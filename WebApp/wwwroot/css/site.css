@@ -2,6 +2,10 @@ html {
   font-size: 14px;
 }
 
+.navbar-brand{
+font-size: 20px;
+}
+
 @media (min-width: 768px) {
   html {
     font-size: 16px;
