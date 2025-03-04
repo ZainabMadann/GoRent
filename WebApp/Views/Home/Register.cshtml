@@ -1,0 +1,115 @@
+@{
+    ViewData["Title"] = "Register Page";
+}
+
+<div class="register-container-wrapper">
+    <div class="register-container">
+        <form method="post" asp-action="Register">
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="FullName" class="form-control" placeholder="Enter your full name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="Email" class="form-control" placeholder="Enter your email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="Password" class="form-control" placeholder="Create a password" required>
+            </div>
+
+            <div class="form-actions text-center">
+                <button type="submit" class="register-btn btn-block">Register</button>
+            </div>
+
+            <div class="login-link text-center mt-3">
+                Already have an account? <a asp-action="Login">Login here</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        body {
+            background-color: #121212;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .register-container {
+            background-color: #1f1f1f;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 400px;
+            margin: 65px auto;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            margin-bottom: 8px;
+            display: block;
+            color: #f0f0f0;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            background-color: #2c2c2c;
+            border: 1px solid #444;
+            border-radius: 5px;
+            font-size: 14px;
+            color: #fff;
+        }
+
+        input::placeholder {
+            color: #aaa;
+        }
+
+        .form-actions {
+            margin-top: 20px;
+        }
+
+        .register-btn {
+            background-color: #1f2a55;
+            border: none;
+            padding: 14px 15px;
+            cursor: pointer;
+            font-size: 16px;
+            color: white;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+
+        .register-btn:hover {
+            background-color: #2a3565;
+        }
+
+        .login-link {
+            margin-top: 20px;
+            color: white;
+        }
+
+        .login-link a {
+            color: #4A90E2;
+            text-decoration: none;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+}
