@@ -2,9 +2,83 @@ html {
   font-size: 14px;
 }
 
-.navbar-brand{
-font-size: 20px;
+.navbar-brand {
+  font-size: 20px;
 }
+
+.home-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 20px;
+  padding-top: 20px;
+}
+
+#homepimg {
+  border-radius: 15px;
+  max-width: 500px;
+  height: auto;
+  transition: transform 0.3s ease; 
+  overflow: hidden;
+}
+
+#homepimg:hover {
+  transform: scale(1.05); 
+  cursor: pointer; 
+}
+
+.home-header p {
+  font-size: 55px;
+  max-width: 600px;
+  font-weight: bold;
+  margin: 0;
+  text-align: left;
+}
+
+.image-slider {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  white-space: nowrap;
+}
+
+.image-track {
+  display: flex;
+  gap: 20px;
+  position: relative;
+}
+
+.image-track img {
+  width: 250px;
+  height: auto;
+  border-radius: 10px;
+}
+
+.content-container {
+  display: flex;
+  align-items: center;
+  gap: 30px; 
+  padding: 20px;
+}
+
+.equipment-text {
+  font-size: 24px;
+  font-weight: bold;
+  max-width: 300px; 
+  text-align: left;
+}
+
+
+@keyframes scrollRight {
+  from {
+      transform: translateX(-100%);
+  }
+  to {
+      transform: translateX(100%);
+  }
+}
+
+
 
 @media (min-width: 768px) {
   html {
@@ -12,7 +86,11 @@ font-size: 20px;
   }
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus {
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
