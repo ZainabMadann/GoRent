@@ -8,17 +8,21 @@
         <div class="profile-info">
             <p><strong>Full Name:</strong> marwa mohamed</p>
             <p><strong>Email Address:</strong> marwa@gmail.com</p>
+            <button class="profile-btn" id="updateProfileBtn">Update Profile</button>
+            <button class="profile-btn" id="changePasswordBtn">Change Password</button>
         </div>
 
+
+
         <div class="profile-actions">
-            <button class="profile-btn-small" id="updateProfileBtn">Update Profile</button>
-            <button class="profile-btn-small" id="changePasswordBtn">Change Password</button>
         </div>
 
         <div class="profile-forms-container">
 
+            <div class="profile-divider"></div>
+
+
             <div class="profile-form-container" id="updateProfileForm" style="display: none;">
-                <h3 class="profile-subtitle">Update Profile</h3>
                 <form method="post" asp-action="UpdateProfile" class="profile-form">
                     <div class="form-group">
                         <label for="name">Full Name</label>
@@ -27,7 +31,7 @@
 
                     <div class="form-group">
                         <label for="email">Email Address</label>
-                        <input type="email" id="email" name="Email" class="form-control" value="marwa@gmail.com" readonly>
+                        <input type="email" id="email" name="Email" class="form-control" value="marwa@gmail.com" required>
                     </div>
 
                     <div class="form-actions text-center">
@@ -40,10 +44,8 @@
                 </div>
             </div>
 
-            <div class="profile-divider"></div>
 
             <div class="profile-form-container" id="changePasswordForm" style="display: none;">
-                <h3 class="profile-subtitle">Change Password</h3>
                 <form method="post" asp-action="ChangePassword" class="profile-form">
                     <div class="form-group">
                         <label for="currentPassword">Current Password</label>
@@ -122,6 +124,13 @@
     margin-bottom: 15px;
 }
 
+.form-group label {
+            font-weight: bold;
+            margin-bottom: 8px;
+            display: block;
+            color: #f0f0f0;
+        }
+
 input[type="text"],
 input[type="email"],
 input[type="password"] {
@@ -132,11 +141,6 @@ input[type="password"] {
     border-radius: 5px;
     font-size: 14px;
     color: #fff;
-}
-
-input[readonly] {
-    background-color: #333;
-    color: #aaa;
 }
 
 input::placeholder {
@@ -159,21 +163,6 @@ input::placeholder {
     background-color: #2a3565;
 }
 
-.profile-btn-small {
-    background-color: #1f2a55;
-    border: none;
-    padding: 4px 8px;
-    cursor: pointer;
-    font-size: 11px;
-    color: white;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-    width: auto;
-}
-
-.profile-btn-small:hover {
-    background-color: #2a3565;
-}
 
 .form-actions {
     margin-top: 15px;
