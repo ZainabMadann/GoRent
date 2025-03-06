@@ -1,0 +1,212 @@
+@{
+    ViewData["Title"] = "Profile Page";
+}
+
+<div class="profile-container-wrapper">
+    <div class="profile-container">
+        
+        <div class="profile-info">
+            <p><strong>Full Name:</strong> marwa mohamed</p>
+            <p><strong>Email Address:</strong> marwa@gmail.com</p>
+        </div>
+
+        <div class="profile-actions">
+            <button class="profile-btn-small" id="updateProfileBtn">Update Profile</button>
+            <button class="profile-btn-small" id="changePasswordBtn">Change Password</button>
+        </div>
+
+        <div class="profile-forms-container">
+
+            <div class="profile-form-container" id="updateProfileForm" style="display: none;">
+                <h3 class="profile-subtitle">Update Profile</h3>
+                <form method="post" asp-action="UpdateProfile" class="profile-form">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" name="FullName" class="form-control" value="marwa mohamed" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="Email" class="form-control" value="marwa@gmail.com" readonly>
+                    </div>
+
+                    <div class="form-actions text-center">
+                        <button type="submit" class="profile-btn">Update Profile</button>
+                    </div>
+                </form>
+
+                <div class="form-actions text-center">
+                    <button class="profile-btn" id="closeUpdateProfileBtn">Close</button>
+                </div>
+            </div>
+
+            <div class="profile-divider"></div>
+
+            <div class="profile-form-container" id="changePasswordForm" style="display: none;">
+                <h3 class="profile-subtitle">Change Password</h3>
+                <form method="post" asp-action="ChangePassword" class="profile-form">
+                    <div class="form-group">
+                        <label for="currentPassword">Current Password</label>
+                        <input type="password" id="currentPassword" name="CurrentPassword" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="newPassword">New Password</label>
+                        <input type="password" id="newPassword" name="NewPassword" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm New Password</label>
+                        <input type="password" id="confirmPassword" name="ConfirmPassword" class="form-control" required>
+                    </div>
+
+                    <div class="form-actions text-center">
+                        <button type="submit" class="profile-btn">Change Password</button>
+                    </div>
+                </form>
+
+                <div class="form-actions text-center">
+                    <button class="profile-btn" id="closeChangePasswordBtn">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        body {
+            background-color: #121212;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .profile-container-wrapper {
+            display: flex;
+            justify-content: center;
+            padding: 30px;
+        }
+
+        .profile-container {
+    background-color: #1f1f1f;
+    padding: 20px; 
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    width: 100%;
+    max-width: 900px;
+    display: flex;
+    gap: 20px;
+}
+
+.profile-forms-container {
+    flex: 2;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px; 
+}
+
+.profile-form-container {
+    display: none;
+    width: 100%;
+    flex-direction: column;
+}
+
+.profile-form {
+    width: 100%;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 8px; 
+    background-color: #2c2c2c;
+    border: 1px solid #444;
+    border-radius: 5px;
+    font-size: 14px;
+    color: #fff;
+}
+
+input[readonly] {
+    background-color: #333;
+    color: #aaa;
+}
+
+input::placeholder {
+    color: #aaa;
+}
+
+.profile-btn {
+    background-color: #1f2a55;
+    border: none;
+    padding: 6px 12px; 
+    cursor: pointer;
+    font-size: 13px; 
+    color: white;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    width: auto;
+}
+
+.profile-btn:hover {
+    background-color: #2a3565;
+}
+
+.profile-btn-small {
+    background-color: #1f2a55;
+    border: none;
+    padding: 4px 8px;
+    cursor: pointer;
+    font-size: 11px;
+    color: white;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    width: auto;
+}
+
+.profile-btn-small:hover {
+    background-color: #2a3565;
+}
+
+.form-actions {
+    margin-top: 15px;
+}
+
+.profile-divider {
+    border: none;
+    height: 1px;
+    background-color: #444;
+    margin: 20px 0; 
+
+        }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        document.getElementById('updateProfileBtn').addEventListener('click', function() {
+            document.getElementById('updateProfileForm').style.display = 'block';
+            document.getElementById('changePasswordForm').style.display = 'none';
+        });
+
+        document.getElementById('changePasswordBtn').addEventListener('click', function() {
+            document.getElementById('changePasswordForm').style.display = 'block';
+            document.getElementById('updateProfileForm').style.display = 'none'; 
+        });
+
+        document.getElementById('closeUpdateProfileBtn').addEventListener('click', function() {
+            document.getElementById('updateProfileForm').style.display = 'none';
+        });
+
+        document.getElementById('closeChangePasswordBtn').addEventListener('click', function() {
+            document.getElementById('changePasswordForm').style.display = 'none';
+        });
+    </script>
+}
