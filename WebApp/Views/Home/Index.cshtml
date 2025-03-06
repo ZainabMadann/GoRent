@@ -1,27 +1,36 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-
 <div class="text-center">
-    <header class="home-header">
-        <img src="/images/building-construction-site_1024x1024.webp" alt="" id="homepimg">
-        <p>Rent the Right Equipment, Get the Job Done Right!</p>
+    <header class="d-flex align-items-start justify-content-start gap-4 pt-3">
+        <img src="/images/building-construction-site_1024x1024.webp" alt="" id="homepimg" class="rounded img-fluid"
+            style="max-width: 500px; transition: transform 0.3s ease;">
+        <p class="fs-1 fw-bold text-start m-0" style="max-width: 600px;">Rent the Right Equipment, Get the Job Done
+            Right!</p>
     </header>
 
-<body>
-    <div class="content-container">
-        <p class="equipment-text">Discover Our Equipment and Services</p>
-        <div class="image-slider">
-            <div class="image-track">
-                <img src="/images/equipment_maintenance.jpg" alt="Equipment Maintenance">
-                <img src="/images/Semi Trailers Bars.JPG" alt="Semi Trailers">
-                <img src="/images/Skid Steer Loader .jpg" alt="Skid Steer Loader">
-                <img src="/images/Telescopic Handler .jpg" alt="Telescopic Handler">
-                <img src="/images/VibratoryDrum.png" alt="Vibratory Drum">
+    <body>
+        <div class="d-flex align-items-center gap-4 p-3">
+            <p class="fs-4 fw-bold text-start" style="max-width: 300px;">Discover Our Equipment and Services</p>
+            <div class="w-100 overflow-hidden position-relative">
+                <div class="d-flex gap-3 position-relative" style="white-space: nowrap;">
+                    <img src="/images/equipment_maintenance.jpg" alt="Equipment Maintenance" class="rounded"
+                        style="width: 250px; height: auto;">
+                    <img src="/images/Semi Trailers Bars.JPG" alt="Semi Trailers" class="rounded"
+                        style="width: 250px; height: auto;">
+                    <img src="/images/Skid Steer Loader .jpg" alt="Skid Steer Loader" class="rounded"
+                        style="width: 250px; height: auto;">
+                    <img src="/images/Telescopic Handler .jpg" alt="Telescopic Handler" class="rounded"
+                        style="width: 250px; height: auto;">
+                    <img src="/images/VibratoryDrum.png" alt="Vibratory Drum" class="rounded"
+                        style="width: 250px; height: auto;">
+                </div>
             </div>
         </div>
-    </div>
-</body>
-
-
+    </body>
+    <footer class="footer text-muted">
+        <div class="container">
+            <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Feedback">Write a Feedback!</a>
+        </div>
+    </footer>
 </div>
