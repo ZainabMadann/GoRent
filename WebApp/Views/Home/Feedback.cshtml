@@ -1,0 +1,30 @@
+﻿@{
+    ViewData["Title"] = "Feedback";
+}
+<div class="d-flex justify-content-center align-items-center h-100">
+    <div class="bg-dark p-4 rounded shadow-lg" style="max-width: 400px;">
+        <form method="post" asp-action="SubmitFeedback">
+            <div class="mb-3">
+                <label for="email" class="form-label fw-bold text-light">Email Address</label>
+                <input type="email" id="email" name="Email"
+                    class="form-control bg-secondary bg-opacity-25 border-secondary text-white"
+                    placeholder="Enter your email" required>
+            </div>
+            <div class="mb-3">
+                <label for="title" class="form-label fw-bold text-light">Title</label>
+                <input type="text" id="title" name="Title"
+                    class="form-control bg-secondary bg-opacity-25 border-secondary text-white"
+                    placeholder="Enter the title" required>
+            </div>
+            <div class="mb-3">
+                <label for="content" class="form-label fw-bold text-light">Feedback</label>
+                <textarea id="content" name="Content"
+                    class="form-control bg-secondary bg-opacity-25 border-secondary text-white"
+                    placeholder="Enter your feedback" rows="5" required></textarea>
+            </div>
+            <div class="text-center mt-4">
+                <button type="submit" class="custom-btn">Submit Feedback</button>
+            </div>
+        </form>
+    </div>
+</div>

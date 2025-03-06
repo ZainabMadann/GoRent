@@ -1,107 +1,27 @@
 @{
     ViewData["Title"] = "Login Page";
 }
-
-<div class="login-container">
-    <form method="post" asp-action="Login">
-        <div class="form-group">
-            <label for="email">Email Address</label>
-            <input type="email" id="email" name="Email" class="form-control" placeholder="Enter your email" required>
-        </div>
-
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" id="password" name="Password" class="form-control" placeholder="Enter your password" required>
-        </div>
-
-        <div class="form-actions text-center">
-                <button type="submit" class="login-btn btn-block">Login</button>
+<div class="d-flex justify-content-center align-items-center h-100">
+    <div class="dcustom-bg p-4 rounded" style="max-width: 400px;">
+        <form method="post" asp-action="Login">
+            <div class="mb-3">
+                <label for="email" class="form-label fw-bold text-light">Email Address</label>
+                <input type="email" id="email" name="Email"
+                    class="form-control bg-secondary bg-opacity-25 border-secondary text-white"
+                    placeholder="Enter your email" required>
             </div>
-
-        <div class="register-link text-center mt-3">
-            Don't have an account? <a asp-action="Register">Register here</a>
-        </div>
-    </form>
+            <div class="mb-3">
+                <label for="password" class="form-label fw-bold text-light">Password</label>
+                <input type="password" id="password" name="Password"
+                    class="form-control bg-secondary bg-opacity-25 border-secondary text-white"
+                    placeholder="Enter your password" required>
+            </div>
+            <div class="text-center mt-4">
+                <button type="submit" class="custom-btn">Login</button>
+            </div>
+            <div class="text-center mt-3 text-white">
+                Don't have an account? <a asp-action="Register" class="custom-link">Register here</a>
+            </div>
+        </form>
+    </div>
 </div>
-
-@section Styles {
-    <style>
-        body {
-            background-color: #121212;
-            color: #fff;
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-
-        .login-container {
-            background-color: #1f1f1f;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-            width: 100%;
-            max-width: 400px;
-            margin: 110px auto;
-        }
-
-        .form-group {
-            margin-bottom: 20px; 
-        }
-
-        .form-group label {
-            font-weight: bold;
-            margin-bottom: 8px;
-            display: block;
-            color: #f0f0f0;
-        }
-
-        input[type="email"],
-        input[type="password"] {
-            width: 100%;
-            padding: 12px;
-            background-color: #2c2c2c;
-            border: 1px solid #444;
-            border-radius: 5px;
-            font-size: 14px;
-            color: #fff;
-        }
-
-        input::placeholder {
-            color: #aaa;
-        }
-
-        .form-actions {
-            margin-top: 20px;
-        }
-
-        .login-btn {
-            background-color: #1f2a55;
-            border: none;
-            padding: 14px 15px;
-            cursor: pointer;
-            font-size: 16px;
-            color: white;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-            width: 100%;
-        }
-
-        .login-btn:hover {
-            background-color: #2a3565;
-        }
-
-        .register-link {
-            margin-top: 20px;
-            color: white;
-        }
-
-        .register-link a {
-            color: #4A90E2;
-            text-decoration: none;
-        }
-
-        .register-link a:hover {
-            text-decoration: underline;
-        }
-    </style>
-}
