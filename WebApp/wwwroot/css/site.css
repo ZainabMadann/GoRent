@@ -47,6 +47,17 @@ html {
   cursor: pointer;
 }
 
+.img-size {
+  width: 250px;
+  height: auto;
+}
+
+.animate-scroll {
+  display: flex;
+  animation: scrollRight 20s linear infinite;
+}
+
+
 .profile-icon {
   width: 40px;
   height: 40px;
