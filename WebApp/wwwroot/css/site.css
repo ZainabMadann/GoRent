@@ -4,6 +4,12 @@
   box-sizing: border-box;
 }
 
+button:focus,
+button:active {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
 .custom-btn {
   background-color: #1f2a55;
   border: none;
@@ -21,7 +27,7 @@
 }
 
 .cancel-btn {
-  background-color: #6c757d;  
+  background-color: #6c757d;
   border: none;
   padding: 14px 15px;
   cursor: pointer;
@@ -33,7 +39,7 @@
 }
 
 .cancel-btn:hover {
-  background-color: #5a6268;  
+  background-color: #5a6268;
 }
 
 .custom-bg {
