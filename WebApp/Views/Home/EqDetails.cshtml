@@ -1,0 +1,43 @@
+@{
+    ViewData["Title"] = "Equipment Details Page";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <h4 class="text-light mb-4">Equipment Details</h4>
+            <div class="card bg-dark text-white shadow-sm p-3">
+                <img src="equipment-placeholder.jpg" class="card-img-top rounded" alt="Equipment Image">
+                <div class="card-body">
+                    <h3 class="card-title">Equipment Name</h3>
+                    <p class="text-muted">Short description of the equipment.</p>
+                    <h4 class="text-success">$0.00</h4>
+                    <button class="btn button-primary mt-3" style="background-color: #1f2a55; color: white;">Rent</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-5">
+            <h4 class="text-light">User Feedback</h4>
+            <a asp-controller="Home" asp-action="Feedback">
+                <button class="btn button-primary btn-sm mb-3" style="background-color: #1f2a55; color: white;">
+                    Add Feedback
+                </button>
+            </a>
+
+            <div class="border border-secondary rounded p-3" style="max-height: 400px; overflow-y: auto;">
+                @for (int i = 0; i < 10; i++) 
+                {
+                    <div class="list-group">
+                        <div class="list-group-item bg-dark text-white border-secondary p-3">
+                            <h6 class="text-info mb-1">user@example.com</h6>
+                            <strong>Feedback Title</strong>
+                            <p class="text-muted small">Short feedback content...</p>
+                            <p class="text-warning m-0">⭐⭐⭐⭐⭐</p>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

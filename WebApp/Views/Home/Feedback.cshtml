@@ -1,6 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Feedback";
 }
+
 <div class="d-flex justify-content-center align-items-center h-100">
     <div class="bg-dark p-4 rounded shadow-lg" style="max-width: 400px;">
         <form method="post" asp-action="SubmitFeedback">
@@ -22,6 +23,27 @@
                     class="form-control bg-secondary bg-opacity-25 border-secondary text-white"
                     placeholder="Enter your feedback" rows="5" required></textarea>
             </div>
+
+            <div class="mb-3 text-center">
+                <label class="form-label fw-bold text-light">Rate Your Experience</label>
+                <div class="d-flex justify-content-center">
+                    <input type="radio" name="Rating" value="5" id="star5" class="btn-check" required>
+                    <label for="star5" class="btn btn-outline-warning mx-1">⭐</label>
+
+                    <input type="radio" name="Rating" value="4" id="star4" class="btn-check">
+                    <label for="star4" class="btn btn-outline-warning mx-1">⭐</label>
+
+                    <input type="radio" name="Rating" value="3" id="star3" class="btn-check">
+                    <label for="star3" class="btn btn-outline-warning mx-1">⭐</label>
+
+                    <input type="radio" name="Rating" value="2" id="star2" class="btn-check">
+                    <label for="star2" class="btn btn-outline-warning mx-1">⭐</label>
+
+                    <input type="radio" name="Rating" value="1" id="star1" class="btn-check">
+                    <label for="star1" class="btn btn-outline-warning mx-1">⭐</label>
+                </div>
+            </div>
+
             <div class="text-center mt-4">
                 <button type="submit" class="custom-btn">Submit Feedback</button>
             </div>

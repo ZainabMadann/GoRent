@@ -56,6 +56,16 @@ html {
   margin-left: 20px;
 }
 
+.notification-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 20px;
+  margin-left: 20px;
+}
+
+
 .navbar-collapse {
   display: flex;
   align-items: center;
