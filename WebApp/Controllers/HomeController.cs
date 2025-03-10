@@ -52,7 +52,30 @@ public class HomeController : Controller
     {
         return View();
     }
+    public IActionResult RequestDetails()
+    {
+        return View();
+    }
 
+    public IActionResult TransactionDetails()
+    {
+        return View();
+    }
+
+    public IActionResult Payment()
+    {
+        return View();
+    }
+
+    public IActionResult MangeComments()
+    {
+        return View();
+    }
+
+    public IActionResult CommentDetails()
+    {
+        return View();
+    }
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {
