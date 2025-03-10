@@ -73,26 +73,11 @@ html {
   animation: scrollRight 20s linear infinite;
 }
 
-
-.profile-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-right: 20px;
-  margin-left: 20px;
-}
-
 .navbar-collapse {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
-
-.profile-icon-link {
-  padding: 0;
-}
-
 
 @keyframes scrollRight {
   from {
