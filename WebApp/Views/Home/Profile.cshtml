@@ -149,8 +149,8 @@
             <div class="card bg-dark text-white shadow mb-4">
                 <div class="card-body p-4">
                     <div class="d-flex gap-2">
-                        <button class="btn custom-btn text-white" id="manageCategoriesBtn">Manage Categories</button>
-                        <button class="btn custom-btn text-white" id="manageEquipmentsBtn">Manage Equipments</button>
+                        <a asp-controller="Home" asp-action="ManageCat"><button class="btn custom-btn text-white" id="manageCategoriesBtn">Manage Categories</button></a>
+                        <a asp-controller="Home" asp-action="ManageEq"><button class="btn custom-btn text-white" id="manageEquipmentsBtn">Manage Equipments</button></a>
                         <button class="btn custom-btn text-white" id="manageRentalRequestsBtn">Manage Rental
                             Requests</button>
                         <button class="btn custom-btn text-white" id="manageTransactionsBtn">Manage
