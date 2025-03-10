@@ -103,7 +103,11 @@
                                     <p class="mb-1"><strong>Request ID:</strong> #12345</p>
                                     <p class="mb-1"><strong>Status:</strong> Pending</p>
                                 </div>
-                                <button class="btn btn-sm btn-outline-light">View</button>
+                                @* <button class="btn btn-sm btn-outline-light">View</button> just for now , we are gonna link it the right way after *@
+                                <a class="nav-link text-white fw-bold" asp-area="" asp-controller="Home"
+                                    asp-action="RequestDetails">
+                                    view
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -131,7 +135,11 @@
                                     <p class="mb-1"><strong>Transaction ID:</strong> #67890</p>
                                     <p class="mb-1"><strong>Status:</strong> Completed</p>
                                 </div>
-                                <button class="btn btn-sm btn-outline-light">View</button>
+                                @* <button class="btn btn-sm btn-outline-light">View</button> *@
+                                <a class="nav-link text-white fw-bold" asp-area="" asp-controller="Home"
+                                    asp-action="TransactionDetails">
+                                    view
+                                </a>
                             </div>
                         </div>
                     </div>
