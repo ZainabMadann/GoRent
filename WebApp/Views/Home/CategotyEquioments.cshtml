@@ -1,0 +1,31 @@
+@{
+    ViewData["Title"] = "Category Equipment Page";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-10">
+            <div class="card bg-dark text-white shadow mb-4">
+                <div class="card-body p-4">
+                    <h4 class="text-white text-center mb-3 mt-0">Category1 Equipments</h4>
+                    <div class="row row-cols-1 row-cols-md-3 g-4">
+                        @for (int i = 0; i < 5; i++)
+                        {
+                            <div class="col">
+                                <div class="card h-100 shadow-sm border-0 bg-secondary text-white">
+                                    <img src="https://via.placeholder.com/150" class="card-img-top" alt="Equipment Image">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Equipment Name</h5>
+                                        <p class="fw-bold">$100</p>
+                                        <a asp-controller="Home" asp-action="EqDetails" class="btn button-primary px-3"
+                                           style="background-color: #1f2a55; color: white;">View</a>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -2,41 +2,152 @@
     ViewData["Title"] = "Equipment Details Page";
 }
 
-<div class="container mt-5">
+<div class="container py-4">
     <div class="row justify-content-center">
-        <div class="col-md-5">
+        <div class="col-md-10 col-lg-9"> 
             <h4 class="text-light mb-4">Equipment Details</h4>
             <div class="card bg-dark text-white shadow-sm p-3">
-                <img src="equipment-placeholder.jpg" class="card-img-top rounded" alt="Equipment Image">
+                <img src="https://via.placeholder.com/600x400" class="card-img-top rounded" alt="Equipment Image">
                 <div class="card-body">
                     <h3 class="card-title">Equipment Name</h3>
-                    <p class="text-muted">Short description of the equipment.</p>
-                    <h4 class="text-success">$0.00</h4>
-                    <button class="btn button-primary mt-3" style="background-color: #1f2a55; color: white;">Rent</button>
+                    <div class="mb-3">
+                        <span class="badge bg-primary me-2">Category 1</span>
+                        <span class="badge bg-success">Available</span>
+                    </div>
+                    <h4 class="text-success">$100.00</h4>
+                    <p class="text-muted">Equipment description text here</p>
+
+                    <div class="mt-4">
+                        <h5>Specifications</h5>
+                        <p class="text-muted">Equipment specifications here</p>
+                    </div>
+
+                    <button class="btn button-primary mt-3" style="background-color: #1f2a55; color: white;"
+                        data-bs-toggle="modal" data-bs-target="#rentEquipmentModal">
+                        <i class="bi bi-cart-plus me-1"></i> Rent
+                    </button>
+                </div>
+            </div>
+
+            <div class="mt-5">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="text-light">User Feedback</h4>
+                    <button class="btn button-primary btn-sm" style="background-color: #1f2a55; color: white;"
+                        data-bs-toggle="modal" data-bs-target="#feedbackModal">
+                        Add Feedback
+                    </button>
+                </div>
+
+                <div style="max-height: 440px; overflow-y: auto;">
+                    @for (int i = 0; i < 5; i++)
+                    {
+                        <div class="list-group mb-3">
+                            <div class="list-group-item bg-secondary text-white border-secondary p-3">
+                                <h6 class="text-info mb-1">user@example.com</h6>
+                                <strong>Feedback Title</strong>
+                                <p class="text-muted small">Short feedback content...</p>
+                                <p class="text-warning m-0">⭐⭐⭐⭐⭐</p>
+                            </div>
+                        </div>
+                    }
                 </div>
             </div>
         </div>
+    </div>
+</div>
 
-        <div class="col-md-5">
-            <h4 class="text-light">User Feedback</h4>
-            <a asp-controller="Home" asp-action="Feedback">
-                <button class="btn button-primary btn-sm mb-3" style="background-color: #1f2a55; color: white;">
-                    Add Feedback
-                </button>
-            </a>
+<div class="modal fade" id="rentEquipmentModal" tabindex="-1" aria-labelledby="rentEquipmentModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark text-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="rentEquipmentModalLabel">Rent Equipment</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="rentEquipmentForm">
+                    <div class="mb-3">
+                        <label for="rentalStartDate" class="form-label">Start Date</label>
+                        <input type="date" class="form-control bg-dark text-white border-secondary" id="rentalStartDate"
+                            required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="rentalEndDate" class="form-label">End Date</label>
+                        <input type="date" class="form-control bg-dark text-white border-secondary" id="rentalEndDate"
+                            required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="rentalNotes" class="form-label">Notes (Optional)</label>
+                        <textarea class="form-control bg-dark text-white border-secondary" id="rentalNotes"
+                            rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" form="rentEquipmentForm" class="btn button-primary"
+                    style="background-color: #1f2a55; color: white;">Confirm Rental</button>
+            </div>
+        </div>
+    </div>
+</div>
 
-            <div class="border border-secondary rounded p-3" style="max-height: 400px; overflow-y: auto;">
-                @for (int i = 0; i < 10; i++) 
-                {
-                    <div class="list-group">
-                        <div class="list-group-item bg-dark text-white border-secondary p-3">
-                            <h6 class="text-info mb-1">user@example.com</h6>
-                            <strong>Feedback Title</strong>
-                            <p class="text-muted small">Short feedback content...</p>
-                            <p class="text-warning m-0">⭐⭐⭐⭐⭐</p>
+<div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark text-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="feedbackModalLabel">Submit Feedback</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" asp-action="SubmitFeedback">
+                    <div class="mb-3">
+                        <label for="email" class="form-label fw-bold text-light">Email Address</label>
+                        <input type="email" id="email" name="Email"
+                            class="form-control bg-secondary bg-opacity-25 border-secondary text-white"
+                            placeholder="Enter your email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="title" class="form-label fw-bold text-light">Title</label>
+                        <input type="text" id="title" name="Title"
+                            class="form-control bg-secondary bg-opacity-25 border-secondary text-white"
+                            placeholder="Enter the title" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="content" class="form-label fw-bold text-light">Feedback</label>
+                        <textarea id="content" name="Content"
+                            class="form-control bg-secondary bg-opacity-25 border-secondary text-white"
+                            placeholder="Enter your feedback" rows="5" required></textarea>
+                    </div>
+
+                    <div class="mb-3 text-center">
+                        <label class="form-label fw-bold text-light">Rate Your Experience</label>
+                        <div class="d-flex justify-content-center">
+                            <input type="radio" name="Rating" value="5" id="star5" class="btn-check" required>
+                            <label for="star5" class="btn btn-outline-warning mx-1">⭐</label>
+
+                            <input type="radio" name="Rating" value="4" id="star4" class="btn-check">
+                            <label for="star4" class="btn btn-outline-warning mx-1">⭐</label>
+
+                            <input type="radio" name="Rating" value="3" id="star3" class="btn-check">
+                            <label for="star3" class="btn btn-outline-warning mx-1">⭐</label>
+
+                            <input type="radio" name="Rating" value="2" id="star2" class="btn-check">
+                            <label for="star2" class="btn btn-outline-warning mx-1">⭐</label>
+
+                            <input type="radio" name="Rating" value="1" id="star1" class="btn-check">
+                            <label for="star1" class="btn btn-outline-warning mx-1">⭐</label>
                         </div>
                     </div>
-                }
+
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn button-primary" style="background-color: #1f2a55; color: white;">
+                            Submit Feedback
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

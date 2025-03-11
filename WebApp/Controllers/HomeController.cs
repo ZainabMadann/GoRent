@@ -96,6 +96,11 @@ public class HomeController : Controller
         return View();
     }
 
+    public IActionResult CategotyEquioments()
+    {
+        return View();
+    }
+
     public IActionResult ContactUs()
     {
         return View();
