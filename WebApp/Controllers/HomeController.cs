@@ -82,6 +82,15 @@ public class HomeController : Controller
         return View();
     }
 
+        public IActionResult ManageRentalRequests()
+    {
+        return View();
+    }
+        public IActionResult ManageTransactions()
+    {
+        return View();
+    }
+
     public IActionResult CommentDetails()
     {
         return View();
