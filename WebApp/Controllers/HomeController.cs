@@ -82,11 +82,11 @@ public class HomeController : Controller
         return View();
     }
 
-        public IActionResult ManageRentalRequests()
+    public IActionResult ManageRentalRequests()
     {
         return View();
     }
-        public IActionResult ManageTransactions()
+    public IActionResult ManageTransactions()
     {
         return View();
     }
@@ -95,6 +95,12 @@ public class HomeController : Controller
     {
         return View();
     }
+
+    public IActionResult ContactUs()
+    {
+        return View();
+    }
+
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {
