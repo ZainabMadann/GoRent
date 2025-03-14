@@ -101,6 +101,16 @@ public class HomeController : Controller
         return View();
     }
 
+    public IActionResult ManageLogs()
+    {
+        return View();
+    }
+
+    public IActionResult ManageStatus()
+    {
+        return View();
+    }
+
     public IActionResult ContactUs()
     {
         return View();
