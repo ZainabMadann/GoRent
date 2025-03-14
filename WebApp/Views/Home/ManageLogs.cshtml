@@ -1,5 +1,294 @@
 @{
-    ViewData["Title"] = "Category Equipment Page";
+    ViewData["Title"] = "Manage Logs Page";
 }
 
-<div>hello from logs</div>
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-10">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h4 mb-0 text-white">System Audit Logs</h2>
+                <div>
+                    <button class="btn btn-danger" id="clearLogsBtn" data-bs-toggle="modal"
+                        data-bs-target="#clearLogsModal">
+                        <i class="bi bi-trash me-1"></i> Clear Logs
+                    </button>
+                </div>
+            </div>
+
+            <div class="card bg-dark text-white shadow mb-4">
+                <div class="card-body p-4">
+                    <h3 class="h5 mb-3">Filter Logs</h3>
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <label for="logType" class="form-label">Log Type</label>
+                            <select class="form-select bg-dark text-white border-secondary" id="logType">
+                                <option value="all">All Types</option>
+                                <option value="info">Information</option>
+                                <option value="warning">Warning</option>
+                                <option value="error">Error</option>
+                                <option value="security">Security</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="logUser" class="form-label">User</label>
+                            <select class="form-select bg-dark text-white border-secondary" id="logUser">
+                                <option value="all">All Users</option>
+                                <option value="admin">Admin</option>
+                                <option value="manager">Managers</option>
+                                <option value="customer">Customers</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="startDate" class="form-label">Start Date</label>
+                            <input type="date" class="form-control bg-dark text-white border-secondary" id="startDate">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="endDate" class="form-label">End Date</label>
+                            <input type="date" class="form-control bg-dark text-white border-secondary" id="endDate">
+                        </div>
+                        <div class="col-12">
+                            <div class="d-flex justify-content-end">
+                                <button class="btn btn-secondary me-2" id="resetFiltersBtn">Reset Filters</button>
+                                <button class="btn button-primary" style="background-color: #1f2a55; color: white;"
+                                    id="applyFiltersBtn">Apply Filters</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card bg-dark text-white shadow">
+                <div class="card-body p-4">
+                    <h4 class="text-white mb-3">System Log Entries</h4>
+
+                    <div class="table-responsive">
+                        <table class="table table-dark table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Timestamp</th>
+                                    <th>Level</th>
+                                    <th>User</th>
+                                    <th>Action</th>
+                                    <th>Details</th>
+                                    <th>IP Address</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>2025-03-14 08:32:15</td>
+                                    <td><span class="badge bg-info">INFO</span></td>
+                                    <td>admin@example.com</td>
+                                    <td>LOGIN</td>
+                                    <td>Admin user logged in successfully</td>
+                                    <td>192.168.1.100</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-light" data-bs-toggle="modal"
+                                            data-bs-target="#viewLogModal">
+                                            <i class="bi bi-eye"></i> View
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>2025-03-14 09:15:43</td>
+                                    <td><span class="badge bg-warning text-dark">WARNING</span></td>
+                                    <td>john@gmail.com</td>
+                                    <td>FAILED_LOGIN</td>
+                                    <td>Failed login attempt (3 attempts)</td>
+                                    <td>192.168.1.105</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-light" data-bs-toggle="modal"
+                                            data-bs-target="#viewLogModal">
+                                            <i class="bi bi-eye"></i> View
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>2025-03-14 10:22:37</td>
+                                    <td><span class="badge bg-danger">ERROR</span></td>
+                                    <td>system</td>
+                                    <td>DB_ERROR</td>
+                                    <td>Database connection timeout</td>
+                                    <td>Internal</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-light" data-bs-toggle="modal"
+                                            data-bs-target="#viewLogModal">
+                                            <i class="bi bi-eye"></i> View
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>2025-03-14 11:05:22</td>
+                                    <td><span class="badge bg-success">INFO</span></td>
+                                    <td>marwa@gmail.com</td>
+                                    <td>CREATE_REQUEST</td>
+                                    <td>New rental request created (#12345)</td>
+                                    <td>192.168.1.110</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-light" data-bs-toggle="modal"
+                                            data-bs-target="#viewLogModal">
+                                            <i class="bi bi-eye"></i> View
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>2025-03-14 12:48:51</td>
+                                    <td><span class="badge bg-info">INFO</span></td>
+                                    <td>admin@example.com</td>
+                                    <td>UPDATE_EQUIPMENT</td>
+                                    <td>Equipment details updated (ID: 78)</td>
+                                    <td>192.168.1.100</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-light" data-bs-toggle="modal"
+                                            data-bs-target="#viewLogModal">
+                                            <i class="bi bi-eye"></i> View
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>2025-03-14 14:12:09</td>
+                                    <td><span class="badge" style="background-color: #6f42c1;">SECURITY</span></td>
+                                    <td>system</td>
+                                    <td>PERMISSION_DENIED</td>
+                                    <td>Unauthorized access attempt to admin area</td>
+                                    <td>203.0.113.42</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-light" data-bs-toggle="modal"
+                                            data-bs-target="#viewLogModal">
+                                            <i class="bi bi-eye"></i> View
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                  
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="viewLogModal" tabindex="-1" aria-labelledby="viewLogModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-dark text-white">
+            <div class="modal-header border-secondary">
+                <h5 class="modal-title" id="viewLogModalLabel">Log Entry Details</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <p><strong>Log ID:</strong> 134267</p>
+                        <p><strong>Timestamp:</strong> 2025-03-14 11:05:22</p>
+                        <p><strong>Level:</strong> <span class="badge bg-success">INFO</span></p>
+                        <p><strong>User:</strong> marwa@gmail.com</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>IP Address:</strong> 192.168.1.110</p>
+                        <p><strong>User Agent:</strong> Mozilla/5.0 (Windows NT 10.0; Win64; x64)</p>
+                        <p><strong>Action:</strong> CREATE_REQUEST</p>
+                        <p><strong>Related ID:</strong> #12345 (Rental Request)</p>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <h6>Details:</h6>
+                    <div class="p-3 bg-secondary rounded">
+                        <p class="mb-0">New rental request created with ID #12345. Request details: DSLR Camera (Canon
+                            EOS 50D), rental period: 2025-03-20 to 2025-03-25.</p>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <h6>Additional Data:</h6>
+                    <pre class="p-3 bg-secondary rounded text-white"><code>{
+  "request_id": 12345,
+  "equipment_id": 78,
+  "user_id": 456,
+  "start_date": "2025-03-20",
+  "end_date": "2025-03-25",
+  "status": "pending",
+  "notes": "First-time rental, needs approval"
+}</code></pre>
+                </div>
+            </div>
+            <div class="modal-footer border-secondary">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="clearLogsModal" tabindex="-1" aria-labelledby="clearLogsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark text-white">
+            <div class="modal-header border-secondary">
+                <h5 class="modal-title" id="clearLogsModalLabel">Confirm Clear Logs</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-danger">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    <strong>Warning:</strong> You are about to clear system logs. This action cannot be undone.
+                </div>
+
+                <p>Please select which logs you want to clear:</p>
+
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="radio" name="clearLogOption" id="clearAllLogs" value="all"
+                        checked>
+                    <label class="form-check-label" for="clearAllLogs">
+                        Clear all logs
+                    </label>
+                </div>
+
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="radio" name="clearLogOption" id="clearOldLogs" value="old">
+                    <label class="form-check-label" for="clearOldLogs">
+                        Clear logs older than:
+                    </label>
+                    <select class="form-select mt-2 bg-dark text-white border-secondary" id="clearLogAge">
+                        <option value="30">30 days</option>
+                        <option value="60">60 days</option>
+                        <option value="90">90 days</option>
+                        <option value="180">180 days</option>
+                        <option value="365">1 year</option>
+                    </select>
+                </div>
+
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="radio" name="clearLogOption" id="clearSpecificLogs"
+                        value="specific">
+                    <label class="form-check-label" for="clearSpecificLogs">
+                        Clear specific log types:
+                    </label>
+                    <div class="ms-4 mt-2">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="info" id="clearInfoLogs">
+                            <label class="form-check-label" for="clearInfoLogs">
+                                Information logs
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="warning" id="clearWarningLogs">
+                            <label class="form-check-label" for="clearWarningLogs">
+                                Warning logs
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="error" id="clearErrorLogs">
+                            <label class="form-check-label" for="clearErrorLogs">
+                                Error logs
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="security" id="clearSecurityLogs">
+                            <label class="form-check-label" for="clearSecurityLogs">
+                                Security logs
+                            </label>
+                        </div>
+                    </div>
+                <button type="button" class="btn btn-danger mt-2">Clear</button>
+                </div>
