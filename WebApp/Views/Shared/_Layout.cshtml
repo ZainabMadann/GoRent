@@ -16,7 +16,7 @@
         <nav class="navbar navbar-expand-sm shadow-sm mb-3"
             style="background-color: #141414; border-bottom: 1px solid #27313A;">
             <div class="container-fluid px-4 py-3">
-                <div class="d-flex align-items-center gap-4 text-white">
+                <div class="d-flex align-items-center gap-2 text-white">
                     <a class="text-white fs-3 fw-bold tracking-tight text-decoration-none" asp-area=""
                         asp-controller="Home" asp-action="Index" style="letter-spacing: -0.015em;">GoRent</a>
                 </div>
@@ -25,15 +25,19 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end">
-                    <div class="d-flex align-items-center gap-4">
+                    <div class="d-flex align-items-center gap-3">
                         <a class="text-white text-sm fw-medium text-decoration-none" asp-area="" asp-controller="Home"
                             asp-action="Register">Register</a>
                         <a class="text-white text-sm fw-medium text-decoration-none" asp-area="" asp-controller="Home"
                             asp-action="Login">Login</a>
-                        <div class="d-flex align-items-center gap-2">
+                        <div class="d-flex align-items-center gap-0">
                             <a class="nav-link profile-icon-link" asp-area="" asp-controller="Home"
                                 asp-action="Notifications">
                                 <img src="/images/not.jpg" alt="Notification Icon" class="notification-icon">
+                            </a>
+                            <a class="nav-link" asp-area="" asp-controller="Home"
+                                asp-action="Dashboard">
+                                <img src="/images/hamburger.png" alt="Notification Icon" class="notification-icon">
                             </a>
                             <a class="d-flex align-items-center justify-content-center rounded-3 bg-dark text-decoration-none"
                                 style="background-color: #27313A; height: 36px; min-width: 0; padding: 0 10px;"

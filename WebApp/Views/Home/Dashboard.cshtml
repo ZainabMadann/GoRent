@@ -1,0 +1,290 @@
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-10">
+            <div class="card bg-dark text-white shadow mb-4">
+                <div class="card-body p-4">
+                    <h2 class="h4 mb-4">Building Equipment Management Dashboard</h2>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-3 mb-3">
+                            <div class="card bg-secondary h-100">
+                                <div class="card-body text-center">
+                                    <h3 class="h5">Total Equipment</h3>
+                                    <p class="display-4 mb-0">247</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="card bg-secondary h-100">
+                                <div class="card-body text-center">
+                                    <h3 class="h5">Available</h3>
+                                    <p class="display-4 mb-0">183</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="card bg-secondary h-100">
+                                <div class="card-body text-center">
+                                    <h3 class="h5">In Use</h3>
+                                    <p class="display-4 mb-0">52</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="card bg-secondary h-100">
+                                <div class="card-body text-center">
+                                    <h3 class="h5">Maintenance</h3>
+                                    <p class="display-4 mb-0">12</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-4">
+                            <div class="card bg-secondary h-100">
+                                <div class="card-body">
+                                    <h3 class="h5 mb-3">Request Status</h3>
+                                    <div class="mb-3">
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <span>Pending (28)</span>
+                                            <span>28%</span>
+                                        </div>
+                                        <div class="progress bg-dark">
+                                            <div class="progress-bar bg-warning" role="progressbar" style="width: 28%" aria-valuenow="28" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <span>Approved (45)</span>
+                                            <span>45%</span>
+                                        </div>
+                                        <div class="progress bg-dark">
+                                            <div class="progress-bar bg-success" role="progressbar" style="width: 45%" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <span>Rejected (15)</span>
+                                            <span>15%</span>
+                                        </div>
+                                        <div class="progress bg-dark">
+                                            <div class="progress-bar bg-danger" role="progressbar" style="width: 15%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <span>Returned (12)</span>
+                                            <span>12%</span>
+                                        </div>
+                                        <div class="progress bg-dark">
+                                            <div class="progress-bar bg-info" role="progressbar" style="width: 12%" aria-valuenow="12" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="card bg-secondary h-100">
+                                <div class="card-body">
+                                    <h3 class="h5 mb-3">Overdue Requests</h3>
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <div>
+                                            <h4 class="h2 mb-0">18</h4>
+                                            <p style="color: #ff8080;" class="mb-0"><i class="fas fa-arrow-up"></i> 12% from last week</p>
+                                        </div>
+                                        <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 70px; height: 70px; background-color: #ff8080;">
+                                            <i class="fas fa-exclamation-triangle fa-2x"></i>
+                                        </div>
+                                    </div>
+                                    <p class="mb-2"><strong>Average Overdue:</strong> 3.5 days</p>
+                                    <p class="mb-0"><strong>Most Overdue Item:</strong> Air Conditioning Unit (8 days)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card bg-secondary mb-4">
+                        <div class="card-body">
+                            <h3 class="h5 mb-3">Equipment by Category</h3>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="mb-3">
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <span>Category 1 (53)</span>
+                                            <span>21.5%</span>
+                                        </div>
+                                        <div class="progress bg-dark">
+                                            <div class="progress-bar" role="progressbar" style="width: 21.5%; background-color: #FF6384;" aria-valuenow="21.5" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <span> Category 2 (89)</span>
+                                            <span>36%</span>
+                                        </div>
+                                        <div class="progress bg-dark">
+                                            <div class="progress-bar" role="progressbar" style="width: 36%; background-color: #36A2EB;" aria-valuenow="36" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <span> Category 3 (62)</span>
+                                            <span>25%</span>
+                                        </div>
+                                        <div class="progress bg-dark">
+                                            <div class="progress-bar" role="progressbar" style="width: 25%; background-color: #FFCE56;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <span> Category 4 (43)</span>
+                                            <span>17.5%</span>
+                                        </div>
+                                        <div class="progress bg-dark">
+                                            <div class="progress-bar" role="progressbar" style="width: 17.5%; background-color: #4BC0C0;" aria-valuenow="17.5" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 d-flex align-items-center justify-content-center">
+                                    <div class="text-center">
+                                        <div class="rounded-circle bg-dark d-flex align-items-center justify-content-center mx-auto mb-2" style="width: 100px; height: 100px;">
+                                            <i class="fas fa-chart-pie fa-3x text-white"></i>
+                                        </div>
+                                        <p class="mb-0">Total Categories: 4</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-4 mb-md-0">
+                            <div class="card bg-secondary h-100">
+                                <div class="card-body">
+                                    <h3 class="h5 mb-3">Damaged Equipment Report</h3>
+                                    <div class="table-responsive">
+                                        <table class="table table-dark table-bordered mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Equipment</th>
+                                                    <th>Category</th>
+                                                    <th>Damage Level</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Central AC Unit</td>
+                                                    <td>Category</td>
+                                                    <td>Minor</td>
+                                                    <td><span class="badge bg-warning">Repair</span></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Water Heater</td>
+                                                    <td>Category</td>
+                                                    <td>Major</td>
+                                                    <td><span class="badge bg-danger">Replace</span></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Circuit Breaker Panel</td>
+                                                    <td>Category</td>
+                                                    <td>Minor</td>
+                                                    <td><span class="badge bg-success">Fixed</span></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card bg-secondary h-100">
+                                <div class="card-body">
+                                    <h3 class="h5 mb-3">Financial Summary</h3>
+                                    <div class="mb-3">
+                                        <p class="mb-1"><strong>Total Revenue (YTD):</strong> $24,850</p>
+                                        <p class="mb-1"><strong>Monthly Average:</strong> $2,070</p>
+                                        <p class="mb-1"><strong>Pending Payments:</strong> $1,350</p>
+                                        <p class="mb-1"><strong>Maintenance Costs:</strong> $3,200</p>
+                                        <p class="mb-1"><strong>Net Profit:</strong> $21,650</p>
+                                    </div>
+                                    <div class="progress bg-dark mb-2">
+                                        <div class="progress-bar bg-success" role="progressbar" style="width: 87%" aria-valuenow="87" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                    <p class="text-end mb-0"><small>87% of target reached</small></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card bg-secondary">
+                        <div class="card-body">
+                            <h3 class="h5 mb-3">Recent Activities</h3>
+                            <div class="table-responsive">
+                                <table class="table table-dark table-bordered mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>User</th>
+                                            <th>Activity</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Mar 14, 2025</td>
+                                            <td>zainab madan</td>
+                                            <td>Submitted rental request for Concrete Mixer</td>
+                                            <td><span class="badge bg-warning">Pending</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Mar 13, 2025</td>
+                                            <td>Sarah ali</td>
+                                            <td>Returned Portable Generator</td>
+                                            <td><span class="badge bg-success">Completed</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Mar 12, 2025</td>
+                                            <td>marwa abbas</td>
+                                            <td>Reported damage on Pressure Washer</td>
+                                            <td><span class="badge bg-danger">Action Required</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Mar 11, 2025</td>
+                                            <td>hasan and qassim</td>
+                                            <td>Payment received for invoice #2345</td>
+                                            <td><span class="badge bg-info">Processed</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>      
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.card.bg-secondary');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px)';
+                    this.style.transition = 'transform 0.3s ease';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+        });
+    </script>
+}
