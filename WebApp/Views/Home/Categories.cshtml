@@ -1,0 +1,76 @@
+@{
+    ViewData["Title"] = "Categories Page";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-10">
+            <div class="card bg-dark text-white shadow mb-4">
+                <div class="card-body p-4">
+                    <form class="d-flex mb-4">
+                        <input type="search" id="searchCategories"
+                            class="form-control bg-dark text-white border-secondary me-2"
+                            placeholder="Search Category / Equipment">
+
+                        <select id="filterCategory" class="form-select bg-dark text-white border-secondary me-2">
+                            <option value="all">All</option>
+                            <option value="category1">Category 1</option>
+                            <option value="category2">Category 2</option>
+                            <option value="category3">Category 3</option>
+                        </select>
+
+                        <button type="submit" class="btn button-primary px-3"
+                            style="background-color: #1f2a55; color: white; white-space: nowrap;">
+                            <i class="bi bi-search me-1"></i> Search
+                        </button>
+                    </form>
+
+                    <h4 class="text-white text-center mb-3 mt-4">All Categories</h4>
+                    <div class="row row-cols-1 row-cols-md-3 g-4">
+                        @for (int i = 0; i < 5; i++)
+                        {
+                            <div class="col">
+                                <div class="card h-100 shadow-sm border-0 bg-secondary text-white">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Category Name</h5>
+                                        <p class="card-text">Description</p>
+                                        <a href="#" class="btn button-primary px-3"
+                                            style="background-color: #1f2a55; color: white;"
+                                            onclick="window.location.href='/home/CategotyEquioments'">View</a>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-10">
+            <div class="card bg-dark text-white shadow mb-4">
+                <div class="card-body p-4">
+                    <h4 class="text-white text-center mb-3 mt-0">All Equipments</h4>
+                    <div class="row row-cols-1 row-cols-md-3 g-4">
+                        @for (int i = 0; i < 5; i++)
+                        {
+                            <div class="col">
+                                <div class="card h-100 shadow-sm border-0 bg-secondary text-white">
+                                    <div class="ps-3 pt-3"> 
+                                        <img src="/images/canon.jpg" class="card-img-top rounded" alt="Equipment Image"
+                                            style="width: 200px; height: 130px; margin-left: 10px;">
+                                    </div>
+                                    <div class="card-body">
+                                        <h5 class="card-title">Canon EOS 50D</h5>
+                                        <p class="fw-bold">$100 per day</p>
+                                        <a asp-controller="Home" asp-action="EqDetails" class="btn button-primary px-3"
+                                            style="background-color: #1f2a55; color: white;">View</a>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

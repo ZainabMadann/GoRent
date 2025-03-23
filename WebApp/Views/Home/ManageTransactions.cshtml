@@ -1,0 +1,82 @@
+@{
+    ViewData["Title"] = "Manage Transactions";
+}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-10">
+
+            <div class="card bg-dark text-white shadow mb-4">
+                <div class="card-body p-4">
+                    <h3 class="h5 mb-3">All Transactions</h3>
+                    <div class="mb-3 d-flex gap-2">
+                        <input type="text" id="searchTransactions"
+                            class="form-control bg-dark text-white border-secondary"
+                            placeholder="Search transactions...">
+                        <select id="filterTransactions" class="form-select bg-dark text-white border-secondary">
+                            <option value="all">All</option>
+                            <option value="completed">Completed</option>
+                            <option value="pending">Pending</option>
+                            <option value="failed">Failed</option>
+                        </select>
+                    </div>
+                    <div id="transactionsList">
+                        <div class="card bg-secondary text-white mb-3">
+                            <div class="card-body d-flex justify-content-between align-items-center">
+                                <div>
+                                    <p class="mb-1"><strong>Transaction ID:</strong> #67890</p>
+                                    <p class="mb-1"><strong>User:</strong> marwa@gmail.com</p>
+                                    <p class="mb-1"><strong>Equipment:</strong> Lorem ipsum dolor sit amet consectetur
+                                        adipisicing elit. Deleniti ipsa accusantium totam at distinctio quae dolores.
+                                    </p>
+                                    <p class="mb-1"><strong>Amount:</strong> $45.00</p>
+                                    <p class="mb-1"><strong>Status:</strong> Completed</p>
+                                    <p class="mb-1"><strong>Date:</strong> 2025-03-04</p>
+                                </div>
+                                <div>
+                                    <button class="btn btn-sm btn-outline-light fw-bold"
+                                        onclick="window.location.href='@Url.Action("TransactionDetails", "Home", new { id = 67890 })'">View</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card bg-secondary text-white mb-3">
+                            <div class="card-body d-flex justify-content-between align-items-center">
+                                <div>
+                                    <p class="mb-1"><strong>Transaction ID:</strong> #67891</p>
+                                    <p class="mb-1"><strong>User:</strong> john@gmail.com</p>
+                                    <p class="mb-1"><strong>Equipment:</strong> Lorem ipsum dolor sit amet consectetur
+                                        adipisicing elit. Deleniti ipsa accusantium totam at distinctio quae dolores.
+                                    </p>
+                                    <p class="mb-1"><strong>Amount:</strong> $75.00</p>
+                                    <p class="mb-1"><strong>Status:</strong> Pending</p>
+                                    <p class="mb-1"><strong>Date:</strong> 2025-03-03</p>
+                                </div>
+                                <div>
+                                    <button class="btn btn-sm btn-outline-light fw-bold"
+                                        onclick="window.location.href='@Url.Action("TransactionDetails", "Home", new { id = 67891 })'">View</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card bg-secondary text-white mb-3">
+                            <div class="card-body d-flex justify-content-between align-items-center">
+                                <div>
+                                    <p class="mb-1"><strong>Transaction ID:</strong> #67892</p>
+                                    <p class="mb-1"><strong>User:</strong> sara@gmail.com</p>
+                                    <p class="mb-1"><strong>Equipment:</strong> equipment</p>
+                                    <p class="mb-1"><strong>Amount:</strong> $30.00</p>
+                                    <p class="mb-1"><strong>Status:</strong> Failed</p>
+                                    <p class="mb-1"><strong>Date:</strong> 2025-03-01</p>
+                                </div>
+                                <div>
+                                    <button class="btn btn-sm btn-outline-light fw-bold"
+                                        onclick="window.location.href='@Url.Action("TransactionDetails", "Home", new { id = 67892 })'">View</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

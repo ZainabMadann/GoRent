@@ -1,0 +1,50 @@
+@{
+    ViewData["Title"] = "Notifications Page";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h4 class="text-light">Your Notifications</h>
+            </div>
+            
+            <div style="max-height: 430px; overflow-y: auto;">
+                <div class="list-group" id="notificationsContainer">
+                    @for (int i = 0; i < 3; i++) {
+                        <div class="list-group-item bg-secondary text-white p-3 mb-2 notification unread">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h6 class="text-info mb-1">Title</h6>
+                                <span class="badge bg-primary rounded-pill">New</span>
+                            </div>
+                            <p class="mb-1">Content</p>
+                            <div class="d-flex justify-content-between align-items-center mt-2">
+                                <small class="text-white">Date - Time</small>
+                                <button class="btn btn-sm mark-as-read" data-notification-id="placeholder-id" style="background-color: #1f2a55; color: white;">
+                                    Mark as Read
+                                </button>
+                            </div>
+                        </div>
+                    }
+                    
+                    @for (int i = 0; i < 3; i++) {
+                        <div class="list-group-item bg-secondary text-white p-3 mb-2 notification read">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h6 class="text-info mb-1">Title</h6>
+                            </div>
+                            <p class="mb-1">Content</p>
+                            <div class="d-flex justify-content-between align-items-center mt-2">
+                                <small class="text-white">Date - Time</small>
+                            </div>
+                        </div>
+                    }
+                </div>
+                
+                <div id="emptyNotifications" class="text-center p-5" style="display: none;">
+                    <i class="bi bi-bell-slash" style="font-size: 3rem; color: #6c757d;"></i>
+                    <p class="text-muted mt-3">You don't have any notifications yet.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

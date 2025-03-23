@@ -18,11 +18,98 @@ public class HomeController : Controller
         return View();
     }
 
-    public IActionResult Privacy()
+    public IActionResult Register()
     {
         return View();
     }
 
+    public IActionResult Login()
+    {
+        return View();
+    }
+
+    public IActionResult Profile()
+    {
+        return View();
+    }
+
+    public IActionResult Feedback()
+    {
+        return View();
+    }
+
+    public IActionResult Categories()
+    {
+        return View();
+    }
+
+    public IActionResult EqDetails()
+    {
+        return View();
+    }
+
+    public IActionResult Notifications()
+    {
+        return View();
+    }
+    public IActionResult RequestDetails()
+    {
+        return View();
+    }
+
+    public IActionResult TransactionDetails()
+    {
+        return View();
+    }
+
+    public IActionResult Payment()
+    {
+        return View();
+    }
+
+    public IActionResult MangeComments()
+    {
+        return View();
+    }
+
+    public IActionResult ManageCat()
+    {
+        return View();
+    }
+
+    public IActionResult ManageEq()
+    {
+        return View();
+    }
+
+    public IActionResult ManageRentalRequests()
+    {
+        return View();
+    }
+    public IActionResult ManageTransactions()
+    {
+        return View();
+    }
+
+    public IActionResult CommentDetails()
+    {
+        return View();
+    }
+
+    public IActionResult CategotyEquioments()
+    {
+        return View();
+    }
+
+    public IActionResult ContactUs()
+    {
+        return View();
+    }
+
+    public IActionResult Dashboard()
+    {
+        return View();
+    }
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {

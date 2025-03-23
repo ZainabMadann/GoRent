@@ -1,0 +1,190 @@
+@{
+    ViewData["Title"] = "Profile Page";
+}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-10">
+            <div class="card bg-dark text-white shadow mb-4">
+                <div class="card-body p-4">
+                    <div class="row">
+                        <div class="col-md-4 mb-4 mb-md-0">
+                            <div class="mb-4">
+                                <p><strong>Full Name:</strong> marwa mohamed</p>
+                                <p><strong>Email Address:</strong> marwa@gmail.com</p>
+                            </div>
+                            <div class="d-flex flex-column gap-2">
+                                <button class="btn custom-btn text-white" id="updateProfileBtn">Update Profile</button>
+                                <button class="btn custom-btn text-white" id="changePasswordBtn">Change
+                                    Password</button>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="d-none" id="updateProfileForm">
+                                <h3 class="h5 mb-3">Update Profile</h3>
+                                <form method="post" asp-action="UpdateProfile">
+                                    <div class="mb-3">
+                                        <label for="name" class="form-label">Full Name</label>
+                                        <input type="text" id="name" name="FullName"
+                                            class="form-control bg-dark text-white border-secondary"
+                                            value="marwa mohamed" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label">Email Address</label>
+                                        <input type="email" id="email" name="Email"
+                                            class="form-control bg-dark text-white border-secondary"
+                                            value="marwa@gmail.com" readonly>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-2 mb-md-0">
+                                            <button type="submit" class="btn custom-btn text-white w-100">Update
+                                                Profile</button>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <button type="button" class="btn cancel-btn text-white w-100"
+                                                id="closeUpdateProfileBtn">Close</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <hr class="d-none" id="updateProfileDivider">
+                            <div class="d-none" id="changePasswordForm">
+                                <h3 class="h5 mb-3">Change Password</h3>
+                                <form method="post" asp-action="ChangePassword">
+                                    <div class="mb-3">
+                                        <label for="currentPassword" class="form-label">Current Password</label>
+                                        <input type="password" id="currentPassword" name="CurrentPassword"
+                                            class="form-control bg-dark text-white border-secondary" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="newPassword" class="form-label">New Password</label>
+                                        <input type="password" id="newPassword" name="NewPassword"
+                                            class="form-control bg-dark text-white border-secondary" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="confirmPassword" class="form-label">Confirm New Password</label>
+                                        <input type="password" id="confirmPassword" name="ConfirmPassword"
+                                            class="form-control bg-dark text-white border-secondary" required>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-2 mb-md-0">
+                                            <button type="submit" class="btn custom-btn text-white w-100">Change
+                                                Password</button>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <button type="button" class="btn cancel-btn text-white w-100"
+                                                id="closeChangePasswordBtn">Close</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card bg-dark text-white shadow mb-4">
+                <div class="card-body p-4">
+                    <h3 class="h5 mb-3">All My Requests</h3>
+                    <div class="mb-3 d-flex gap-2">
+                        <input type="text" id="searchRequests" class="form-control bg-dark text-white border-secondary"
+                            placeholder="Search requests...">
+                        <select id="filterRequests" class="form-select bg-dark text-white border-secondary">
+                            <option value="all">All</option>
+                            <option value="pending">Pending</option>
+                            <option value="approved">Approved</option>
+                            <option value="rejected">Rejected</option>
+                            <option value="returned">Returned</option>
+                        </select>
+                    </div>
+                    <div id="requestsList">
+                        <div class="card bg-secondary text-white mb-3">
+                            <div class="card-body d-flex justify-content-between align-items-center">
+                                <div>
+                                    <p class="mb-1"><strong>Request ID:</strong> #12345</p>
+                                    <p class="mb-1"><strong>Status:</strong> Pending</p>
+                                </div>
+                                <button class="btn btn-sm btn-outline-light fw-bold"
+                                    onclick="window.location.href='@Url.Action("RequestDetails", "Home")'">View</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card bg-dark text-white shadow mb-4">
+                <div class="card-body p-4">
+                    <h3 class="h5 mb-3">All My Transactions</h3>
+                    <div class="mb-3 d-flex gap-2">
+                        <input type="text" id="searchTransactions"
+                            class="form-control bg-dark text-white border-secondary"
+                            placeholder="Search transactions...">
+                        <select id="filterTransactions" class="form-select bg-dark text-white border-secondary">
+                            <option value="all">All</option>
+                            <option value="completed">Completed</option>
+                            <option value="pending">Pending</option>
+                            <option value="failed">Failed</option>
+                        </select>
+                    </div>
+                    <div id="transactionsList">
+                        <div class="card bg-secondary text-white mb-3">
+                            <div class="card-body d-flex justify-content-between align-items-center">
+                                <div>
+                                    <p class="mb-1"><strong>Transaction ID:</strong> #67890</p>
+                                    <p class="mb-1"><strong>Status:</strong> Completed</p>
+                                </div>
+                                <button class="btn btn-sm btn-outline-light fw-bold"
+                                    onclick="window.location.href='@Url.Action("TransactionDetails", "Home")'">View</button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @* this part is for the admin only , we are gonna handle it later *@
+            <div class="card bg-dark text-white shadow mb-4">
+                <div class="card-body p-4">
+                    <div class="d-flex gap-2">
+                        <button class="btn custom-btn text-white" id="manageCategoriesBtn"
+                            onclick="window.location.href='/home/ManageCat'">Manage
+                            Categories</button>
+                        <button class="btn custom-btn text-white" id="manageEquipmentsBtn"
+                            onclick="window.location.href='/home/ManageEq'">Manage
+                            Equipments</button>
+                        <button class="btn custom-btn text-white" id="manageRentalRequestsBtn" onclick="window.location.href='/home/ManageRentalRequests'">Manage Rental
+                            Requests</button>
+                        <button class="btn custom-btn text-white" id="manageTransactionsBtn" onclick="window.location.href='/home/ManageTransactions'">Manage
+                            Transactions</button>
+                        <button class="btn custom-btn text-white" id="manageCommentsBtn"
+                            onclick="window.location.href='/home/MangeComments'">Manage Comments</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        document.getElementById('updateProfileBtn').addEventListener('click', function () {
+            document.getElementById('updateProfileForm').classList.remove('d-none');
+            document.getElementById('updateProfileDivider').classList.remove('d-none');
+            document.getElementById('changePasswordForm').classList.add('d-none');
+        });
+
+        document.getElementById('changePasswordBtn').addEventListener('click', function () {
+            document.getElementById('changePasswordForm').classList.remove('d-none');
+            document.getElementById('updateProfileForm').classList.add('d-none');
+            document.getElementById('updateProfileDivider').classList.add('d-none');
+        });
+
+        document.getElementById('closeUpdateProfileBtn').addEventListener('click', function () {
+            document.getElementById('updateProfileForm').classList.add('d-none');
+            document.getElementById('updateProfileDivider').classList.add('d-none');
+        });
+
+        document.getElementById('closeChangePasswordBtn').addEventListener('click', function () {
+            document.getElementById('changePasswordForm').classList.add('d-none');
+        });
+    </script>
+}

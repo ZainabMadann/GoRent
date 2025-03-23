@@ -1,0 +1,33 @@
+@{
+    ViewData["Title"] = "Register Page";
+}
+<div class="d-flex justify-content-center align-items-center h-100">
+    <div class="dcustom-bg p-4 rounded" style="max-width: 400px;">
+        <form method="post" asp-action="Register">
+            <div class="mb-3">
+                <label for="name" class="form-label fw-bold text-light">Full Name</label>
+                <input type="text" id="name" name="FullName"
+                    class="form-control bg-secondary bg-opacity-25 border-secondary text-white"
+                    placeholder="Enter your full name" required>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label fw-bold text-light">Email Address</label>
+                <input type="email" id="email" name="Email"
+                    class="form-control bg-secondary bg-opacity-25 border-secondary text-white"
+                    placeholder="Enter your email" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label fw-bold text-light">Password</label>
+                <input type="password" id="password" name="Password"
+                    class="form-control bg-secondary bg-opacity-25 border-secondary text-white"
+                    placeholder="Create a password" required>
+            </div>
+            <div class="text-center mt-4">
+                <button type="submit" class="custom-btn">Register</button>
+            </div>
+            <div class="text-center mt-3 text-white">
+                Already have an account? <a asp-action="Login" class="custom-link">Login here</a>
+            </div>
+        </form>
+    </div>
+</div>

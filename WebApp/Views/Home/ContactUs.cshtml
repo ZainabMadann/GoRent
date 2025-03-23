@@ -1,0 +1,48 @@
+@{
+    ViewData["Title"] = "Contact Us";
+}
+<div class="d-flex justify-content-center align-items-center h-100">
+    <div class="dcustom-bg p-4 rounded" style="max-width: 400px; margin-bottom: 40px;">
+        <h3 class="text-center text-light mb-3">Get In Touch</h3>
+        <form method="post" asp-action="SubmitContact">
+            <div class="mb-3">
+                <label for="name" class="form-label fw-bold text-light">Full Name</label>
+                <input type="text" id="name" name="Name"
+                    class="form-control bg-secondary bg-opacity-25 border-secondary text-white"
+                    placeholder="Enter your name" required>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label fw-bold text-light">Email Address</label>
+                <input type="email" id="email" name="Email"
+                    class="form-control bg-secondary bg-opacity-25 border-secondary text-white"
+                    placeholder="Enter your email" required>
+            </div>
+            <div class="mb-3">
+                <label for="subject" class="form-label fw-bold text-light">Subject</label>
+                <input type="text" id="subject" name="Subject"
+                    class="form-control bg-secondary bg-opacity-25 border-secondary text-white"
+                    placeholder="Enter subject" required>
+            </div>
+            <div class="mb-3">
+                <label for="message" class="form-label fw-bold text-light">Message</label>
+                <textarea id="message" name="Message"
+                    class="form-control bg-secondary bg-opacity-25 border-secondary text-white"
+                    placeholder="Enter your message" rows="3" required></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="department" class="form-label fw-bold text-light">Department</label>
+                <select id="department" name="Department"
+                    class="form-select bg-secondary bg-opacity-25 border-secondary text-white">
+                    <option value="support">Customer Support</option>
+                    <option value="sales">Sales</option>
+                    <option value="technical">Technical Support</option>
+                    <option value="billing">Billing</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            <div class="text-center mt-4">
+                <button type="submit" class="custom-btn">Send Message</button>
+            </div>
+        </form>
+    </div>
+</div>
