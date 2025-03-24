@@ -1,49 +1,69 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - WebApp</title>
+    @RenderSection("Styles", required: false)
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/WebApp.styles.css" asp-append-version="true" />
 </head>
-<body>
+
+<body class="text-white custom-bg">
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">WebApp</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+        <nav class="navbar navbar-expand-sm shadow-sm mb-3"
+            style="background-color: #141414; border-bottom: 1px solid #27313A;">
+            <div class="container-fluid px-4 py-3">
+                <div class="d-flex align-items-center gap-2 text-white">
+                    <a class="text-white fs-3 fw-bold tracking-tight text-decoration-none" asp-area=""
+                        asp-controller="Home" asp-action="Index" style="letter-spacing: -0.015em;">GoRent</a>
+                </div>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end">
+                    <div class="d-flex align-items-center gap-3">
+                        <a class="text-white text-sm fw-medium text-decoration-none" asp-area="" asp-controller="Home"
+                            asp-action="Register">Register</a>
+                        <a class="text-white text-sm fw-medium text-decoration-none" asp-area="" asp-controller="Home"
+                            asp-action="Login">Login</a>
+                        <div class="d-flex align-items-center gap-0">
+                            <a class="nav-link profile-icon-link" asp-area="" asp-controller="Home"
+                                asp-action="Notifications">
+                                <img src="/images/not.jpg" alt="Notification Icon" class="notification-icon">
+                            </a>
+                            <a class="nav-link" asp-area="" asp-controller="Home"
+                                asp-action="Dashboard">
+                                <img src="/images/hamburger.png" alt="Notification Icon" class="notification-icon">
+                            </a>
+                            <a class="d-flex align-items-center justify-content-center rounded-3 bg-dark text-decoration-none"
+                                style="background-color: #27313A; height: 36px; min-width: 0; padding: 0 10px;"
+                                asp-area="" asp-controller="Home" asp-action="Profile">
+                                <div class="text-white">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                                        viewBox="0 0 256 256">
+                                        <path
+                                            d="M230.92,212c-15.23-26.33-38.7-45.21-66.09-54.16a72,72,0,1,0-73.66,0C63.78,166.78,40.31,185.66,25.08,212a8,8,0,1,0,13.85,8c18.84-32.56,52.14-52,89.07-52s70.23,19.44,89.07,52a8,8,0,1,0,13.85-8ZM72,96a56,56,0,1,1,56,56A56.06,56.06,0,0,1,72,96Z">
+                                        </path>
+                                    </svg>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
-
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - WebApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
+    <main role="main">
+        @RenderBody()
+    </main>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
+
 </html>

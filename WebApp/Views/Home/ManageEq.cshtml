@@ -1,0 +1,133 @@
+@{
+    ViewData["Title"] = "Manage Equipment";
+}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-10">
+            <div class="card bg-dark text-white shadow mb-4">
+                <div class="card-body p-4">
+                    <h3 class="h5 mb-3">All Equipment</h3>
+
+                    <div class="mb-3 d-flex gap-2">
+                        <input type="text" id="searchEquipment" class="form-control bg-dark text-white border-secondary"
+                            placeholder="Search equipment...">
+                        <select id="filterCategory" class="form-select bg-dark text-white border-secondary">
+                            <option value="all">All Categories</option>
+                            <option value="category1">Category 1</option>
+                            <option value="category2">Category 2</option>
+                            <option value="category3">Category 3</option>
+                        </select>
+                        <button type="button" class="btn button-primary px-3"
+                            style="background-color: #1f2a55; color: white; white-space: nowrap;" data-bs-toggle="modal"
+                            data-bs-target="#addEquipmentModal">
+                            <i class="bi bi-plus-lg me-1"></i> Add New
+                        </button>
+                    </div>
+
+                    <div id="equipmentList" style="max-height: 380px; overflow-y: auto;">
+                        @for (int i = 1; i <= 5; i++)
+                        {
+                            <div class="card bg-secondary text-white mb-3">
+                                <div class="card-body d-flex justify-content-between align-items-center">
+                                    <div class="d-flex">
+                                        <div class="me-3">
+                                            <img src="/images/canon.jpg" class="card-img-top rounded" alt="Equipment Image"
+                                                style="width: 200px; height: 130px; margin-left: 10px;">
+                                        </div>
+                                        <div>
+                                            <p class="mb-1"><strong>Name:</strong> Equipment @i</p>
+                                            <p class="mb-1"><strong>Category:</strong> Category @(i % 3 + 1)</p>
+                                            <p class="mb-1"><strong>Price:</strong> $@(100 * i).00</p>
+                                            <p class="mb-1"><strong>Status:</strong> @(i % 2 == 0 ? "Available" : "Rented")
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex flex-column gap-2 align-items-center">
+                                        <button class="btn btn-sm btn-outline-light fw-bold" data-bs-toggle="modal"
+                                            onclick="window.location.href='/home/EqDetails'" data-category-id="@i">
+                                            <i class="bi bi-pencil"></i> View
+                                        </button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Equipment Modal -->
+<div class="modal fade" id="addEquipmentModal" tabindex="-1" aria-labelledby="addEquipmentModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-dark text-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addEquipmentModalLabel">Add New Equipment</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addEquipmentForm">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="equipmentName" class="form-label">Equipment Name</label>
+                                <input type="text" class="form-control bg-dark text-white border-secondary"
+                                    id="equipmentName" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="equipmentCategory" class="form-label">Category</label>
+                                <select class="form-select bg-dark text-white border-secondary" id="equipmentCategory"
+                                    required>
+                                    <option value="">Select Category</option>
+                                    <option value="category1">Category 1</option>
+                                    <option value="category2">Category 2</option>
+                                    <option value="category3">Category 3</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="equipmentPrice" class="form-label">Price ($)</label>
+                                <input type="number" class="form-control bg-dark text-white border-secondary"
+                                    id="equipmentPrice" min="0" step="0.01" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="equipmentDescription" class="form-label">Description</label>
+                                <textarea class="form-control bg-dark text-white border-secondary"
+                                    id="equipmentDescription" rows="3" required></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="equipmentImage" class="form-label">Equipment Image</label>
+                                <input type="file" class="form-control bg-dark text-white border-secondary"
+                                    id="equipmentImage">
+                            </div>
+                            <div class="mb-3">
+                                <label for="equipmentStatus" class="form-label">Status</label>
+                                <select class="form-select bg-dark text-white border-secondary" id="equipmentStatus"
+                                    required>
+                                    <option value="available">Available</option>
+                                    <option value="maintenance">Under Maintenance</option>
+                                    <option value="reserved">Reserved</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="equipmentSpecifications" class="form-label">Specifications</label>
+                        <textarea class="form-control bg-dark text-white border-secondary" id="equipmentSpecifications"
+                            rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" form="addEquipmentForm" class="btn button-primary"
+                    style="background-color: #1f2a55; color: white;">Add Equipment</button>
+            </div>
+        </div>
+    </div>
+</div>
