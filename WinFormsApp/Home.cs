@@ -12,6 +12,7 @@ namespace WinFormsApp
 {
     public partial class Home : Form
     {
+        FormsIdentityContext IdentityContext = new FormsIdentityContext();
         public Home()
         {
             InitializeComponent();
@@ -64,6 +65,14 @@ namespace WinFormsApp
             Login login = new Login();
             login.Show();
             this.Hide();
+        }
+
+        private void Home_Load(object sender, EventArgs e)
+        {
+            if (Global.RoleName != "Admin")
+            {
+                btnAdminLogs.Visible = false;
+            }
         }
     }
 }

@@ -29,8 +29,11 @@
         private void InitializeComponent()
         {
             groupBox1 = new GroupBox();
-            txtEndDate = new TextBox();
-            txtRequestDate = new TextBox();
+            dtpEndDate = new DateTimePicker();
+            dtpStartDate = new DateTimePicker();
+            dtpRequestDate = new DateTimePicker();
+            label8 = new Label();
+            ddlStatus = new ComboBox();
             txtUserID = new TextBox();
             txtEquipmentID = new TextBox();
             txtRequestID = new TextBox();
@@ -42,15 +45,16 @@
             label5 = new Label();
             btnSave = new Button();
             btnCancel = new Button();
-            txtStatusID = new TextBox();
             groupBox1.SuspendLayout();
             SuspendLayout();
             // 
             // groupBox1
             // 
-            groupBox1.Controls.Add(txtStatusID);
-            groupBox1.Controls.Add(txtEndDate);
-            groupBox1.Controls.Add(txtRequestDate);
+            groupBox1.Controls.Add(dtpEndDate);
+            groupBox1.Controls.Add(dtpStartDate);
+            groupBox1.Controls.Add(dtpRequestDate);
+            groupBox1.Controls.Add(label8);
+            groupBox1.Controls.Add(ddlStatus);
             groupBox1.Controls.Add(txtUserID);
             groupBox1.Controls.Add(txtEquipmentID);
             groupBox1.Controls.Add(txtRequestID);
@@ -63,34 +67,64 @@
             groupBox1.ForeColor = Color.White;
             groupBox1.Location = new Point(12, 12);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(400, 384);
+            groupBox1.Size = new Size(434, 378);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "Request Info";
             groupBox1.Enter += groupBox1_Enter;
             // 
-            // txtEndDate
+            // dtpEndDate
             // 
-            txtEndDate.Enabled = false;
-            txtEndDate.Location = new Point(164, 233);
-            txtEndDate.Name = "txtEndDate";
-            txtEndDate.Size = new Size(213, 27);
-            txtEndDate.TabIndex = 16;
+            dtpEndDate.Enabled = false;
+            dtpEndDate.Location = new Point(164, 278);
+            dtpEndDate.Name = "dtpEndDate";
+            dtpEndDate.Size = new Size(248, 27);
+            dtpEndDate.TabIndex = 25;
             // 
-            // txtRequestDate
+            // dtpStartDate
             // 
-            txtRequestDate.Enabled = false;
-            txtRequestDate.Location = new Point(164, 192);
-            txtRequestDate.Name = "txtRequestDate";
-            txtRequestDate.Size = new Size(213, 27);
-            txtRequestDate.TabIndex = 15;
+            dtpStartDate.Enabled = false;
+            dtpStartDate.Location = new Point(164, 237);
+            dtpStartDate.Name = "dtpStartDate";
+            dtpStartDate.Size = new Size(248, 27);
+            dtpStartDate.TabIndex = 24;
+            // 
+            // dtpRequestDate
+            // 
+            dtpRequestDate.Enabled = false;
+            dtpRequestDate.Location = new Point(164, 195);
+            dtpRequestDate.Name = "dtpRequestDate";
+            dtpRequestDate.Size = new Size(248, 27);
+            dtpRequestDate.TabIndex = 23;
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Location = new Point(28, 242);
+            label8.Name = "label8";
+            label8.Size = new Size(79, 20);
+            label8.TabIndex = 20;
+            label8.Text = "Start Date:";
+            // 
+            // ddlStatus
+            // 
+            ddlStatus.BackColor = Color.FromArgb(31, 42, 85);
+            ddlStatus.Font = new Font("Segoe UI", 10.2F);
+            ddlStatus.ForeColor = Color.White;
+            ddlStatus.FormattingEnabled = true;
+            ddlStatus.Items.AddRange(new object[] { "Pendding", "Approved", "Rejected", "Returned", "Cancelled" });
+            ddlStatus.Location = new Point(164, 324);
+            ddlStatus.Name = "ddlStatus";
+            ddlStatus.Size = new Size(248, 31);
+            ddlStatus.TabIndex = 17;
+            ddlStatus.Text = "Chose a status";
             // 
             // txtUserID
             // 
             txtUserID.Enabled = false;
             txtUserID.Location = new Point(164, 148);
             txtUserID.Name = "txtUserID";
-            txtUserID.Size = new Size(213, 27);
+            txtUserID.Size = new Size(248, 27);
             txtUserID.TabIndex = 14;
             // 
             // txtEquipmentID
@@ -98,7 +132,7 @@
             txtEquipmentID.Enabled = false;
             txtEquipmentID.Location = new Point(164, 105);
             txtEquipmentID.Name = "txtEquipmentID";
-            txtEquipmentID.Size = new Size(213, 27);
+            txtEquipmentID.Size = new Size(248, 27);
             txtEquipmentID.TabIndex = 13;
             // 
             // txtRequestID
@@ -106,22 +140,22 @@
             txtRequestID.Enabled = false;
             txtRequestID.Location = new Point(164, 58);
             txtRequestID.Name = "txtRequestID";
-            txtRequestID.Size = new Size(213, 27);
+            txtRequestID.Size = new Size(248, 27);
             txtRequestID.TabIndex = 12;
             // 
             // label7
             // 
             label7.AutoSize = true;
-            label7.Location = new Point(28, 280);
+            label7.Location = new Point(28, 329);
             label7.Name = "label7";
-            label7.Size = new Size(71, 20);
+            label7.Size = new Size(52, 20);
             label7.TabIndex = 11;
-            label7.Text = "Status ID:";
+            label7.Text = "Status:";
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(28, 236);
+            label1.Location = new Point(28, 283);
             label1.Name = "label1";
             label1.Size = new Size(73, 20);
             label1.TabIndex = 9;
@@ -167,18 +201,19 @@
             // 
             btnSave.BackColor = Color.FromArgb(31, 42, 85);
             btnSave.ForeColor = Color.White;
-            btnSave.Location = new Point(12, 417);
+            btnSave.Location = new Point(12, 406);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(107, 31);
             btnSave.TabIndex = 20;
             btnSave.Text = "Save";
             btnSave.UseVisualStyleBackColor = false;
+            btnSave.Click += btnSave_Click;
             // 
             // btnCancel
             // 
             btnCancel.BackColor = Color.FromArgb(31, 42, 85);
             btnCancel.ForeColor = Color.White;
-            btnCancel.Location = new Point(305, 417);
+            btnCancel.Location = new Point(339, 406);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(107, 31);
             btnCancel.TabIndex = 21;
@@ -186,25 +221,18 @@
             btnCancel.UseVisualStyleBackColor = false;
             btnCancel.Click += btnClose_Click;
             // 
-            // txtStatusID
-            // 
-            txtStatusID.Enabled = false;
-            txtStatusID.Location = new Point(164, 277);
-            txtStatusID.Name = "txtStatusID";
-            txtStatusID.Size = new Size(213, 27);
-            txtStatusID.TabIndex = 17;
-            // 
             // ManageRentalRequests
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Black;
-            ClientSize = new Size(424, 466);
+            ClientSize = new Size(458, 460);
             Controls.Add(btnCancel);
             Controls.Add(btnSave);
             Controls.Add(groupBox1);
             Name = "ManageRentalRequests";
             Text = "ManageRentalRequests";
+            Load += ManageRentalRequests_Load;
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
             ResumeLayout(false);
@@ -219,13 +247,15 @@
         private Label label3;
         private Label label4;
         private Label label5;
-        private TextBox txtEndDate;
-        private TextBox txtRequestDate;
         private TextBox txtUserID;
         private TextBox txtEquipmentID;
         private TextBox txtRequestID;
         private Label label7;
         private Label label1;
-        private TextBox txtStatusID;
+        private ComboBox ddlStatus;
+        private DateTimePicker dtpEndDate;
+        private DateTimePicker dtpStartDate;
+        private DateTimePicker dtpRequestDate;
+        private Label label8;
     }
 }

@@ -30,11 +30,10 @@
         {
             label1 = new Label();
             label2 = new Label();
-            txtEmail = new TextBox();
+            txtUserName = new TextBox();
             label3 = new Label();
             txtPassword = new TextBox();
             btnLogin = new Button();
-            btnCreateAccount = new Button();
             btnExit = new Button();
             SuspendLayout();
             // 
@@ -62,12 +61,12 @@
             label2.Text = "Email:";
             label2.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // txtEmail
+            // txtUserName
             // 
-            txtEmail.Location = new Point(229, 154);
-            txtEmail.Name = "txtEmail";
-            txtEmail.Size = new Size(295, 27);
-            txtEmail.TabIndex = 2;
+            txtUserName.Location = new Point(229, 154);
+            txtUserName.Name = "txtUserName";
+            txtUserName.Size = new Size(295, 27);
+            txtUserName.TabIndex = 2;
             // 
             // label3
             // 
@@ -85,30 +84,21 @@
             // 
             txtPassword.Location = new Point(229, 215);
             txtPassword.Name = "txtPassword";
+            txtPassword.PasswordChar = '*';
             txtPassword.Size = new Size(295, 27);
             txtPassword.TabIndex = 4;
+            txtPassword.TextChanged += txtPassword_TextChanged;
             // 
             // btnLogin
             // 
             btnLogin.BackColor = Color.FromArgb(31, 42, 85);
-            btnLogin.Location = new Point(118, 290);
+            btnLogin.Location = new Point(118, 267);
             btnLogin.Name = "btnLogin";
-            btnLogin.Size = new Size(94, 29);
+            btnLogin.Size = new Size(406, 61);
             btnLogin.TabIndex = 5;
             btnLogin.Text = "Login";
             btnLogin.UseVisualStyleBackColor = false;
             btnLogin.Click += btnLogin_Click;
-            // 
-            // btnCreateAccount
-            // 
-            btnCreateAccount.BackColor = Color.FromArgb(31, 42, 85);
-            btnCreateAccount.Location = new Point(342, 290);
-            btnCreateAccount.Name = "btnCreateAccount";
-            btnCreateAccount.Size = new Size(182, 29);
-            btnCreateAccount.TabIndex = 6;
-            btnCreateAccount.Text = "No account? Create one!";
-            btnCreateAccount.UseVisualStyleBackColor = false;
-            btnCreateAccount.Click += btnCreateAccount_Click;
             // 
             // btnExit
             // 
@@ -119,7 +109,7 @@
             btnExit.TabIndex = 7;
             btnExit.Text = "Exit";
             btnExit.UseVisualStyleBackColor = false;
-            btnExit.Click += this.btnExit_Click;
+            btnExit.Click += btnExit_Click;
             // 
             // Login
             // 
@@ -128,16 +118,16 @@
             BackColor = Color.Black;
             ClientSize = new Size(650, 488);
             Controls.Add(btnExit);
-            Controls.Add(btnCreateAccount);
             Controls.Add(btnLogin);
             Controls.Add(txtPassword);
             Controls.Add(label3);
-            Controls.Add(txtEmail);
+            Controls.Add(txtUserName);
             Controls.Add(label2);
             Controls.Add(label1);
             ForeColor = Color.White;
             Name = "Login";
             Text = "Form1";
+            Load += Login_Load;
             ResumeLayout(false);
             PerformLayout();
         }
@@ -146,11 +136,10 @@
 
         private Label label1;
         private Label label2;
-        private TextBox txtEmail;
+        private TextBox txtUserName;
         private Label label3;
         private TextBox txtPassword;
         private Button btnLogin;
-        private Button btnCreateAccount;
         private Button btnExit;
     }
 }

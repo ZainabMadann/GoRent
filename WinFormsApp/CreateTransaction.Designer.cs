@@ -31,7 +31,12 @@
             btnCancel = new Button();
             btnCreate = new Button();
             groupBox1 = new GroupBox();
-            txtRentalStartDate = new TextBox();
+            dtpEndDate = new DateTimePicker();
+            dtpStartDate = new DateTimePicker();
+            ddlPaymentStatus = new ComboBox();
+            txtTotalCost = new TextBox();
+            label8 = new Label();
+            label6 = new Label();
             txtUserID = new TextBox();
             txtEquipmentID = new TextBox();
             txtRentalRequentID = new TextBox();
@@ -42,11 +47,6 @@
             label3 = new Label();
             label4 = new Label();
             label5 = new Label();
-            label6 = new Label();
-            label8 = new Label();
-            txtTotalCost = new TextBox();
-            txtRentalEndDate = new TextBox();
-            ddlPaymentStatus = new ComboBox();
             groupBox1.SuspendLayout();
             SuspendLayout();
             // 
@@ -54,32 +54,34 @@
             // 
             btnCancel.BackColor = Color.FromArgb(31, 42, 85);
             btnCancel.ForeColor = Color.White;
-            btnCancel.Location = new Point(387, 462);
+            btnCancel.Location = new Point(387, 532);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(107, 31);
             btnCancel.TabIndex = 24;
             btnCancel.Text = "Cancel";
             btnCancel.UseVisualStyleBackColor = false;
+            btnCancel.Click += btnCancel_Click;
             // 
             // btnCreate
             // 
             btnCreate.BackColor = Color.FromArgb(31, 42, 85);
             btnCreate.ForeColor = Color.White;
-            btnCreate.Location = new Point(12, 462);
+            btnCreate.Location = new Point(12, 532);
             btnCreate.Name = "btnCreate";
             btnCreate.Size = new Size(107, 31);
             btnCreate.TabIndex = 23;
             btnCreate.Text = "Create";
             btnCreate.UseVisualStyleBackColor = false;
+            btnCreate.Click += btnCreate_Click;
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(dtpEndDate);
+            groupBox1.Controls.Add(dtpStartDate);
             groupBox1.Controls.Add(ddlPaymentStatus);
-            groupBox1.Controls.Add(txtRentalEndDate);
             groupBox1.Controls.Add(txtTotalCost);
             groupBox1.Controls.Add(label8);
             groupBox1.Controls.Add(label6);
-            groupBox1.Controls.Add(txtRentalStartDate);
             groupBox1.Controls.Add(txtUserID);
             groupBox1.Controls.Add(txtEquipmentID);
             groupBox1.Controls.Add(txtRentalRequentID);
@@ -93,41 +95,79 @@
             groupBox1.ForeColor = Color.White;
             groupBox1.Location = new Point(12, 12);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(482, 444);
+            groupBox1.Size = new Size(482, 514);
             groupBox1.TabIndex = 22;
             groupBox1.TabStop = false;
             groupBox1.Text = "Transaction Info";
             // 
-            // txtRentalStartDate
+            // dtpEndDate
             // 
-            txtRentalStartDate.Enabled = false;
-            txtRentalStartDate.Location = new Point(219, 229);
-            txtRentalStartDate.Name = "txtRentalStartDate";
-            txtRentalStartDate.Size = new Size(240, 27);
-            txtRentalStartDate.TabIndex = 16;
+            dtpEndDate.Location = new Point(217, 312);
+            dtpEndDate.Name = "dtpEndDate";
+            dtpEndDate.Size = new Size(250, 27);
+            dtpEndDate.TabIndex = 23;
+            // 
+            // dtpStartDate
+            // 
+            dtpStartDate.Location = new Point(217, 227);
+            dtpStartDate.Name = "dtpStartDate";
+            dtpStartDate.Size = new Size(250, 27);
+            dtpStartDate.TabIndex = 22;
+            // 
+            // ddlPaymentStatus
+            // 
+            ddlPaymentStatus.FormattingEnabled = true;
+            ddlPaymentStatus.Items.AddRange(new object[] { "Paid", "UnPaid", "Pending" });
+            ddlPaymentStatus.Location = new Point(217, 356);
+            ddlPaymentStatus.Name = "ddlPaymentStatus";
+            ddlPaymentStatus.Size = new Size(250, 28);
+            ddlPaymentStatus.TabIndex = 21;
+            ddlPaymentStatus.Text = "Status";
+            // 
+            // txtTotalCost
+            // 
+            txtTotalCost.Location = new Point(219, 273);
+            txtTotalCost.Name = "txtTotalCost";
+            txtTotalCost.Size = new Size(248, 27);
+            txtTotalCost.TabIndex = 19;
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Location = new Point(29, 359);
+            label8.Name = "label8";
+            label8.Size = new Size(112, 20);
+            label8.TabIndex = 18;
+            label8.Text = "Payment Status:";
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(29, 317);
+            label6.Name = "label6";
+            label6.Size = new Size(119, 20);
+            label6.TabIndex = 17;
+            label6.Text = "Rental End Date:";
             // 
             // txtUserID
             // 
-            txtUserID.Enabled = false;
             txtUserID.Location = new Point(219, 188);
             txtUserID.Name = "txtUserID";
-            txtUserID.Size = new Size(240, 27);
+            txtUserID.Size = new Size(248, 27);
             txtUserID.TabIndex = 15;
             // 
             // txtEquipmentID
             // 
-            txtEquipmentID.Enabled = false;
             txtEquipmentID.Location = new Point(219, 144);
             txtEquipmentID.Name = "txtEquipmentID";
-            txtEquipmentID.Size = new Size(240, 27);
+            txtEquipmentID.Size = new Size(248, 27);
             txtEquipmentID.TabIndex = 14;
             // 
             // txtRentalRequentID
             // 
-            txtRentalRequentID.Enabled = false;
             txtRentalRequentID.Location = new Point(219, 101);
             txtRentalRequentID.Name = "txtRentalRequentID";
-            txtRentalRequentID.Size = new Size(240, 27);
+            txtRentalRequentID.Size = new Size(248, 27);
             txtRentalRequentID.TabIndex = 13;
             // 
             // txtRequestTransactionID
@@ -135,7 +175,7 @@
             txtRequestTransactionID.Enabled = false;
             txtRequestTransactionID.Location = new Point(219, 58);
             txtRequestTransactionID.Name = "txtRequestTransactionID";
-            txtRequestTransactionID.Size = new Size(240, 27);
+            txtRequestTransactionID.Size = new Size(248, 27);
             txtRequestTransactionID.TabIndex = 12;
             // 
             // label7
@@ -192,60 +232,18 @@
             label5.TabIndex = 8;
             label5.Text = "User ID:";
             // 
-            // label6
-            // 
-            label6.AutoSize = true;
-            label6.Location = new Point(29, 317);
-            label6.Name = "label6";
-            label6.Size = new Size(119, 20);
-            label6.TabIndex = 17;
-            label6.Text = "Rental End Date:";
-            // 
-            // label8
-            // 
-            label8.AutoSize = true;
-            label8.Location = new Point(29, 359);
-            label8.Name = "label8";
-            label8.Size = new Size(112, 20);
-            label8.TabIndex = 18;
-            label8.Text = "Payment Status:";
-            // 
-            // txtTotalCost
-            // 
-            txtTotalCost.Enabled = false;
-            txtTotalCost.Location = new Point(219, 273);
-            txtTotalCost.Name = "txtTotalCost";
-            txtTotalCost.Size = new Size(240, 27);
-            txtTotalCost.TabIndex = 19;
-            // 
-            // txtRentalEndDate
-            // 
-            txtRentalEndDate.Enabled = false;
-            txtRentalEndDate.Location = new Point(219, 314);
-            txtRentalEndDate.Name = "txtRentalEndDate";
-            txtRentalEndDate.Size = new Size(240, 27);
-            txtRentalEndDate.TabIndex = 20;
-            // 
-            // ddlPaymentStatus
-            // 
-            ddlPaymentStatus.FormattingEnabled = true;
-            ddlPaymentStatus.Location = new Point(217, 356);
-            ddlPaymentStatus.Name = "ddlPaymentStatus";
-            ddlPaymentStatus.Size = new Size(242, 28);
-            ddlPaymentStatus.TabIndex = 21;
-            ddlPaymentStatus.Text = "Status";
-            // 
             // CreateTransaction
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Black;
-            ClientSize = new Size(506, 505);
+            ClientSize = new Size(506, 575);
             Controls.Add(btnCancel);
             Controls.Add(btnCreate);
             Controls.Add(groupBox1);
             Name = "CreateTransaction";
             Text = "CreateTransaction";
+            Load += CreateTransaction_Load;
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
             ResumeLayout(false);
@@ -256,7 +254,6 @@
         private Button btnCancel;
         private Button btnCreate;
         private GroupBox groupBox1;
-        private TextBox txtRentalStartDate;
         private TextBox txtUserID;
         private TextBox txtEquipmentID;
         private TextBox txtRentalRequentID;
@@ -267,10 +264,11 @@
         private Label label3;
         private Label label4;
         private Label label5;
-        private TextBox txtRentalEndDate;
         private TextBox txtTotalCost;
         private Label label8;
         private Label label6;
         private ComboBox ddlPaymentStatus;
+        private DateTimePicker dtpEndDate;
+        private DateTimePicker dtpStartDate;
     }
 }
