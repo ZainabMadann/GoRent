@@ -1,0 +1,137 @@
+@model WebApp.Models.ManageEquipmentViewModel
+
+@{
+    ViewData["Title"] = "Manage Equipment";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-10">
+            <div class="card bg-dark text-white shadow mb-4">
+                <div class="card-body p-4">
+                    <h3 class="h5 mb-3">All Equipment</h3>
+
+                    <div class="mb-3 d-flex gap-2">
+                        <input type="text" id="searchEquipment" class="form-control bg-dark text-white border-secondary"
+                               placeholder="Search equipment...">
+                        <select id="filterCategory" class="form-select bg-dark text-white border-secondary">
+                            <option value="all">All Categories</option>
+                            <option value="category1">Category 1</option>
+                            <option value="category2">Category 2</option>
+                            <option value="category3">Category 3</option>
+                        </select>
+                        <button type="button" class="btn button-primary px-3"
+                                style="background-color: #1f2a55; color: white; white-space: nowrap;" data-bs-toggle="modal"
+                                data-bs-target="#addEquipmentModal">
+                            <i class="bi bi-plus-lg me-1"></i> Add New
+                        </button>
+                    </div>
+
+                    <div id="equipmentList" style="max-height: 380px; overflow-y: auto;">
+                        @foreach (var equipment in Model.EquipmentList)
+                        {
+                            <div class="card bg-secondary text-white mb-3">
+                                <div class="card-body d-flex justify-content-between align-items-center">
+                                    <div class="d-flex">
+                                        <div class="me-3">
+                                            <img src="@(equipment.ImagePath ?? "/images/default.jpg")" class="card-img-top rounded" alt="Equipment Image"
+                                                 style="width: 200px; height: 130px; margin-left: 10px;">
+
+                                        </div>
+                                        <div>
+                                            <p class="mb-1"><strong>Name:</strong> @equipment.Name</p>
+                                            <p class="mb-1"><strong>Category:</strong> @equipment.Category?.Name ?? "N/A"</p>
+                                            <p class="mb-1"><strong>Price:</strong> $@equipment.RentalRate.ToString("0.00")</p>
+                                            <p class="mb-1"><strong>Status:</strong> @equipment.EquipmentStatus?.Description ?? "N/A"</p>
+                                            <p><strong>Image Path:</strong> @equipment.ImagePath</p>
+
+                                        </div>
+                                    </div>
+                                    <div class="d-flex flex-column gap-2 align-items-center">
+                                        <button class="btn btn-sm btn-outline-light fw-bold"
+                                                onclick="window.location.href='/home/EqDetails/@equipment.EquipmentId'">
+                                            <i class="bi bi-pencil"></i> View
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Equipment Modal -->
+<div class="modal fade" id="addEquipmentModal" tabindex="-1" aria-labelledby="addEquipmentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-dark text-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addEquipmentModalLabel">Add New Equipment</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form asp-action="Create" asp-controller="Equipment" method="post" enctype="multipart/form-data" id="addEquipmentForm">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label asp-for="CreateEquipment.Name" class="form-label">Equipment Name</label>
+                                <input asp-for="CreateEquipment.Name" class="form-control bg-dark text-white border-secondary" />
+                                <span asp-validation-for="CreateEquipment.Name" class="text-danger"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="CreateEquipment.Category_ID" class="form-label">Category</label>
+                                <select asp-for="CreateEquipment.Category_ID" class="form-select bg-dark text-white border-secondary">
+                                    <option value="">Select Category</option>
+                                    <option value="1">Category 1</option>
+                                    <option value="2">Category 2</option>
+                                    <option value="3">Category 3</option>
+                                </select>
+                                <span asp-validation-for="CreateEquipment.Category_ID" class="text-danger"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="CreateEquipment.RentalRate" class="form-label">Price ($)</label>
+                                <input asp-for="CreateEquipment.RentalRate" type="number" class="form-control bg-dark text-white border-secondary" step="0.01" min="0" />
+                                <span asp-validation-for="CreateEquipment.RentalRate" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label asp-for="CreateEquipment.Description" class="form-label">Description</label>
+                                <textarea asp-for="CreateEquipment.Description" class="form-control bg-dark text-white border-secondary" rows="3"></textarea>
+                                <span asp-validation-for="CreateEquipment.Description" class="text-danger"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="CreateEquipment.Equipment_Status_ID" class="form-label">Status</label>
+                                <select asp-for="CreateEquipment.Equipment_Status_ID" class="form-select bg-dark text-white border-secondary">
+                                    <option value="">Select Status</option>
+                                    <option value="1">Available</option>
+                                    <option value="2">Rented</option>
+                                </select>
+                                <span asp-validation-for="CreateEquipment.Equipment_Status_ID" class="text-danger"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="CreateEquipment.EquipmentImage" class="form-label">Equipment Image</label>
+                                <input asp-for="CreateEquipment.EquipmentImage" type="file" class="form-control bg-dark text-white border-secondary" />
+                                <span asp-validation-for="CreateEquipment.EquipmentImage" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Add Equipment</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

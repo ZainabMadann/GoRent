@@ -32,6 +32,11 @@ namespace ClassLibrary.Model
         public int EquipmentConditionId { get; set; }
         [Column("Equipment_Status_ID")]
         public int EquipmentStatusId { get; set; }
+        [Column("Image_Path")]
+        [StringLength(255)]
+        [Unicode(false)]
+        public string? ImagePath { get; set; }
+
 
         [ForeignKey("CategoryId")]
         [InverseProperty("Equipment")]

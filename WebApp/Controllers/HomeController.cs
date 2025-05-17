@@ -77,10 +77,10 @@ public class HomeController : Controller
         return View();
     }
 
-    public IActionResult ManageEq()
-    {
-        return View();
-    }
+    //public IActionResult ManageEq()
+    //{
+    //    return View();
+    //}
 
     public IActionResult ManageRentalRequests()
     {
@@ -97,6 +97,16 @@ public class HomeController : Controller
     }
 
     public IActionResult CategotyEquioments()
+    {
+        return View();
+    }
+
+    public IActionResult ManageLogs()
+    {
+        return View();
+    }
+
+    public IActionResult ManageStatus()
     {
         return View();
     }
