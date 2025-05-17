@@ -10,7 +10,6 @@ public class CategoryController : Controller
         _context = context;
     }
 
-    // POST: Category/Add
     [HttpPost]
     public IActionResult Add([FromForm] string categoryName, [FromForm] string categoryDescription)
     {
@@ -29,7 +28,7 @@ public class CategoryController : Controller
         _context.Categories.Add(newCategory);
         _context.SaveChanges();
 
-        return RedirectToAction("ManageCategories"); // or wherever your list view is
+        return RedirectToAction("ManageCat"); 
     }
 
     public IActionResult ManageCat()
