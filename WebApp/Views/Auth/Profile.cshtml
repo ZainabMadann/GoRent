@@ -1,5 +1,6 @@
 @{
     ViewData["Title"] = "Profile Page";
+    var userRole = Context.Session.GetString("Role");
 }
 <div class="container py-4">
     <div class="row justify-content-center">
@@ -159,7 +160,7 @@
             @*         </div> *@
             @*     </div> *@
             @* </div> *@
-            @if (User.IsInRole("Admin"))
+            @if (userRole == "Admin")
             {
                 <div class="card bg-dark text-white shadow mb-4">
                     <div class="card-body p-4">
