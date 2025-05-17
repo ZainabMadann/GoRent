@@ -77,10 +77,10 @@ public class HomeController : Controller
         return View();
     }
 
-    public IActionResult ManageEq()
-    {
-        return View();
-    }
+    //public IActionResult ManageEq()
+    //{
+    //    return View();
+    //}
 
     public IActionResult ManageRentalRequests()
     {
