@@ -40,18 +40,21 @@
                                         </div>
                                         <div>
                                             <p class="mb-1"><strong>Name:</strong> @equipment.Name</p>
-                                            <p class="mb-1"><strong>Category:</strong> @equipment.Category?.Name ?? "N/A"</p>
+
+                                            <p class="mb-1"><strong>Category:</strong> @(equipment.Category?.Name ?? "N/A")</p>
+
                                             <p class="mb-1"><strong>Price:</strong> $@equipment.RentalRate.ToString("0.00")</p>
-                                            <p class="mb-1"><strong>Status:</strong> @equipment.EquipmentStatus?.Description ?? "N/A"</p>
-                                            <p><strong>Image Path:</strong> @equipment.ImagePath</p>
+
+                                            <p class="mb-1"><strong>Status:</strong> @(equipment.EquipmentStatus?.Description ?? "N/A")</p>
 
                                         </div>
                                     </div>
                                     <div class="d-flex flex-column gap-2 align-items-center">
                                         <button class="btn btn-sm btn-outline-light fw-bold"
-                                                onclick="window.location.href='/home/EqDetails/@equipment.EquipmentId'">
+                                                onclick="window.location.href='/equipment/details/@equipment.EquipmentId'">
                                             <i class="bi bi-pencil"></i> View
                                         </button>
+
                                     </div>
                                 </div>
                             </div>
@@ -87,10 +90,13 @@
                                 <label asp-for="CreateEquipment.Category_ID" class="form-label">Category</label>
                                 <select asp-for="CreateEquipment.Category_ID" class="form-select bg-dark text-white border-secondary">
                                     <option value="">Select Category</option>
-                                    <option value="1">Category 1</option>
-                                    <option value="2">Category 2</option>
-                                    <option value="3">Category 3</option>
+                                    @foreach (var category in Model.Categories)
+                                    {
+                                        <option value="@category.CategoryId">@category.Name</option>
+                                    }
                                 </select>
+
+
                                 <span asp-validation-for="CreateEquipment.Category_ID" class="text-danger"></span>
                             </div>
 
@@ -112,9 +118,12 @@
                                 <label asp-for="CreateEquipment.Equipment_Status_ID" class="form-label">Status</label>
                                 <select asp-for="CreateEquipment.Equipment_Status_ID" class="form-select bg-dark text-white border-secondary">
                                     <option value="">Select Status</option>
-                                    <option value="1">Available</option>
-                                    <option value="2">Rented</option>
+                                    @foreach (var status in Model.Statuses)
+                                    {
+                                        <option value="@status.EquipmentStatusId">@status.Description</option>
+                                    }
                                 </select>
+
                                 <span asp-validation-for="CreateEquipment.Equipment_Status_ID" class="text-danger"></span>
                             </div>
 

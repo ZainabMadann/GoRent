@@ -25,7 +25,9 @@ namespace WebApp.Controllers
                     .Include(e => e.Category)
                     .Include(e => e.EquipmentStatus)
                     .ToList(),
-                CreateEquipment = new CreateEquipmentViewModel()
+                CreateEquipment = new CreateEquipmentViewModel(),
+                Categories = _context.Categories.ToList(),
+                Statuses = _context.EquipmentStatuses.ToList()
             };
 
             return View("ManageEq", viewModel);
@@ -40,12 +42,12 @@ namespace WebApp.Controllers
                     .Include(e => e.Category)
                     .Include(e => e.EquipmentStatus)
                     .ToList();
+                model.Categories = _context.Categories.ToList();
 
                 return View("ManageEq", model);
             }
 
             var create = model.CreateEquipment;
-
             string? imagePath = null;
 
             if (create.EquipmentImage != null)
@@ -71,7 +73,7 @@ namespace WebApp.Controllers
                 RentalRate = create.RentalRate,
                 CategoryId = create.Category_ID,
                 EquipmentStatusId = create.Equipment_Status_ID,
-                EquipmentConditionId = 1, // default
+                EquipmentConditionId = 1,
                 ImagePath = imagePath
             };
 
@@ -80,5 +82,57 @@ namespace WebApp.Controllers
 
             return RedirectToAction("Manage");
         }
+
+        [HttpGet]
+        public IActionResult Details(int id)
+        {
+            var equipment = _context.Equipment
+                .Include(e => e.Category)
+                .Include(e => e.EquipmentStatus)
+                .FirstOrDefault(e => e.EquipmentId == id);
+
+            if (equipment == null)
+                return NotFound();
+
+            ViewBag.Categories = _context.Categories.ToList();
+            ViewBag.Statuses = _context.EquipmentStatuses.ToList();
+
+            return View("EqDetails", equipment);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(IFormFile? EquipmentImage, int EquipmentId, string Name, string Description,
+    decimal RentalRate, int CategoryId, int EquipmentStatusId)
+        {
+            var equipment = await _context.Equipment.FindAsync(EquipmentId);
+            if (equipment == null) return NotFound();
+
+            equipment.Name = Name;
+            equipment.Description = Description;
+            equipment.RentalRate = RentalRate;
+            equipment.CategoryId = CategoryId;
+            equipment.EquipmentStatusId = EquipmentStatusId;
+
+            // Image upload handling
+            if (EquipmentImage != null)
+            {
+                var uploads = Path.Combine(_env.WebRootPath, "images");
+                Directory.CreateDirectory(uploads);
+                var fileName = Guid.NewGuid() + Path.GetExtension(EquipmentImage.FileName);
+                var filePath = Path.Combine(uploads, fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await EquipmentImage.CopyToAsync(stream);
+                }
+
+                equipment.ImagePath = "/images/" + fileName;
+            }
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Details", new { id = equipment.EquipmentId });
+        }
+
     }
 }

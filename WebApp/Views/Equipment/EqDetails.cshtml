@@ -1,3 +1,5 @@
+@model ClassLibrary.Model.Equipment
+
 @{
     ViewData["Title"] = "Equipment Details Page";
 }
@@ -7,36 +9,29 @@
         <div class="col-md-10 col-lg-9">
             <h4 class="text-light mb-4">Equipment Details</h4>
             <div class="card bg-dark text-white shadow-sm p-3">
-                <img src="/images/canon.jpg" class="card-img-top rounded" alt="Equipment Image"
-                    style="width: 400px; height: 250px;">
-                <div class="card-body">
-                    <h3 class="card-title mt-2">Canon EOS 50D</h3>
-                    <div class="mb-3">
-                        <span class="badge bg-primary me-2">DSLR Camera</span>
-                        <span class="badge bg-success">Available</span>
-                    </div>
-                    <h4 class="text-success">$100.00 per day</h4>
-                    <p class="text-muted">The Canon EOS 50D is a powerful DSLR camera featuring a 15.1 MP APS-C CMOS
-                        sensor,
-                        fast DIGIC 4 processor, and high ISO performance, making it ideal for photographers and
-                        enthusiasts.
-                    </p>
+                <img src="@(Model.ImagePath ?? "/images/default.jpg")" class="card-img-top rounded" alt="Equipment Image"
+                     style="width: 400px; height: 250px;">
 
-                    <div class="mt-4">
-                        <h5>Specifications</h5>
-                        <ul class="text-muted">
-                            <li>Sensor: 15.1 MP APS-C CMOS</li>
-                            <li>Processor: DIGIC 4</li>
-                            <li>ISO Range: 100-3200 (expandable to 12800)</li>
-                            <li>Autofocus: 9-point AF system</li>
-                            <li>Shutter Speed: 1/8000 to 30 sec</li>
-                            <li>Continuous Shooting: 6.3 fps</li>
-                            <li>LCD: 3.0-inch, 920k-dot</li>
-                            <li>Video: Not supported</li>
-                            <li>Battery Life: Approx. 800 shots</li>
-                            <li>Weight: 822g (body only)</li>
-                        </ul>
-                    </div>
+
+                <h3 class="card-title mt-2">@Model.Name</h3>
+
+                <div class="mb-3">
+                    @if (Model.Category != null)
+                    {
+                        <span class="badge bg-primary me-2">@Model.Category.Name</span>
+                    }
+
+                    @if (Model.EquipmentStatus != null)
+                    {
+                        <span class="badge bg-success">@Model.EquipmentStatus.Description</span>
+                    }
+
+                </div>
+
+                <h4 class="text-success">$@Model.RentalRate.ToString("0.00") per day</h4>
+
+                <p class="text-muted">@Model.Description</p>
+
 
                     <div class="mt-3">
                         <button class="btn button-primary" style="background-color: #1f2a55; color: white;"
@@ -128,80 +123,76 @@
                     aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="editEquipmentForm">
-                    <input type="hidden" id="editEquipmentId">
+                <form asp-action="Edit" asp-controller="Equipment" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="EquipmentId" value="@Model.EquipmentId" />
+
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="editEquipmentName" class="form-label">Equipment Name</label>
-                                <input type="text" class="form-control bg-dark text-white border-secondary"
-                                    id="editEquipmentName" value="Canon EOS 50D" required>
+                                <label class="form-label">Equipment Name</label>
+                                <input type="text" name="Name" class="form-control bg-dark text-white border-secondary"
+                                       value="@Model.Name" required />
                             </div>
+
                             <div class="mb-3">
-                                <label for="editEquipmentCategory" class="form-label">Category</label>
-                                <select class="form-select bg-dark text-white border-secondary"
-                                    id="editEquipmentCategory" required>
-                                    <option value="">Select Category</option>
-                                    <option value="category1" selected>DSLR Camera</option>
-                                    <option value="category2">Video Camera</option>
-                                    <option value="category3">Lens</option>
-                                </select>
+                                <label class="form-label">Category</label>
+                               <select name="CategoryId" class="form-select bg-dark text-white border-secondary" required>
+    <option value="">Select Category</option>
+    @foreach (var category in ViewBag.Categories as List<ClassLibrary.Model.Category>)
+    {
+        var isSelected = Model.CategoryId == category.CategoryId ? "selected" : "";
+        @:<option value="@category.CategoryId" @isSelected>@category.Name</option>
+    }
+</select>
+
                             </div>
+
                             <div class="mb-3">
-                                <label for="editEquipmentPrice" class="form-label">Price ($)</label>
-                                <input type="number" class="form-control bg-dark text-white border-secondary"
-                                    id="editEquipmentPrice" min="0" step="0.01" value="100.00" required>
+                                <label class="form-label">Price ($)</label>
+                                <input type="number" name="RentalRate" class="form-control bg-dark text-white border-secondary"
+                                       value="@Model.RentalRate.ToString("0.00")" min="0" step="0.01" required />
                             </div>
                         </div>
+
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="editEquipmentDescription" class="form-label">Description</label>
-                                <textarea class="form-control bg-dark text-white border-secondary"
-                                    id="editEquipmentDescription" rows="3"
-                                    required>The Canon EOS 50D is a powerful DSLR camera featuring a 15.1 MP APS-C CMOS sensor, fast DIGIC 4 processor, and high ISO performance, making it ideal for photographers and enthusiasts.</textarea>
+                                <label class="form-label">Description</label>
+                                <textarea name="Description" class="form-control bg-dark text-white border-secondary" rows="3"
+                                          required>@Model.Description</textarea>
                             </div>
+
                             <div class="mb-3">
-                                <label for="editEquipmentImage" class="form-label">Equipment Image</label>
-                                <input type="file" class="form-control bg-dark text-white border-secondary"
-                                    id="editEquipmentImage">
+                                <label class="form-label">Equipment Image</label>
+                                <input type="file" name="EquipmentImage" class="form-control bg-dark text-white border-secondary" />
                                 <div class="mt-2">
-                                    <img src="/images/canon.jpg" class="img-thumbnail" alt="Current Image"
-                                        style="max-width: 100px;">
+                                    <img src="@Model.ImagePath" class="img-thumbnail" alt="Current Image" style="max-width: 100px;" />
                                     <small class="d-block text-muted">Current image</small>
                                 </div>
                             </div>
+
                             <div class="mb-3">
-                                <label for="editEquipmentStatus" class="form-label">Status</label>
-                                <select class="form-select bg-dark text-white border-secondary" id="editEquipmentStatus"
-                                    required>
-                                    <option value="available" selected>Available</option>
-                                    <option value="maintenance">Under Maintenance</option>
-                                    <option value="reserved">Reserved</option>
-                                </select>
+                                <label class="form-label">Status</label>
+                                <select name="EquipmentStatusId" class="form-select bg-dark text-white border-secondary" required>
+    <option value="">Select Status</option>
+    @foreach (var status in ViewBag.Statuses as List<ClassLibrary.Model.EquipmentStatus>)
+    {
+        var isSelected = Model.EquipmentStatusId == status.EquipmentStatusId ? "selected" : "";
+        @:<option value="@status.EquipmentStatusId" @isSelected>@status.Description</option>
+    }
+</select>
+
                             </div>
                         </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="editEquipmentSpecifications" class="form-label">Specifications</label>
-                        <textarea class="form-control bg-dark text-white border-secondary"
-                            id="editEquipmentSpecifications" rows="3">Sensor: 15.1 MP APS-C CMOS
-Processor: DIGIC 4
-ISO Range: 100-3200 (expandable to 12800)
-Autofocus: 9-point AF system
-Shutter Speed: 1/8000 to 30 sec
-Continuous Shooting: 6.3 fps
-LCD: 3.0-inch, 920k-dot
-Video: Not supported
-Battery Life: Approx. 800 shots
-Weight: 822g (body only)</textarea>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
                     </div>
                 </form>
+
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="submit" form="editEquipmentForm" class="btn button-primary"
-                    style="background-color: #1f2a55; color: white;">Save Changes</button>
-            </div>
+           
         </div>
     </div>
 </div>
