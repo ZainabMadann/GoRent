@@ -29,7 +29,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.Message = $"Exception occurred: {ex.Message}";
+                ViewBag.Message = $"Exception occurred: {ex.Message} <br/> StackTrace: {ex.StackTrace}";
                 ViewBag.Success = false;
             }
 
