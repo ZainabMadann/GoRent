@@ -83,12 +83,17 @@ namespace WebApp.Controllers
             return View(user);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Logout()
         {
             HttpContext.Session.Clear();
             return RedirectToAction("Login");
         }
+
+
     }
+
 }
 //using Microsoft.AspNetCore.Mvc;
 //using Microsoft.AspNetCore.Identity;

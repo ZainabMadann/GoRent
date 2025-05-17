@@ -26,14 +26,14 @@
                                     <div class="mb-3">
                                         <label for="name" class="form-label">Full Name</label>
                                         <input type="text" id="name" name="FullName"
-                                            class="form-control bg-dark text-white border-secondary"
-                                            value="marwa mohamed" required>
+                                        class="form-control bg-dark text-white border-secondary"
+                                        value="marwa mohamed" required>
                                     </div>
                                     <div class="mb-3">
                                         <label for="email" class="form-label">Email Address</label>
                                         <input type="email" id="email" name="Email"
-                                            class="form-control bg-dark text-white border-secondary"
-                                            value="marwa@gmail.com" readonly>
+                                        class="form-control bg-dark text-white border-secondary"
+                                        value="marwa@gmail.com" readonly>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-6 mb-2 mb-md-0">
@@ -42,7 +42,7 @@
                                         </div>
                                         <div class="col-md-6">
                                             <button type="button" class="btn cancel-btn text-white w-100"
-                                                id="closeUpdateProfileBtn">Close</button>
+                                            id="closeUpdateProfileBtn">Close</button>
                                         </div>
                                     </div>
                                 </form>
@@ -54,17 +54,17 @@
                                     <div class="mb-3">
                                         <label for="currentPassword" class="form-label">Current Password</label>
                                         <input type="password" id="currentPassword" name="CurrentPassword"
-                                            class="form-control bg-dark text-white border-secondary" required>
+                                        class="form-control bg-dark text-white border-secondary" required>
                                     </div>
                                     <div class="mb-3">
                                         <label for="newPassword" class="form-label">New Password</label>
                                         <input type="password" id="newPassword" name="NewPassword"
-                                            class="form-control bg-dark text-white border-secondary" required>
+                                        class="form-control bg-dark text-white border-secondary" required>
                                     </div>
                                     <div class="mb-3">
                                         <label for="confirmPassword" class="form-label">Confirm New Password</label>
                                         <input type="password" id="confirmPassword" name="ConfirmPassword"
-                                            class="form-control bg-dark text-white border-secondary" required>
+                                        class="form-control bg-dark text-white border-secondary" required>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-6 mb-2 mb-md-0">
@@ -73,7 +73,7 @@
                                         </div>
                                         <div class="col-md-6">
                                             <button type="button" class="btn cancel-btn text-white w-100"
-                                                id="closeChangePasswordBtn">Close</button>
+                                            id="closeChangePasswordBtn">Close</button>
                                         </div>
                                     </div>
                                 </form>
@@ -88,7 +88,7 @@
                     <h3 class="h5 mb-3">All My Requests</h3>
                     <div class="mb-3 d-flex gap-2">
                         <input type="text" id="searchRequests" class="form-control bg-dark text-white border-secondary"
-                            placeholder="Search requests...">
+                        placeholder="Search requests...">
                         <select id="filterRequests" class="form-select bg-dark text-white border-secondary">
                             <option value="all">All</option>
                             <option value="pending">Pending</option>
@@ -105,7 +105,7 @@
                                     <p class="mb-1"><strong>Status:</strong> Pending</p>
                                 </div>
                                 <button class="btn btn-sm btn-outline-light fw-bold"
-                                    onclick="window.location.href='@Url.Action("RequestDetails", "Home")'">View</button>
+                                onclick="window.location.href='@Url.Action("RequestDetails", "Home")'">View</button>
                             </div>
                         </div>
                     </div>
@@ -117,8 +117,8 @@
                     <h3 class="h5 mb-3">All My Transactions</h3>
                     <div class="mb-3 d-flex gap-2">
                         <input type="text" id="searchTransactions"
-                            class="form-control bg-dark text-white border-secondary"
-                            placeholder="Search transactions...">
+                        class="form-control bg-dark text-white border-secondary"
+                        placeholder="Search transactions...">
                         <select id="filterTransactions" class="form-select bg-dark text-white border-secondary">
                             <option value="all">All</option>
                             <option value="completed">Completed</option>
@@ -134,7 +134,7 @@
                                     <p class="mb-1"><strong>Status:</strong> Completed</p>
                                 </div>
                                 <button class="btn btn-sm btn-outline-light fw-bold"
-                                    onclick="window.location.href='@Url.Action("TransactionDetails", "Home")'">View</button>
+                                onclick="window.location.href='@Url.Action("TransactionDetails", "Home")'">View</button>
 
                             </div>
                         </div>
@@ -142,52 +142,58 @@
                 </div>
             </div>
             @* this part is for the admin only , we are gonna handle it later *@
-            <div class="card bg-dark text-white shadow mb-4">
-                <div class="card-body p-4">
-                    <h3>Manager</h3>
-                    <div class="d-flex gap-2 mt-3">
-                        <button class="btn custom-btn text-white" id="manageCategoriesBtn"
+            @if (userRole == "Manager")
+            {
+                <div class="card bg-dark text-white shadow mb-4">
+                    <div class="card-body p-4">
+                        <h3>Manager</h3>
+                        <div class="d-flex gap-2 mt-3">
+                            <button class="btn custom-btn text-white" id="manageCategoriesBtn"
                             onclick="window.location.href='/category/ManageCat'">Manage
-                            Categories</button>
-                        <button class="btn custom-btn text-white" id="manageEquipmentsBtn"
-                                onclick="window.location.href='@Url.Action("Manage", "Equipment")'">
-                            Manage Equipments
-                        </button>
-                        <button class="btn custom-btn text-white" id="manageRentalRequestsBtn" onclick="window.location.href='/home/ManageRentalRequests'">Manage Rental
-                            Requests</button>
-                        <button class="btn custom-btn text-white" id="manageTransactionsBtn" onclick="window.location.href='/home/ManageTransactions'">Manage
-                            Transactions</button>
-                        <button class="btn custom-btn text-white" id="manageCommentsBtn"
+                                Categories</button>
+                            <button class="btn custom-btn text-white" id="manageEquipmentsBtn"
+                            onclick="window.location.href='@Url.Action("Manage", "Equipment")'">
+                                Manage Equipments
+                            </button>
+                            <button class="btn custom-btn text-white" id="manageRentalRequestsBtn" onclick="window.location.href='/home/ManageRentalRequests'">Manage Rental
+                                Requests</button>
+                            <button class="btn custom-btn text-white" id="manageTransactionsBtn" onclick="window.location.href='/home/ManageTransactions'">Manage
+                                Transactions</button>
+                            <button class="btn custom-btn text-white" id="manageCommentsBtn"
                             onclick="window.location.href='/home/MangeComments'">Manage Comments</button>
-                    </div>
-                </div>
-            </div>
-            <div class="card bg-dark text-white shadow mb-4">
-                <div class="card-body p-4">
-                    <h3>Adminstrator</h3>
-                    <div class="d-flex gap-2 mt-3">
-                        <button class="btn custom-btn text-white" id="manageCategoriesBtn"
-                            onclick="window.location.href='/home/ManageCat'">Manage
-                            Categories</button>
-                        <button class="btn custom-btn text-white" id="manageEquipmentsBtn"
-                            onclick="window.location.href='/home/ManageEq'">Manage
-                            Equipments</button>
-                        <button class="btn custom-btn text-white" id="manageRentalRequestsBtn" onclick="window.location.href='/home/ManageRentalRequests'">Manage Rental
-                            Requests</button>
-                        <button class="btn custom-btn text-white" id="manageTransactionsBtn" onclick="window.location.href='/home/ManageTransactions'">Manage
-                            Transactions</button>
-                        <button class="btn custom-btn text-white" id="manageCommentsBtn"
-                            onclick="window.location.href='/home/MangeComments'">Manage Comments</button>
-                        <button class="btn custom-btn text-white" id="manageCommentsBtn"
-                            onclick="window.location.href='/home/ManageLogs'">Manage Logs</button>
-                        <button class="btn custom-btn text-white" id="manageCommentsBtn"
-                            onclick="window.location.href='/home/ManageStatus'">Manage Status</button>
+                        </div>
                     </div>
                 </div>
             }
 
+            @if (userRole == "Admin")
+            {
+                <div class="card bg-dark text-white shadow mb-4">
+                    <div class="card-body p-4">
+                        <h3>Adminstrator</h3>
+                        <div class="d-flex gap-2 mt-3">
+                            <button class="btn custom-btn text-white" id="manageCategoriesBtn"
+                            onclick="window.location.href='/home/ManageCat'">Manage
+                                Categories</button>
+                            <button class="btn custom-btn text-white" id="manageEquipmentsBtn"
+                            onclick="window.location.href='/home/ManageEq'">Manage
+                                Equipments</button>
+                            <button class="btn custom-btn text-white" id="manageRentalRequestsBtn" onclick="window.location.href='/home/ManageRentalRequests'">Manage Rental
+                                Requests</button>
+                            <button class="btn custom-btn text-white" id="manageTransactionsBtn" onclick="window.location.href='/home/ManageTransactions'">Manage
+                                Transactions</button>
+                            <button class="btn custom-btn text-white" id="manageCommentsBtn"
+                            onclick="window.location.href='/home/MangeComments'">Manage Comments</button>
+                            <button class="btn custom-btn text-white" id="manageCommentsBtn"
+                            onclick="window.location.href='/home/ManageLogs'">Manage Logs</button>
+                            <button class="btn custom-btn text-white" id="manageCommentsBtn"
+                            onclick="window.location.href='/home/ManageStatus'">Manage Status</button>
+                        </div>
+                    </div>
+
+                </div>
+            }
         </div>
-    </div>
 </div>
 
 
