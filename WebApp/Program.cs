@@ -2,7 +2,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
-using ClassLibrary.Model; // Ensure this matches your actual namespace
+using ClassLibrary.Model;
+using Microsoft.AspNetCore.Identity; // Ensure this matches your actual namespace
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -59,9 +60,13 @@ void SeedAdminUser(WebApplication app)
         {
             Name = "Admin",
             Email = "admin@site.com",
-            Password = "admin123", // ❗ Replace with hashed password in production
             Role = "Admin"
         };
+
+        // ✅ Hash the password before saving
+        var passwordHasher = new PasswordHasher<User>();
+        admin.Password = passwordHasher.HashPassword(admin, "admin123");
+
         db.Users.Add(admin);
         db.SaveChanges();
     }
