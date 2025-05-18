@@ -85,23 +85,24 @@
                     aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="rentEquipmentForm">
-                    <div class="mb-3">
-                        <label for="rentalStartDate" class="form-label">Start Date</label>
-                        <input type="date" class="form-control bg-dark text-white border-secondary" id="rentalStartDate"
-                            required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="rentalEndDate" class="form-label">End Date</label>
-                        <input type="date" class="form-control bg-dark text-white border-secondary" id="rentalEndDate"
-                            required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="rentalNotes" class="form-label">Notes (Optional)</label>
-                        <textarea class="form-control bg-dark text-white border-secondary" id="rentalNotes"
-                            rows="3"></textarea>
-                    </div>
-                </form>
+               <form asp-action="CreateRentalRequest" asp-controller="Rental" method="post">
+    <input type="hidden" name="EquipmentId" value="@Model.EquipmentId" />
+    <div class="mb-3">
+        <label for="StartDate" class="form-label">Start Date</label>
+        <input type="date" class="form-control bg-dark text-white border-secondary" name="StartDate" required>
+    </div>
+    <div class="mb-3">
+        <label for="EndDate" class="form-label">End Date</label>
+        <input type="date" class="form-control bg-dark text-white border-secondary" name="EndDate" required>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="submit" class="btn button-primary" style="background-color: #1f2a55; color: white;">
+            Confirm Rental
+        </button>
+    </div>
+</form>
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>

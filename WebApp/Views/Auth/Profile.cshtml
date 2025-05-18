@@ -156,7 +156,7 @@
                 </div>
             </div>
             @* this part is for the admin only , we are gonna handle it later *@
-            @if (userRole == "Manager")
+            @if (userRole == "Manager" || userRole == "Admin")
             {
                 <div class="card bg-dark text-white shadow mb-4">
                     <div class="card-body p-4">
