@@ -1,0 +1,66 @@
+﻿@model Tuple<List<ClassLibrary.Model.Category>, List<ClassLibrary.Model.Equipment>>
+@using Microsoft.AspNetCore.Mvc.Rendering
+
+@{
+    ViewData["Title"] = "Categories Page";
+    var categories = Model.Item1;
+    var equipment = Model.Item2;
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+
+        <!-- Search + Filter Form -->
+        <div class="col-12 col-lg-10">
+            <div class="card bg-dark text-white shadow mb-4">
+                <div class="card-body p-4">
+                    <form class="d-flex mb-4" id="searchForm">
+                        <input type="search" name="searchTerm"
+                               class="form-control bg-dark text-white border-secondary me-2"
+                               placeholder="Search Category / Equipment" />
+
+                        <select name="filterCategory" class="form-select bg-dark text-white border-secondary me-2">
+                            <option value="">All Categories</option>
+                            @foreach (var cat in ViewBag.CategorySelectList as SelectList)
+                            {
+                                <option value="@cat.Value">@cat.Text</option>
+                            }
+                        </select>
+
+                        <button type="submit" class="btn button-primary px-3"
+                                style="background-color: #1f2a55; color: white;">
+                            <i class="bi bi-search me-1"></i> Search
+                        </button>
+                    </form>
+
+                    <!-- Filtered Results (replaced by AJAX) -->
+                    <div id="filteredCategoriesAndEquipments">
+                        @await Html.PartialAsync("_FilteredCardsOnly", Model)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById('searchForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const searchTerm = document.querySelector('[name="searchTerm"]').value;
+            const filterCategory = document.querySelector('[name="filterCategory"]').value;
+
+            fetch(`/Category/FilterAll?searchTerm=${encodeURIComponent(searchTerm)}&filterCategory=${filterCategory}`, {
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                }
+            })
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('filteredCategoriesAndEquipments').innerHTML = html;
+                });
+        });
+    </script>
+}

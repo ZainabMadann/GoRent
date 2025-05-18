@@ -1,0 +1,44 @@
+﻿@model Tuple<List<ClassLibrary.Model.Category>, List<ClassLibrary.Model.Equipment>>
+
+<!-- CATEGORIES -->
+<h4 class="text-white text-center mb-3 mt-4">All Categories</h4>
+<div class="row row-cols-1 row-cols-md-3 g-4 mb-5">
+    @foreach (var cat in Model.Item1)
+    {
+        <div class="col">
+            <div class="card h-100 shadow-sm border-0 bg-secondary text-white">
+                <div class="card-body">
+                    <h5 class="card-title">@cat.Name</h5>
+                    <p class="card-text">@cat.Description</p>
+                    <a asp-controller="Category" asp-action="CategoryDetails"
+                       asp-route-categoryId="@cat.CategoryId"
+                       class="btn button-primary px-3"
+                       style="background-color: #1f2a55; color: white;">View</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<!-- EQUIPMENT -->
+<h4 class="text-white text-center mb-3 mt-0">All Equipments</h4>
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    @foreach (var eq in Model.Item2)
+    {
+        <div class="col">
+            <div class="card h-100 shadow-sm border-0 bg-secondary text-white">
+                <div class="ps-3 pt-3">
+                    <img src="@eq.ImagePath" class="card-img-top rounded" alt="Equipment Image"
+                         style="width: 200px; height: 130px; margin-left: 10px;">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">@eq.Name</h5>
+                    <p class="fw-bold">$@eq.RentalRate.ToString("0.00") per day</p>
+                    <a asp-controller="Equipment" asp-action="Details" asp-route-id="@eq.EquipmentId"
+                       class="btn button-primary px-3"
+                       style="background-color: #1f2a55; color: white;">View</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>

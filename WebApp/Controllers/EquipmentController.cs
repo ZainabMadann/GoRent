@@ -133,6 +133,27 @@ namespace WebApp.Controllers
 
             return RedirectToAction("Details", new { id = equipment.EquipmentId });
         }
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var equipment = await _context.Equipment.FindAsync(id);
+            if (equipment == null)
+                return NotFound();
+
+            if (!string.IsNullOrEmpty(equipment.ImagePath))
+            {
+                var imagePath = Path.Combine(_env.WebRootPath, equipment.ImagePath.TrimStart('/'));
+                if (System.IO.File.Exists(imagePath))
+                {
+                    System.IO.File.Delete(imagePath);
+                }
+            }
+
+            _context.Equipment.Remove(equipment);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Manage");
+        }
 
     }
 }
