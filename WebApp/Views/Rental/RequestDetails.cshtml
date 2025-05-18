@@ -1,0 +1,35 @@
+@model ClassLibrary.Model.RentalRequest
+
+@{
+    ViewData["Title"] = "Request Details";
+}
+
+@if (Model != null)
+{
+    <div class="container py-4">
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-8">
+                <div class="card bg-dark text-white shadow">
+                    <div class="card-body p-4">
+                        <h3 class="h5 mb-3">Request Details</h3>
+                        <p><strong>Request ID:</strong> #@Model.RentalRequestId</p>
+                        <p><strong>Status:</strong> @(Model.RequestStatus?.Name ?? "Unknown")</p>
+                        <p><strong>Equipment:</strong> @(Model.Equipment?.Name ?? "Unknown")</p>
+                        <p><strong>Start Date:</strong> @Model.StartDate.ToShortDateString()</p>
+                        <p><strong>End Date:</strong> @Model.EndDate.ToShortDateString()</p>
+                        <p><strong>Request Date:</strong> @Model.RequestDate.ToShortDateString()</p>
+
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-warning">Update Request</button>
+                            <button class="btn btn-danger">Cancel Request</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <p class="text-danger">Request details not found.</p>
+}

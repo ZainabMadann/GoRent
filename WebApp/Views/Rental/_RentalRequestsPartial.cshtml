@@ -18,7 +18,7 @@ else
                             <p class="mb-1"><strong>End:</strong> @request.EndDate.ToShortDateString()</p>
                         </div>
                         <button class="btn btn-sm btn-outline-light fw-bold"
-                                onclick="window.location.href='@Url.Action("RequestDetails", "Home", new { id = request.RentalRequestId })'">View</button>
+                                onclick="window.location.href='@Url.Action("RequestDetails", "Rental", new { id = request.RentalRequestId })'">View</button>
                     </div>
                 </div>
     }

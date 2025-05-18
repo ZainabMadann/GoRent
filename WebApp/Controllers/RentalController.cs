@@ -56,5 +56,21 @@ public class RentalController : Controller
 
         return PartialView("_RentalRequestsPartial", requests);
     }
+    public IActionResult RequestDetails(int id)
+    {
+        var request = _context.RentalRequests
+            .Include(r => r.Equipment)
+            .Include(r => r.RequestStatus)
+            .FirstOrDefault(r => r.RentalRequestId == id);
+
+        if (request == null)
+        {
+            // Just to confirm what's happening
+            return Content("Rental request not found for ID: " + id);
+        }
+
+        return View(request);
+    }
+
 
 }
