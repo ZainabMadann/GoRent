@@ -66,11 +66,55 @@ public class RentalController : Controller
 
         if (request == null)
         {
-            // Just to confirm what's happening
             return Content("Rental request not found for ID: " + id);
         }
 
+        ViewBag.UserRole = HttpContext.Session.GetString("UserRole");
         return View(request);
+    }
+
+    [HttpPost]
+    public IActionResult UpdateDescription(int RentalRequestId, string Description)
+    {
+        var request = _context.RentalRequests.FirstOrDefault(r => r.RentalRequestId == RentalRequestId);
+        if (request == null)
+        {
+            return NotFound("Rental request not found.");
+        }
+
+        request.Description = Description;
+        _context.SaveChanges();
+
+        return RedirectToAction("RequestDetails", new { id = RentalRequestId });
+    }
+    [HttpPost]
+    public IActionResult ApproveRequest(int RentalRequestId)
+    {
+        var request = _context.RentalRequests.FirstOrDefault(r => r.RentalRequestId == RentalRequestId);
+        if (request == null)
+        {
+            return NotFound("Rental request not found.");
+        }
+
+        request.RequestStatusId = 2;
+        _context.SaveChanges();
+
+        return RedirectToAction("RequestDetails", new { id = RentalRequestId });
+    }
+
+    [HttpPost]
+    public IActionResult RejectRequest(int RentalRequestId)
+    {
+        var request = _context.RentalRequests.FirstOrDefault(r => r.RentalRequestId == RentalRequestId);
+        if (request == null)
+        {
+            return NotFound("Rental request not found.");
+        }
+
+        request.RequestStatusId = 3;
+        _context.SaveChanges();
+
+        return RedirectToAction("RequestDetails", new { id = RentalRequestId });
     }
 
 

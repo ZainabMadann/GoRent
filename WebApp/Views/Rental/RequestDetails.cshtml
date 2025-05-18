@@ -1,7 +1,76 @@
+@* @model ClassLibrary.Model.RentalRequest *@
+@* @{ *@
+@*     ViewData["Title"] = "Request Details"; *@
+@*     var userRole = Context.Session.GetString("Role"); *@
+@*     bool isCustomer = string.Equals(userRole, "Customer", StringComparison.OrdinalIgnoreCase); *@
+@*     bool isNotApproved = !string.Equals(Model.RequestStatus?.Name, "Approved", StringComparison.OrdinalIgnoreCase); *@
+@* } *@
+
+@* @if (Model != null) *@
+@* { *@
+@*     <div class="container py-4"> *@
+@*         <div class="row justify-content-center"> *@
+@*             <div class="col-12 col-lg-8"> *@
+@*                 <div class="card bg-dark text-white shadow"> *@
+@*                     <div class="card-body p-4"> *@
+@*                         <h3 class="h5 mb-3">Request Details</h3> *@
+@*                         <p><strong>Request ID:</strong> #@Model.RentalRequestId</p> *@
+@*                         <p><strong>Status:</strong> @(Model.RequestStatus?.Name ?? "Unknown")</p> *@
+@*                         <p><strong>Equipment:</strong> @(Model.Equipment?.Name ?? "Unknown")</p> *@
+@*                         <p><strong>Start Date:</strong> @Model.StartDate.ToShortDateString()</p> *@
+@*                         <p><strong>End Date:</strong> @Model.EndDate.ToShortDateString()</p> *@
+@*                         <p><strong>Request Date:</strong> @Model.RequestDate.ToShortDateString()</p> *@
+
+@*                         <div class="d-flex gap-2"> *@
+@*                             @if (isCustomer && isNotApproved) *@
+@*                             { *@
+@*                                 <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#updateDescriptionModal"> *@
+@*                                     Update Request *@
+@*                                 </button> *@
+@*                             } *@
+
+@*                         </div> *@
+@*                     </div> *@
+@*                 </div> *@
+@*             </div> *@
+@*         </div> *@
+@*     </div> *@
+@* } *@
+@* else *@
+@* { *@
+@*     <p class="text-danger">Request details not found.</p> *@
+@* } *@
+@* <div class="modal fade" id="updateDescriptionModal" tabindex="-1" aria-labelledby="updateDescriptionModalLabel" aria-hidden="true"> *@
+@*     <div class="modal-dialog"> *@
+@*         <div class="modal-content bg-dark text-white"> *@
+@*             <form method="post" asp-action="UpdateDescription"> *@
+@*                 <div class="modal-header"> *@
+@*                     <h5 class="modal-title" id="updateDescriptionModalLabel">Update Description</h5> *@
+@*                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button> *@
+@*                 </div> *@
+@*                 <div class="modal-body"> *@
+@*                     <input type="hidden" name="RentalRequestId" value="@Model.RentalRequestId" /> *@
+@*                     <div class="mb-3"> *@
+@*                         <label for="Description" class="form-label">Description</label> *@
+@*                         <textarea class="form-control" name="Description" id="Description" rows="4">@Model.Description</textarea> *@
+@*                     </div> *@
+@*                 </div> *@
+@*                 <div class="modal-footer"> *@
+@*                     <button type="submit" class="btn btn-success">Save changes</button> *@
+@*                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button> *@
+@*                 </div> *@
+@*             </form> *@
+@*         </div> *@
+@*     </div> *@
+@* </div> *@
 @model ClassLibrary.Model.RentalRequest
 
 @{
     ViewData["Title"] = "Request Details";
+    var userRole = Context.Session.GetString("Role");
+    bool isCustomer = string.Equals(userRole, "Customer", StringComparison.OrdinalIgnoreCase);
+    bool isManager = string.Equals(userRole, "Manager", StringComparison.OrdinalIgnoreCase);
+    bool isNotApproved = !string.Equals(Model.RequestStatus?.Name, "Approved", StringComparison.OrdinalIgnoreCase);
 }
 
 @if (Model != null)
@@ -20,8 +89,25 @@
                         <p><strong>Request Date:</strong> @Model.RequestDate.ToShortDateString()</p>
 
                         <div class="d-flex gap-2">
-                            <button class="btn btn-warning">Update Request</button>
-                            <button class="btn btn-danger">Cancel Request</button>
+                            @if (isCustomer && isNotApproved)
+                            {
+                                <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#updateDescriptionModal">
+                                    Update Request
+                                </button>
+                            }
+
+                            @if (isManager && isNotApproved)
+                            {
+                                <form method="post" asp-action="ApproveRequest" class="d-inline">
+                                    <input type="hidden" name="RentalRequestId" value="@Model.RentalRequestId" />
+                                    <button type="submit" class="btn btn-success">Approve</button>
+                                </form>
+                                <form method="post" asp-action="RejectRequest" class="d-inline">
+                                    <input type="hidden" name="RentalRequestId" value="@Model.RentalRequestId" />
+                                    <button type="submit" class="btn btn-danger">Reject</button>
+                                </form>
+                            }
+
                         </div>
                     </div>
                 </div>
@@ -33,3 +119,28 @@ else
 {
     <p class="text-danger">Request details not found.</p>
 }
+
+<!-- Modal (unchanged) -->
+<div class="modal fade" id="updateDescriptionModal" tabindex="-1" aria-labelledby="updateDescriptionModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark text-white">
+            <form method="post" asp-action="UpdateDescription">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="updateDescriptionModalLabel">Update Description</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="RentalRequestId" value="@Model.RentalRequestId" />
+                    <div class="mb-3">
+                        <label for="Description" class="form-label">Description</label>
+                        <textarea class="form-control" name="Description" id="Description" rows="4">@Model.Description</textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Save changes</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -23,7 +23,7 @@ builder.Services.AddHttpContextAccessor();
 var app = builder.Build();
 
 // Seed the admin user
-SeedAdminUser(app);
+SeedAdminAndManagerUsers(app);
 
 // Configure the HTTP request pipeline
 if (!app.Environment.IsDevelopment())
@@ -48,12 +48,14 @@ app.MapControllerRoute(
 
 app.Run();
 
-// Function to seed an admin user if one doesn't exist
-void SeedAdminUser(WebApplication app)
+void SeedAdminAndManagerUsers(WebApplication app)
 {
     using var scope = app.Services.CreateScope();
     var db = scope.ServiceProvider.GetRequiredService<CourseDBContext>();
 
+    var passwordHasher = new PasswordHasher<User>();
+
+    // Seed Admin
     if (!db.Users.Any(u => u.Role == "Admin"))
     {
         var admin = new User
@@ -62,12 +64,22 @@ void SeedAdminUser(WebApplication app)
             Email = "admin@site.com",
             Role = "Admin"
         };
-
-        // ✅ Hash the password before saving
-        var passwordHasher = new PasswordHasher<User>();
         admin.Password = passwordHasher.HashPassword(admin, "admin123");
-
         db.Users.Add(admin);
-        db.SaveChanges();
     }
+
+    // Seed Manager
+    if (!db.Users.Any(u => u.Role == "Manager"))
+    {
+        var manager = new User
+        {
+            Name = "Manager",
+            Email = "manager@site.com",
+            Role = "Manager"
+        };
+        manager.Password = passwordHasher.HashPassword(manager, "manager123");
+        db.Users.Add(manager);
+    }
+
+    db.SaveChanges();
 }
