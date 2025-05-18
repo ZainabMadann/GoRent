@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@{
+    var isLoggedIn = Context.Session.GetString("UserId") != null;
+}
+
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -25,36 +29,46 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end">
+
                     <div class="d-flex align-items-center gap-3">
-                        <a class="text-white text-sm fw-medium text-decoration-none" asp-area="" asp-controller="Auth"
-                            asp-action="Register">Register</a>
-                        <a class="text-white text-sm fw-medium text-decoration-none" asp-area="" asp-controller="Auth"
-                            asp-action="Login">Login</a>
-                        <a class="text-white text-sm fw-medium text-decoration-none" asp-area="" asp-controller=""
-                           asp-action="">Logout</a>
-                        <div class="d-flex align-items-center gap-0">
-                            <a class="nav-link profile-icon-link" asp-area="" asp-controller="Home"
-                                asp-action="Notifications">
-                                <img src="/images/notification4.jpeg" alt="Notification Icon" class="notification-icon">
-                            </a>
-                            <a class="d-flex align-items-center justify-content-center rounded-3 bg-dark text-decoration-none"
-                                style="background-color: #27313A; height: 36px; min-width: 0; padding: 0 10px;"
-                                asp-area="" asp-controller="Auth" asp-action="Profile">
-                                <div class="text-white">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
-                                        viewBox="0 0 256 256">
-                                        <path
-                                            d="M230.92,212c-15.23-26.33-38.7-45.21-66.09-54.16a72,72,0,1,0-73.66,0C63.78,166.78,40.31,185.66,25.08,212a8,8,0,1,0,13.85,8c18.84-32.56,52.14-52,89.07-52s70.23,19.44,89.07,52a8,8,0,1,0,13.85-8ZM72,96a56,56,0,1,1,56,56A56.06,56.06,0,0,1,72,96Z">
-                                        </path>
-                                    </svg>
-                                </div>
-                            </a>
-                            <a class="nav-link" asp-area="" asp-controller="Home"
-                                asp-action="Dashboard">
-                                <img src="/images/hamburger.png" alt="Ham Icon" class="ham-icon">
-                            </a>
-                        </div>
+                        @if (!isLoggedIn)
+                        {
+                            <a class="text-white text-sm fw-medium text-decoration-none" asp-area="" asp-controller="Auth" asp-action="Register">Register</a>
+                            <a class="text-white text-sm fw-medium text-decoration-none" asp-area="" asp-controller="Auth" asp-action="Login">Login</a>
+                        }
+                        else
+                        {
+                            <form asp-controller="Auth" asp-action="Logout" method="post" class="d-inline">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-link text-white text-sm fw-medium text-decoration-none p-0">Logout</button>
+                            </form>
+
+                        }
+
+                        @if (isLoggedIn)
+                        {
+                            <div class="d-flex align-items-center gap-0">
+                                <a class="nav-link profile-icon-link" asp-area="" asp-controller="Home" asp-action="Notifications">
+                                    <img src="/images/notification4.jpeg" alt="Notification Icon" class="notification-icon">
+                                </a>
+                                <a class="d-flex align-items-center justify-content-center rounded-3 bg-dark text-decoration-none"
+                                   style="background-color: #27313A; height: 36px; min-width: 0; padding: 0 10px;"
+                                   asp-area="" asp-controller="Auth" asp-action="Profile">
+                                    <div class="text-white">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                                             viewBox="0 0 256 256">
+                                            <path d="M230.92,212c-15.23-26.33-38.7-45.21-66.09-54.16a72,72,0,1,0-73.66,0C63.78,166.78,40.31,185.66,25.08,212a8,8,0,1,0,13.85,8c18.84-32.56,52.14-52,89.07-52s70.23,19.44,89.07,52a8,8,0,1,0,13.85-8ZM72,96a56,56,0,1,1,56,56A56.06,56.06,0,0,1,72,96Z">
+                                            </path>
+                                        </svg>
+                                    </div>
+                                </a>
+                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Dashboard">
+                                    <img src="/images/hamburger.png" alt="Ham Icon" class="ham-icon">
+                                </a>
+                            </div>
+                        }
                     </div>
+
                 </div>
             </div>
         </nav>

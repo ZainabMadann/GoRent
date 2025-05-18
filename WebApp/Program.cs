@@ -16,6 +16,9 @@ builder.Services.AddDbContext<CourseDBContext>(options =>
 // ✅ Add session support BEFORE builder.Build()
 builder.Services.AddSession();
 
+// ✅ Add this to support @inject IHttpContextAccessor in Razor views
+builder.Services.AddHttpContextAccessor();
+
 var app = builder.Build();
 
 // Seed the admin user
