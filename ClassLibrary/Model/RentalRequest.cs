@@ -29,6 +29,7 @@ namespace ClassLibrary.Model
         public int UserId { get; set; }
         [Column("Request_Status_ID")]
         public int RequestStatusId { get; set; }
+        public string? Description { get; set; }
 
         [ForeignKey("EquipmentId")]
         [InverseProperty("RentalRequests")]

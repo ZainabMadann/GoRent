@@ -12,15 +12,15 @@ public class RentalController : Controller
     }
 
     [HttpPost]
-    public IActionResult CreateRentalRequest(DateTime StartDate, DateTime EndDate, int EquipmentId)
+    public IActionResult CreateRentalRequest(DateTime StartDate, DateTime EndDate, int EquipmentId, string? Description)
     {
         var userIdStr = HttpContext.Session.GetString("UserId");
         if (string.IsNullOrEmpty(userIdStr))
         {
             return RedirectToAction("Login", "Auth");
         }
-        int userId = int.Parse(userIdStr);
 
+        int userId = int.Parse(userIdStr);
 
         var rentalRequest = new RentalRequest
         {
@@ -29,15 +29,16 @@ public class RentalController : Controller
             EndDate = EndDate,
             RequestDate = DateTime.Today,
             UserId = userId,
-            RequestStatusId = 1 // Default status (e.g., 'Pending')
+            RequestStatusId = 1, // Default: Pending
+            Description = Description
         };
 
         _context.RentalRequests.Add(rentalRequest);
         _context.SaveChanges();
 
-        // Redirect to payment or confirmation page
         return RedirectToAction("Payment", "Home");
     }
+
     public IActionResult MyRequests()
     {
         var userIdStr = HttpContext.Session.GetString("UserId");
