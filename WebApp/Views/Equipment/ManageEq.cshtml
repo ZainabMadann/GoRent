@@ -1,5 +1,4 @@
-@model WebApp.Models.ManageEquipmentViewModel
-
+﻿@model WebApp.Models.ManageEquipmentViewModel
 @{
     ViewData["Title"] = "Manage Equipment";
 }
@@ -10,57 +9,56 @@
             <div class="card bg-dark text-white shadow mb-4">
                 <div class="card-body p-4">
                     <h3 class="h5 mb-3">All Equipment</h3>
+<div class="mb-4">
+    <div class="row g-2 align-items-center">
 
-                    <div class="mb-3 d-flex gap-2">
-                        <input type="text" id="searchEquipment" class="form-control bg-dark text-white border-secondary"
-                               placeholder="Search equipment...">
-                        <select id="filterCategory" class="form-select bg-dark text-white border-secondary">
-                            <option value="all">All Categories</option>
-                            <option value="category1">Category 1</option>
-                            <option value="category2">Category 2</option>
-                            <option value="category3">Category 3</option>
-                        </select>
-                        <button type="button" class="btn button-primary px-3"
-                                style="background-color: #1f2a55; color: white; white-space: nowrap;" data-bs-toggle="modal"
-                                data-bs-target="#addEquipmentModal">
-                            <i class="bi bi-plus-lg me-1"></i> Add New
-                        </button>
+       <div class="row g-2 align-items-start mb-3">
+    <div class="col-md-6">
+        <input type="text" id="searchEquipment"
+               class="form-control bg-dark text-white border-secondary"
+               placeholder="Search equipment..." />
+    </div>
+
+    <div class="col-md-3">
+        <select id="filterCategory" class="form-select bg-dark text-white border-secondary">
+            <option value="">All Categories</option>
+            @foreach (var category in Model.Categories)
+            {
+                <option value="@category.CategoryId">@category.Name</option>
+            }
+        </select>
+    </div>
+
+    <div class="col-md-1">
+        <button type="button" class="btn button-primary w-100"
+                id="resetBtn"
+                style="background-color: #1f2a55; color: white;">
+            <i class="bi bi-arrow-counterclockwise"></i> Reset
+        </button>
+    </div>
+
+    <div class="col-md-2">
+        <button type="button" class="btn button-primary w-100"
+                style="background-color: #1f2a55; color: white;"
+                data-bs-toggle="modal" data-bs-target="#addEquipmentModal">
+            <i class="bi bi-plus-lg me-1"></i> Add New
+        </button>
+    </div>
+</div>
+
+</div>
+
+
+
+                    <!-- Spinner -->
+                    <div id="loadingSpinner" style="display:none;" class="text-center my-2">
+                        <div class="spinner-border text-light" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
                     </div>
 
                     <div id="equipmentList" style="max-height: 380px; overflow-y: auto;">
-                        @foreach (var equipment in Model.EquipmentList)
-                        {
-                            <div class="card bg-secondary text-white mb-3">
-                                <div class="card-body d-flex justify-content-between align-items-center">
-                                    <div class="d-flex">
-                                        <div class="me-3">
-                                            <img src="@(equipment.ImagePath ?? "/images/default.jpg")" class="card-img-top rounded" alt="Equipment Image"
-                                                 style="width: 200px; height: 130px; margin-left: 10px;">
-
-                                        </div>
-                                        <div>
-                                            <p class="mb-1"><strong>Name:</strong> @equipment.Name</p>
-
-                                            <p class="mb-1"><strong>Category:</strong> @(equipment.Category?.Name ?? "N/A")</p>
-
-                                            <p class="mb-1"><strong>Price:</strong> $@equipment.RentalRate.ToString("0.00")</p>
-
-                                            <p class="mb-1"><strong>Status:</strong> @(equipment.EquipmentStatus?.Description ?? "N/A")</p>
-
-                                        </div>
-                                    </div>
-                                    <div class="d-flex flex-column gap-2 align-items-center">
-                                        <button class="btn btn-sm btn-outline-light fw-bold"
-                                                onclick="window.location.href='/equipment/details/@equipment.EquipmentId'">
-                                            <i class="bi bi-pencil"></i> View
-                                        </button>
-
-                                    </div>
-                                </div>
-                            </div>
-                        }
-
-
+                        @await Html.PartialAsync("_FilteredEquipmentManagePartial", Model.EquipmentList)
                     </div>
                 </div>
             </div>
@@ -95,8 +93,6 @@
                                         <option value="@category.CategoryId">@category.Name</option>
                                     }
                                 </select>
-
-
                                 <span asp-validation-for="CreateEquipment.Category_ID" class="text-danger"></span>
                             </div>
 
@@ -123,7 +119,6 @@
                                         <option value="@status.EquipmentStatusId">@status.Description</option>
                                     }
                                 </select>
-
                                 <span asp-validation-for="CreateEquipment.Equipment_Status_ID" class="text-danger"></span>
                             </div>
 
@@ -144,3 +139,35 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+<script>
+    const searchInput = document.getElementById('searchEquipment');
+    const categorySelect = document.getElementById('filterCategory');
+    const resetBtn = document.getElementById('resetBtn');
+    const equipmentList = document.getElementById('equipmentList');
+    const spinner = document.getElementById('loadingSpinner');
+
+    function filterEquipment() {
+        const searchTerm = searchInput.value;
+        const filterCategory = categorySelect.value;
+
+        spinner.style.display = 'block';
+        fetch(`/Equipment/FilterManage?searchTerm=${encodeURIComponent(searchTerm)}&filterCategory=${filterCategory}`)
+            .then(response => response.text())
+            .then(html => {
+                equipmentList.innerHTML = html;
+                spinner.style.display = 'none';
+            });
+    }
+
+    searchInput.addEventListener('input', filterEquipment);
+    categorySelect.addEventListener('change', filterEquipment);
+
+    resetBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        categorySelect.selectedIndex = 0;
+        filterEquipment();
+    });
+</script>
+}

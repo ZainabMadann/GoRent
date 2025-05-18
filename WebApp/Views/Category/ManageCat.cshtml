@@ -1,9 +1,10 @@
 @model List<ClassLibrary.Model.Category>
-
+@using Microsoft.AspNetCore.Mvc.Rendering
 
 @{
     ViewData["Title"] = "Manage Categories";
 }
+
 <div class="container py-4">
     <div class="row justify-content-center">
         <div class="col-12 col-lg-10">
@@ -11,43 +12,51 @@
                 <div class="card-body p-4">
                     <h3 class="h5 mb-3">All Categories</h3>
 
-                    <div class="mb-3 d-flex gap-2">
-                        <input type="text" id="searchEquipment" class="form-control bg-dark text-white border-secondary"
-                            placeholder="Search category...">
-                        <select id="filterCategory" class="form-select bg-dark text-white border-secondary">
-                            <option value="all">All Categories</option>
-                            <option value="category1">Category 1</option>
-                            <option value="category2">Category 2</option>
-                            <option value="category3">Category 3</option>
-                        </select>
-                        <button type="button" class="btn button-primary px-3"
-                            style="background-color: #1f2a55; color: white; white-space: nowrap;" data-bs-toggle="modal"
-                            data-bs-target="#addCategoryModal">
-                            <i class="bi bi-plus-lg me-1"></i> Add New
-                        </button>
+                    <div class="row g-2 align-items-start mb-3">
+                        <div class="col-md-6">
+                            <input type="text" name="searchTerm" id="searchTerm"
+                                   class="form-control bg-dark text-white border-secondary"
+                                   placeholder="Search category..." />
+                        </div>
+
+                        <div class="col-md-3">
+                            <select name="filterCategory" id="filterCategory"
+                                    class="form-select bg-dark text-white border-secondary">
+                                <option value="">All Categories</option>
+                                @foreach (var cat in ViewBag.CategorySelectList as SelectList)
+                                {
+                                    <option value="@cat.Value">@cat.Text</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="col-md-1">
+                            <button type="button" class="btn button-primary w-100"
+                                    id="resetBtn"
+                                    style="background-color: #1f2a55; color: white;">
+                                <i class="bi bi-arrow-counterclockwise"></i> Reset
+                            </button>
+                        </div>
+
+                        <div class="col-md-2">
+                            <button type="button" class="btn button-primary w-100"
+                                    style="background-color: #1f2a55; color: white;"
+                                    data-bs-toggle="modal" data-bs-target="#addCategoryModal">
+                                <i class="bi bi-plus-lg me-1"></i> Add New
+                            </button>
+                        </div>
                     </div>
 
-                   <div id="categoriesList" style="max-height: 380px; overflow-y: auto;">
-    @foreach (var category in Model)
-    {
-        <div class="card bg-secondary text-white mb-3">
-            <div class="card-body d-flex justify-content-between align-items-center">
-                <div>
-                    <p class="mb-1"><strong>Name:</strong> @category.Name</p>
-                    <p class="mb-1"><strong>Description:</strong> @category.Description</p>
-                </div>
-                <div class="d-flex flex-column gap-2">
-                  <button class="btn btn-sm btn-outline-light fw-bold"
-        onclick="window.location.href='/Category/CategoryDetails?categoryId=@category.CategoryId'">
-    <i class="bi bi-eye"></i> View
-</button>
+                    <!-- Spinner -->
+                    <div id="loadingSpinner" class="text-center d-none my-3">
+                        <div class="spinner-border text-light" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
 
-                </div>
-            </div>
-        </div>
-    }
-</div>
-
+                    <!-- Categories List -->
+                    <div id="categoriesList" style="max-height: 380px; overflow-y: auto;">
+                        @await Html.PartialAsync("_FilteredCategoriesOnly", Model)
                     </div>
                 </div>
             </div>
@@ -74,13 +83,48 @@
                         <textarea name="categoryDescription" class="form-control bg-dark text-white border-secondary" id="categoryDescription" rows="3" required></textarea>
                     </div>
                 </form>
-
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                 <button type="submit" form="addCategoryForm" class="btn button-primary"
-                    style="background-color: #1f2a55; color: white;">Add Category</button>
+                        style="background-color: #1f2a55; color: white;">Add Category</button>
             </div>
         </div>
     </div>
 </div>
+
+@section Scripts {
+<script>
+    let debounceTimer;
+
+    function fetchCategories() {
+        const searchTerm = document.getElementById("searchTerm").value;
+        const filterCategory = document.getElementById("filterCategory").value;
+        const spinner = document.getElementById("loadingSpinner");
+
+        spinner.classList.remove("d-none");
+
+        fetch(`/Category/FilterManage?searchTerm=${encodeURIComponent(searchTerm)}&filterCategory=${filterCategory}`, {
+            headers: { "X-Requested-With": "XMLHttpRequest" }
+        })
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('categoriesList').innerHTML = html;
+                spinner.classList.add("d-none");
+            });
+    }
+
+    document.getElementById('searchTerm').addEventListener('input', function () {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(fetchCategories, 200);
+    });
+
+    document.getElementById('filterCategory').addEventListener('change', fetchCategories);
+
+    document.getElementById('resetBtn').addEventListener('click', function () {
+        document.getElementById('searchTerm').value = '';
+        document.getElementById('filterCategory').selectedIndex = 0;
+        fetchCategories();
+    });
+</script>
+}

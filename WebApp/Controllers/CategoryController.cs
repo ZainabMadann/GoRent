@@ -15,6 +15,7 @@ public class CategoryController : Controller
     public IActionResult ManageCat()
     {
         var categories = _context.Categories.ToList();
+        ViewBag.CategorySelectList = new SelectList(categories, "CategoryId", "Name");
         return View(categories);
     }
 
@@ -173,7 +174,23 @@ public class CategoryController : Controller
 
         return View("Categories", model); // Normal full-page render
     }
+    public IActionResult FilterManage(string searchTerm, int? filterCategory)
+    {
+        var query = _context.Categories.AsQueryable();
 
+        if (!string.IsNullOrWhiteSpace(searchTerm))
+        {
+            query = query.Where(c => c.Name.Contains(searchTerm) || c.Description.Contains(searchTerm));
+        }
+
+        if (filterCategory.HasValue && filterCategory.Value > 0)
+        {
+            query = query.Where(c => c.CategoryId == filterCategory.Value);
+        }
+
+        var filtered = query.ToList();
+        return PartialView("_FilteredCategoriesOnly", filtered);
+    }
 
 
 }

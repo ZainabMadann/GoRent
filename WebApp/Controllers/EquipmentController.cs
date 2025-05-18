@@ -154,6 +154,30 @@ namespace WebApp.Controllers
 
             return RedirectToAction("Manage");
         }
+        [HttpGet]
+        public IActionResult FilterManage(string searchTerm, int? filterCategory)
+        {
+            var equipmentQuery = _context.Equipment
+                .Include(e => e.Category)
+                .Include(e => e.EquipmentStatus)
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                equipmentQuery = equipmentQuery.Where(e =>
+                    e.Name.Contains(searchTerm) || e.Description.Contains(searchTerm));
+            }
+
+            if (filterCategory.HasValue && filterCategory.Value > 0)
+            {
+                equipmentQuery = equipmentQuery.Where(e => e.CategoryId == filterCategory.Value);
+            }
+
+            var equipmentList = equipmentQuery.ToList();
+
+            return PartialView("_FilteredEquipmentManagePartial", equipmentList);
+        }
+
 
     }
 }
