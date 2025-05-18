@@ -78,7 +78,7 @@ namespace WebApp.Controllers
             HttpContext.Session.SetString("UserId", user.UserId.ToString());
             HttpContext.Session.SetString("Role", user.Role);
             HttpContext.Session.SetString("Name", user.Name);
-
+            TempData.Remove("Message");
             return RedirectToAction("Profile");
         }
 
@@ -101,5 +101,72 @@ namespace WebApp.Controllers
             HttpContext.Session.Clear();
             return RedirectToAction("Login");
         }
+        // POST: /Auth/UpdateProfile
+        [HttpPost]
+        public IActionResult UpdateProfile(string fullName, string email)
+        {
+            var userIdStr = HttpContext.Session.GetString("UserId");
+            if (string.IsNullOrEmpty(userIdStr))
+                return RedirectToAction("Login");
+
+            int userId = int.Parse(userIdStr);
+            var user = _context.Users.Find(userId);
+            if (user == null)
+                return RedirectToAction("Login");
+
+            // Check if the email is being changed and if it's already used by another user
+            if (email != user.Email && _context.Users.Any(u => u.Email == email))
+            {
+                TempData["Error"] = "The email is already used by another user.";
+                return RedirectToAction("Profile");
+            }
+
+            user.Name = fullName;
+            user.Email = email;
+            _context.Users.Update(user);
+            _context.SaveChanges();
+
+            HttpContext.Session.SetString("Name", user.Name);
+            TempData["Message"] = "Profile updated successfully.";
+
+            return RedirectToAction("Profile");
+        }
+
+
+        // POST: /Auth/ChangePassword
+        [HttpPost]
+        public IActionResult ChangePassword(string currentPassword, string newPassword, string confirmPassword)
+        {
+            var userIdStr = HttpContext.Session.GetString("UserId");
+            if (string.IsNullOrEmpty(userIdStr))
+                return RedirectToAction("Login");
+
+            int userId = int.Parse(userIdStr);
+            var user = _context.Users.Find(userId);
+            if (user == null)
+                return RedirectToAction("Login");
+
+            if (newPassword != confirmPassword)
+            {
+                TempData["Error"] = "New password and confirmation do not match.";
+                return RedirectToAction("Profile");
+            }
+
+            var passwordHasher = new PasswordHasher<User>();
+            var result = passwordHasher.VerifyHashedPassword(user, user.Password, currentPassword);
+            if (result == PasswordVerificationResult.Failed)
+            {
+                TempData["Error"] = "Current password is incorrect.";
+                return RedirectToAction("Profile");
+            }
+
+            user.Password = passwordHasher.HashPassword(user, newPassword);
+            _context.Users.Update(user);
+            _context.SaveChanges();
+
+            TempData["Message"] = "Password changed successfully.";
+            return RedirectToAction("Profile");
+        }
+
     }
 }

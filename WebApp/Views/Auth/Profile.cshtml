@@ -7,7 +7,17 @@
 @{
     ViewData["Title"] = "Profile Page";
     var userRole = Context.Session.GetString("Role");
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-success">@TempData["Message"]</div>
     }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Error"]</div>
+    }
+
+    }
+
 
 <div class="container py-4">
     <div class="row justify-content-center">
@@ -29,18 +39,15 @@
                         <div class="col-md-8">
                             <div class="d-none" id="updateProfileForm">
                                 <h3 class="h5 mb-3">Update Profile</h3>
-                                <form method="post" asp-action="UpdateProfile">
-                                    <div class="mb-3">
+                                        <form method="post" asp-action="UpdateProfile">
+                                            <div class="mb-3">
                                         <label for="name" class="form-label">Full Name</label>
-                                        <input type="text" id="name" name="FullName"
-                                        class="form-control bg-dark text-white border-secondary"
-                                        value="marwa mohamed" required>
+                                        <input type="text" id="name" name="FullName" value="@Model.Name" class="form-control ..." required>
                                     </div>
                                     <div class="mb-3">
                                         <label for="email" class="form-label">Email Address</label>
-                                        <input type="email" id="email" name="Email"
-                                        class="form-control bg-dark text-white border-secondary"
-                                        value="marwa@gmail.com" readonly>
+                                        <input type="email" id="email" name="Email" value="@Model.Email" class="form-control ..." required>
+
                                     </div>
                                     <div class="row">
                                         <div class="col-md-6 mb-2 mb-md-0">
