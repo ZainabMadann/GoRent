@@ -22,10 +22,15 @@
                             placeholder="Search transactions...">
                         <select id="filterTransactions" class="form-select bg-dark text-white border-secondary">
                             <option value="all">All</option>
-                            <option value="Paid">Completed</option>
+                            <option value="Paid">Paid</option>
                             <option value="Pending">Pending</option>
                             <option value="Failed">Failed</option>
+                            <option value="Cancelled">Cancelled</option>
                         </select>
+                         <button type="button" id="resetTransactionFilter" class="btn button-primary"
+        style="background-color: #1f2a55; color: white;">
+        <i class="bi bi-arrow-counterclockwise"></i> Reset
+    </button>
                     </div>
 
                     <div id="transactionsList">
@@ -133,3 +138,23 @@
         </div>
     </div>
 </div>
+
+<script>
+    const searchInput = document.getElementById('searchTransactions');
+    const statusFilter = document.getElementById('filterTransactions');
+    const transactionList = document.getElementById('transactionsList');
+
+    function filterTransactions() {
+        const searchTerm = searchInput.value;
+        const filterStatus = statusFilter.value;
+
+        fetch(`/RentalTransaction/FilterTransactions?searchTerm=${encodeURIComponent(searchTerm)}&filterStatus=${filterStatus}`)
+            .then(response => response.text())
+            .then(html => {
+                transactionList.innerHTML = html;
+            });
+    }
+
+    searchInput.addEventListener('input', filterTransactions);
+    statusFilter.addEventListener('change', filterTransactions);
+</script>

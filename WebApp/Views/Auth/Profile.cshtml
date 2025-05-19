@@ -121,17 +121,23 @@
             <div class="card bg-dark text-white shadow mb-4">
                 <div class="card-body p-4">
                     <h3 class="h5 mb-3">All My Transactions</h3>
-                    <div class="mb-3 d-flex gap-2">
-                        <input type="text" id="searchTransactions"
-                        class="form-control bg-dark text-white border-secondary"
-                        placeholder="Search transactions...">
-                        <select id="filterTransactions" class="form-select bg-dark text-white border-secondary">
-                            <option value="all">All</option>
-                            <option value="completed">Completed</option>
-                            <option value="pending">Pending</option>
-                            <option value="failed">Failed</option>
-                        </select>
-                    </div>
+                   <div class="mb-3 d-flex gap-2">
+    <input type="text" id="searchTransactions"
+        class="form-control bg-dark text-white border-secondary"
+        placeholder="Search transactions...">
+    <select id="filterTransactions" class="form-select bg-dark text-white border-secondary">
+        <option value="all">All</option>
+        <option value="paid">Paid</option>
+        <option value="pending">Pending</option>
+        <option value="failed">Failed</option>
+         <option value="cancelled">Cancelled</option>
+    </select>
+    <button type="button" id="resetTransactionFilter" class="btn button-primary"
+        style="background-color: #1f2a55; color: white;">
+        <i class="bi bi-arrow-counterclockwise"></i> Reset
+    </button>
+</div>
+
                    <div id="transactionsList">
     <div class="text-center text-muted">Loading your transactions...</div>
 </div>
@@ -235,19 +241,35 @@
             });
         </script>
         <script>
-            window.addEventListener('DOMContentLoaded', function () {
-    fetch('@Url.Action("MyTransactions", "RentalTransaction")')
-        .then(response => response.text())
-        .then(html => {
-            document.getElementById('transactionsList').innerHTML = html;
-        })
-        .catch(error => {
-            console.error("Failed to load transactions:", error);
-            document.getElementById('transactionsList').innerHTML =
-                '<div class="text-danger">Unable to load your transactions at this time.</div>';
-        });
-});
+    const searchInput = document.getElementById('searchTransactions');
+    const statusSelect = document.getElementById('filterTransactions');
+    const resetBtn = document.getElementById('resetTransactionFilter');
+    const transactionsList = document.getElementById('transactionsList');
 
-        </script>
+    function loadMyTransactions() {
+        const search = searchInput.value;
+        const status = statusSelect.value;
+
+        fetch(`/RentalTransaction/FilterMyTransactions?searchTerm=${encodeURIComponent(search)}&filterStatus=${encodeURIComponent(status)}`)
+            .then(res => res.text())
+            .then(html => {
+                transactionsList.innerHTML = html;
+            })
+            .catch(() => {
+                transactionsList.innerHTML = '<div class="text-danger">Unable to load your transactions at this time.</div>';
+            });
+    }
+
+    searchInput.addEventListener('input', loadMyTransactions);
+    statusSelect.addEventListener('change', loadMyTransactions);
+    resetBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        statusSelect.value = 'all';
+        loadMyTransactions();
+    });
+
+    window.addEventListener('DOMContentLoaded', loadMyTransactions);
+</script>
+
 
 }

@@ -182,6 +182,82 @@ namespace WebApp.Controllers
             TempData["Message"] = "Rental transaction created successfully.";
             return RedirectToAction("ManageTransactions");
         }
+        [HttpGet]
+        public IActionResult FilterTransactions(string searchTerm, string filterStatus)
+        {
+            var transactionsQuery = _context.RentalTransactions
+                .Include(t => t.Equipment)
+                .Include(t => t.User)
+                .Include(t => t.RentalRequest)
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                searchTerm = searchTerm.ToLower();
+
+                transactionsQuery = transactionsQuery.Where(t =>
+                    t.RentalTransactionId.ToString().Contains(searchTerm) ||
+                    t.TotalCost.ToString().Contains(searchTerm) ||
+                    t.PaymentStatus.ToLower().Contains(searchTerm) ||
+                    t.Equipment.Name.ToLower().Contains(searchTerm) ||
+                    t.User.Email.ToLower().Contains(searchTerm) ||
+                    t.RentalRequestId.ToString().Contains(searchTerm)
+                );
+            }
+
+            if (!string.IsNullOrWhiteSpace(filterStatus) && filterStatus != "all")
+            {
+                transactionsQuery = transactionsQuery.Where(t =>
+                    t.PaymentStatus.ToLower() == filterStatus.ToLower());
+            }
+
+            var filteredList = transactionsQuery
+                .OrderByDescending(t => t.RentalTransactionId)
+                .ToList();
+
+            return PartialView("_FilteredTransactionPartial", filteredList);
+        }
+
+
+        [HttpGet]
+        public IActionResult FilterMyTransactions(string searchTerm, string filterStatus)
+        {
+            var userIdStr = HttpContext.Session.GetString("UserId");
+            if (string.IsNullOrEmpty(userIdStr)) return Unauthorized();
+
+            int userId = int.Parse(userIdStr);
+
+            var transactionsQuery = _context.RentalTransactions
+                .Where(t => t.UserId == userId)
+                .Include(t => t.Equipment)
+                .Include(t => t.RentalRequest)
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                searchTerm = searchTerm.ToLower();
+
+                transactionsQuery = transactionsQuery.Where(t =>
+                    t.RentalTransactionId.ToString().Contains(searchTerm) ||
+                    t.TotalCost.ToString().Contains(searchTerm) ||
+                    t.PaymentStatus.ToLower().Contains(searchTerm) ||
+                    t.Equipment.Name.ToLower().Contains(searchTerm) ||
+                    t.RentalRequestId.ToString().Contains(searchTerm)
+                );
+            }
+
+            if (!string.IsNullOrWhiteSpace(filterStatus) && filterStatus != "all")
+            {
+                transactionsQuery = transactionsQuery.Where(t =>
+                    t.PaymentStatus.ToLower() == filterStatus.ToLower());
+            }
+
+            var filteredTransactions = transactionsQuery
+                .OrderByDescending(t => t.RentalTransactionId)
+                .ToList();
+
+            return PartialView("_MyTransactionsPartial", filteredTransactions);
+        }
 
 
 
