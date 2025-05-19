@@ -36,7 +36,7 @@ public class RentalController : Controller
         _context.SaveChanges();
 
         // Redirect to payment or confirmation page
-        return RedirectToAction("Payment", "Home");
+        return RedirectToAction("Payment", "RentalTransaction", new { rentalRequestId = rentalRequest.RentalRequestId });
     }
     public IActionResult MyRequests()
     {

@@ -1,0 +1,56 @@
+@model WebApp.Models.PaymentViewModel
+
+@{
+    ViewData["Title"] = "Payment";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-8">
+            <div class="card bg-dark text-white shadow">
+                <div class="card-body p-4">
+                    <h3 class="h5 mb-3">Make a Payment</h3>
+
+                    <form asp-action="ProcessPayment" asp-controller="RentalTransaction" method="post">
+                        @Html.AntiForgeryToken()
+
+                        <input type="hidden" asp-for="RentalRequestId" />
+                        <input type="hidden" asp-for="Amount" />
+
+                        <div class="mb-3">
+                            <label asp-for="CardNumber" class="form-label"></label>
+                            <input asp-for="CardNumber" class="form-control bg-dark text-white border-secondary" placeholder="1234 5678 9012 3456" />
+                            <span asp-validation-for="CardNumber" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3 row">
+                            <div class="col-md-6">
+                                <label asp-for="ExpiryDate" class="form-label"></label>
+                                <input asp-for="ExpiryDate" class="form-control bg-dark text-white border-secondary" placeholder="MM/YY" />
+                                <span asp-validation-for="ExpiryDate" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="CVV" class="form-label"></label>
+                                <input asp-for="CVV" class="form-control bg-dark text-white border-secondary" placeholder="123" />
+                                <span asp-validation-for="CVV" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Amount</label>
+                            <input value="@Model.Amount.ToString("0.00")" class="form-control bg-dark text-white border-secondary" disabled />
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-success w-100">Pay Now</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
