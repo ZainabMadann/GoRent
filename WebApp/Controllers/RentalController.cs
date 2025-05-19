@@ -149,5 +149,70 @@ public class RentalController : Controller
         return RedirectToAction("RequestDetails", new { id = RentalRequestId });
     }
 
+    public IActionResult RentedNow()
+    {
+        var userIdStr = HttpContext.Session.GetString("UserId");
+        var userRole = HttpContext.Session.GetString("Role");
 
+        if (string.IsNullOrEmpty(userIdStr) || string.IsNullOrEmpty(userRole))
+        {
+            return RedirectToAction("Login", "Auth");
+        }
+
+        int userId = int.Parse(userIdStr);
+
+        IQueryable<RentalRequest> query = _context.RentalRequests
+            .Include(r => r.Equipment)
+            .Include(r => r.RequestStatus)
+            .Where(r => r.RequestStatusId == 2); 
+
+        if (userRole != "Admin" && userRole != "Manager")
+        {
+            query = query.Where(r => r.UserId == userId);
+        }
+
+        var rentedItems = query.OrderByDescending(r => r.RequestDate).ToList();
+
+        return View(rentedItems);
+    }
+    public IActionResult RentedNowPartial(string search, string filter)
+    {
+        var userIdStr = HttpContext.Session.GetString("UserId");
+        var userRole = HttpContext.Session.GetString("Role");
+
+        if (string.IsNullOrEmpty(userIdStr) || string.IsNullOrEmpty(userRole))
+        {
+            return Content("Please login first");
+        }
+
+        int userId = int.Parse(userIdStr);
+
+        IQueryable<RentalRequest> query = _context.RentalRequests
+            .Include(r => r.Equipment)
+            .Include(r => r.RequestStatus)
+            .Where(r => r.RequestStatusId == 2); // Approved status
+
+        if (userRole != "Admin" && userRole != "Manager")
+        {
+            query = query.Where(r => r.UserId == userId);
+        }
+
+        if (!string.IsNullOrEmpty(search))
+        {
+            query = query.Where(r => r.Equipment.Name.Contains(search));
+        }
+
+        if (filter == "active")
+        {
+            query = query.Where(r => r.EndDate >= DateTime.Today);
+        }
+        else if (filter == "overdue")
+        {
+            query = query.Where(r => r.EndDate < DateTime.Today);
+        }
+
+        var rentedItems = query.OrderByDescending(r => r.RequestDate).ToList();
+
+        return PartialView("_RentedNowPartial", rentedItems);
+    }
 }

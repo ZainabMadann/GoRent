@@ -158,33 +158,10 @@
                         </select>
                     </div>
                     <div id="rentedNowList">
-                        @if (ViewBag.RentedNow != null && ViewBag.RentedNow.Count > 0)
-                        {
-                            foreach (var rental in ViewBag.RentedNow)
-                            {
-                                <div class="card bg-secondary text-white mb-3">
-                                    <div class="card-body d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <p class="mb-1"><strong>Request ID:</strong> @rental.Id</p>
-                                            <p class="mb-1"><strong>Item:</strong> @rental.EquipmentName</p>
-                                            <p class="mb-1"><strong>Due Date:</strong> @rental.DueDate.ToString("dd MMM yyyy")</p>
-                                        </div>
-                                        <button class="btn btn-sm btn-outline-light fw-bold"
-                                                onclick="window.location.href='@Url.Action("RentalDetails", "Home", new { id = rental.Id })'">
-                                            View
-                                        </button>
-                                    </div>
-                                </div>
-                            }
-                        }
-                        else
-                        {
-                            <div class="text-center text-muted">No approved rentals currently.</div>
-                        }
+                        <div class="text-center text-muted">Loading your rented items...</div>
                     </div>
                 </div>
             </div>
-
             @* this part is for the admin only , we are gonna handle it later *@
             @if (userRole == "Manager" || userRole == "Admin")
             {
@@ -330,5 +307,29 @@
             // Load initially
             window.addEventListener("DOMContentLoaded", loadRequests);
         </script>
+        <script>
+            // Load rented items
+            function loadRentedNow() {
+                const search = document.getElementById('searchRentedNow').value;
+                const filter = document.getElementById('filterRentedNow').value;
 
+                fetch(`/Rental/RentedNowPartial?search=${encodeURIComponent(search)}&filter=${encodeURIComponent(filter)}`)
+                    .then(response => response.text())
+                    .then(html => {
+                        document.getElementById('rentedNowList').innerHTML = html;
+                    })
+                    .catch(error => {
+                        console.error("Failed to load rented items:", error);
+                        document.getElementById('rentedNowList').innerHTML =
+                            '<div class="text-danger">Unable to load your rented items at this time.</div>';
+                    });
+            }
+
+            // Event listeners
+            document.getElementById('searchRentedNow').addEventListener('input', loadRentedNow);
+            document.getElementById('filterRentedNow').addEventListener('change', loadRentedNow);
+
+            // Load initially
+            window.addEventListener('DOMContentLoaded', loadRentedNow);
+        </script>
 }

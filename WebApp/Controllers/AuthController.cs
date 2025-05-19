@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
 using System.Linq;
 using ClassLibrary.Model;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebApp.Controllers
 {
