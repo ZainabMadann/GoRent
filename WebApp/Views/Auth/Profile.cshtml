@@ -121,30 +121,27 @@
             <div class="card bg-dark text-white shadow mb-4">
                 <div class="card-body p-4">
                     <h3 class="h5 mb-3">All My Transactions</h3>
-                    <div class="mb-3 d-flex gap-2">
-                        <input type="text" id="searchTransactions"
-                        class="form-control bg-dark text-white border-secondary"
-                        placeholder="Search transactions...">
-                        <select id="filterTransactions" class="form-select bg-dark text-white border-secondary">
-                            <option value="all">All</option>
-                            <option value="completed">Completed</option>
-                            <option value="pending">Pending</option>
-                            <option value="failed">Failed</option>
-                        </select>
-                    </div>
-                    <div id="transactionsList">
-                        <div class="card bg-secondary text-white mb-3">
-                            <div class="card-body d-flex justify-content-between align-items-center">
-                                <div>
-                                    <p class="mb-1"><strong>Transaction ID:</strong> #67890</p>
-                                    <p class="mb-1"><strong>Status:</strong> Completed</p>
-                                </div>
-                                <button class="btn btn-sm btn-outline-light fw-bold"
-                                onclick="window.location.href='@Url.Action("TransactionDetails", "Home")'">View</button>
+                   <div class="mb-3 d-flex gap-2">
+    <input type="text" id="searchTransactions"
+        class="form-control bg-dark text-white border-secondary"
+        placeholder="Search transactions...">
+    <select id="filterTransactions" class="form-select bg-dark text-white border-secondary">
+        <option value="all">All</option>
+        <option value="paid">Paid</option>
+        <option value="pending">Pending</option>
+        <option value="failed">Failed</option>
+         <option value="cancelled">Cancelled</option>
+    </select>
+    <button type="button" id="resetTransactionFilter" class="btn button-primary"
+        style="background-color: #1f2a55; color: white;">
+        <i class="bi bi-arrow-counterclockwise"></i> Reset
+    </button>
+</div>
 
-                            </div>
-                        </div>
-                    </div>
+                   <div id="transactionsList">
+    <div class="text-center text-muted">Loading your transactions...</div>
+</div>
+
                 </div>
             </div>
             @* this part is for the admin only , we are gonna handle it later *@
@@ -163,8 +160,11 @@
                             </button>
                             <button class="btn custom-btn text-white" id="manageRentalRequestsBtn" onclick="window.location.href='/home/ManageRentalRequests'">Manage Rental
                                 Requests</button>
-                            <button class="btn custom-btn text-white" id="manageTransactionsBtn" onclick="window.location.href='/home/ManageTransactions'">Manage
-                                Transactions</button>
+                            <button class="btn custom-btn text-white"
+        onclick="window.location.href='/RentalTransaction/ManageTransactions'">
+    Manage Transactions
+</button>
+
                             <button class="btn custom-btn text-white" id="manageCommentsBtn"
                             onclick="window.location.href='/home/MangeComments'">Manage Comments</button>
                         </div>
@@ -240,6 +240,37 @@
                     });
             });
         </script>
+        <script>
+    const searchInput = document.getElementById('searchTransactions');
+    const statusSelect = document.getElementById('filterTransactions');
+    const resetBtn = document.getElementById('resetTransactionFilter');
+    const transactionsList = document.getElementById('transactionsList');
+
+    function loadMyTransactions() {
+        const search = searchInput.value;
+        const status = statusSelect.value;
+
+        fetch(`/RentalTransaction/FilterMyTransactions?searchTerm=${encodeURIComponent(search)}&filterStatus=${encodeURIComponent(status)}`)
+            .then(res => res.text())
+            .then(html => {
+                transactionsList.innerHTML = html;
+            })
+            .catch(() => {
+                transactionsList.innerHTML = '<div class="text-danger">Unable to load your transactions at this time.</div>';
+            });
+    }
+
+    searchInput.addEventListener('input', loadMyTransactions);
+    statusSelect.addEventListener('change', loadMyTransactions);
+    resetBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        statusSelect.value = 'all';
+        loadMyTransactions();
+    });
+
+    window.addEventListener('DOMContentLoaded', loadMyTransactions);
+</script>
+
         <script>
             function loadRequests() {
                 const search = document.getElementById("searchRequests").value;

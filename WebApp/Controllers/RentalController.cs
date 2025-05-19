@@ -36,7 +36,8 @@ public class RentalController : Controller
         _context.RentalRequests.Add(rentalRequest);
         _context.SaveChanges();
 
-        return RedirectToAction("Payment", "Home");
+        // Redirect to payment or confirmation page
+        return RedirectToAction("Payment", "RentalTransaction", new { rentalRequestId = rentalRequest.RentalRequestId });
     }
     public IActionResult MyRequests(string? search, string? filter)
     {
