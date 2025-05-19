@@ -149,5 +149,124 @@ public class RentalController : Controller
         return RedirectToAction("RequestDetails", new { id = RentalRequestId });
     }
 
+    //public IActionResult RentedNow()
+    //{
+    //    var userIdStr = HttpContext.Session.GetString("UserId");
+    //    var userRole = HttpContext.Session.GetString("Role");
+
+    //    if (string.IsNullOrEmpty(userIdStr) || string.IsNullOrEmpty(userRole))
+    //    {
+    //        return RedirectToAction("Login", "Auth");
+    //    }
+
+    //    int userId = int.Parse(userIdStr);
+
+    //    var rentedItems = _context.RentalRequests
+    //        .Include(r => r.Equipment)
+    //        .Include(r => r.RequestStatus)
+    //        .Include(r => r.RentalTransactions)
+    //        .Where(r => r.RequestStatusId == 2 &&
+    //                   r.RentalTransactions.Any(t => t.PaymentStatus == "Paid"))
+    //        .Where(r => userRole == "Admin" || userRole == "Manager" || r.UserId == userId)
+    //        .OrderByDescending(r => r.RequestDate)
+    //        .ToList();
+
+    //    return View(rentedItems); // This will render RentedNow.cshtml
+    //}
+
+    public IActionResult RentedNowPartial(string search, string filter)
+    {
+        var userIdStr = HttpContext.Session.GetString("UserId");
+        var userRole = HttpContext.Session.GetString("Role");
+
+        if (string.IsNullOrEmpty(userIdStr) || string.IsNullOrEmpty(userRole))
+        {
+            return Content("Please login first");
+        }
+
+        int userId = int.Parse(userIdStr);
+
+        IQueryable<RentalRequest> query = _context.RentalRequests
+            .Include(r => r.Equipment)
+            .Include(r => r.RequestStatus)
+            .Include(r => r.RentalTransactions)
+            .Where(r => r.RequestStatusId == 2 && // Approved
+                        r.RentalTransactions.Any(t => t.PaymentStatus == "Paid")); // Only paid transactions
+
+        if (userRole != "Admin" && userRole != "Manager")
+        {
+            query = query.Where(r => r.UserId == userId);
+        }
+
+        if (!string.IsNullOrEmpty(search))
+        {
+            query = query.Where(r => r.Equipment.Name.Contains(search));
+        }
+
+        if (filter == "active")
+        {
+            query = query.Where(r => r.EndDate >= DateTime.Today);
+        }
+        else if (filter == "overdue")
+        {
+            query = query.Where(r => r.EndDate < DateTime.Today);
+        }
+
+        var rentedItems = query.OrderByDescending(r => r.RequestDate).ToList();
+
+        return PartialView("_RentedNowPartial", rentedItems);
+    }
+
+    [HttpPost]
+    public IActionResult ReturnEquipment(int RentalRequestId, int EquipmentId, int RentalTransactionId, int EquipmentConditionId)
+    {
+        var userIdStr = HttpContext.Session.GetString("UserId");
+        if (string.IsNullOrEmpty(userIdStr))
+        {
+            return RedirectToAction("Login", "Auth");
+        }
+
+        int userId = int.Parse(userIdStr);
+
+        // Check if this equipment has already been returned for this transaction
+        if (_context.ReturnRecords.Any(r => r.RentalTransactionId == RentalTransactionId))
+        {
+            TempData["Error"] = "This equipment has already been returned";
+            return RedirectToAction("_RentedNowPartial");
+        }
+
+        var returnRecord = new ReturnRecord
+        {
+            ReturnDate = DateTime.Today,
+            RentalTransactionId = RentalTransactionId,
+            EquipmentId = EquipmentId,
+            UserId = userId,
+            EquipmentConditionId = EquipmentConditionId
+        };
+
+        _context.ReturnRecords.Add(returnRecord);
+
+        // Update rental request status to returned
+        var rentalRequest = _context.RentalRequests.FirstOrDefault(r => r.RentalRequestId == RentalRequestId);
+        if (rentalRequest != null)
+        {
+            rentalRequest.RequestStatusId = 4; // 4 = Returned
+        }
+
+        try
+        {
+            _context.SaveChanges();
+            TempData["Message"] = "Equipment successfully returned";
+            //throw new Exception();
+        }
+        catch (DbUpdateException ex)
+        {
+            TempData["Error"] = "Error returning equipment: " + ex.Message;
+
+            throw new Exception();
+        }
+
+        return RedirectToAction("_RentedNowPartial");
+    }
 
 }

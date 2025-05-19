@@ -5,8 +5,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ClassLibrary.Migrations
 {
-    public partial class InitialCreate : Migration
+    /// <inheritdoc />
+    public partial class InitialSetup : Migration
     {
+        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
@@ -92,7 +94,8 @@ namespace ClassLibrary.Migrations
                     Name = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
                     Category_ID = table.Column<int>(type: "int", nullable: false),
                     Equipment_Condition_ID = table.Column<int>(type: "int", nullable: false),
-                    Equipment_Status_ID = table.Column<int>(type: "int", nullable: false)
+                    Equipment_Status_ID = table.Column<int>(type: "int", nullable: false),
+                    Image_Path = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -168,7 +171,8 @@ namespace ClassLibrary.Migrations
                     EndDate = table.Column<DateTime>(type: "date", nullable: false),
                     Equipment_ID = table.Column<int>(type: "int", nullable: false),
                     User_ID = table.Column<int>(type: "int", nullable: false),
-                    Request_Status_ID = table.Column<int>(type: "int", nullable: false)
+                    Request_Status_ID = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -275,7 +279,8 @@ namespace ClassLibrary.Migrations
                 name: "Return_Record",
                 columns: table => new
                 {
-                    Return_Record_ID = table.Column<int>(type: "int", nullable: false),
+                    Return_Record_ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     ReturnDate = table.Column<DateTime>(type: "date", nullable: false),
                     Rental_transaction_ID = table.Column<int>(type: "int", nullable: false),
                     Equipment_ID = table.Column<int>(type: "int", nullable: false),
@@ -398,6 +403,7 @@ namespace ClassLibrary.Migrations
                 column: "User_ID");
         }
 
+        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(

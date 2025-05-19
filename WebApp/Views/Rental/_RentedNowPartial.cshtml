@@ -1,0 +1,77 @@
+﻿@using Microsoft.AspNetCore.Mvc.Rendering
+@model List<ClassLibrary.Model.RentalRequest>
+
+
+@if (!Model.Any())
+{
+    <div class="text-muted">No currently rented equipment.</div>
+}
+else
+{
+    @foreach (var request in Model)
+    {
+        var daysRemaining = (request.EndDate - DateTime.Today).Days;
+        var paidTransaction = request.RentalTransactions?.FirstOrDefault(t => t.PaymentStatus == "Paid");
+        var transactionId = paidTransaction?.RentalTransactionId;
+        var isOverdue = request.EndDate < DateTime.Today;
+        var cardClass = isOverdue ? "bg-danger" : "bg-secondary";
+
+        <div class="card @cardClass text-white mb-3">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <div>
+                    <p class="mb-1"><strong>Request ID:</strong> #@request.RentalRequestId</p>
+                    <p class="mb-1"><strong>Equipment:</strong> @request.Equipment?.Name</p>
+                    <p class="mb-1"><strong>Status:</strong> @request.RequestStatus?.Name</p>
+                    <p class="mb-1"><strong>Start Date:</strong> @request.StartDate.ToString("dd MMM yyyy")</p>
+                    <p class="mb-1"><strong>End Date:</strong> @request.EndDate.ToString("dd MMM yyyy")</p>
+                    <p class="mb-1">
+                        <strong>Days Remaining:</strong> 
+                        @if (isOverdue)
+                        {
+                            <span class="text-warning">OVERDUE (@Math.Abs(daysRemaining) days)</span>
+                        }
+                        else
+                        {
+                            @daysRemaining
+                        }
+                    </p>
+                </div>
+
+                @if (transactionId != null && request.RequestStatusId == 2) // Only show return for approved requests
+                {
+                    <form asp-action="ReturnEquipment" asp-controller="Rental" method="post" class="d-flex gap-2">
+                        <input type="hidden" name="RentalRequestId" value="@request.RentalRequestId" />
+                        <input type="hidden" name="EquipmentId" value="@request.Equipment?.EquipmentId" />
+                        <input type="hidden" name="RentalTransactionId" value="@transactionId" />
+
+                        <select name="EquipmentConditionId" class="form-select form-select-sm" required>
+                            <option value="">Select condition</option>
+                            <option value="1">Good</option>
+                            <option value="2">Damaged</option>
+                            <option value="3">Lost</option>
+                        </select>
+
+                        <button type="submit" class="btn btn-sm btn-warning fw-bold">
+                            @if (isOverdue)
+                            {
+                                <span>Return Overdue</span>
+                            }
+                            else
+                            {
+                                <span>Return</span>
+                            }
+                        </button>
+                    </form>
+                }
+                else if (request.RequestStatusId == 4) // Returned status
+                {
+                    <span class="badge bg-success">Already Returned</span>
+                }
+                else
+                {
+                    <span class="text-warning">Cannot return (no valid transaction)</span>
+                }
+            </div>
+        </div>
+    }
+}
