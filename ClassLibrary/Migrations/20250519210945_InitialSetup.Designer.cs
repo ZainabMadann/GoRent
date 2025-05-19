@@ -12,15 +12,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClassLibrary.Migrations
 {
     [DbContext(typeof(CourseDBContext))]
-    [Migration("20250517143526_Create")]
-    partial class Create
+    [Migration("20250519210945_InitialSetup")]
+    partial class InitialSetup
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.6")
+                .HasAnnotation("ProductVersion", "9.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -113,6 +113,12 @@ namespace ClassLibrary.Migrations
                     b.Property<int>("EquipmentStatusId")
                         .HasColumnType("int")
                         .HasColumnName("Equipment_Status_ID");
+
+                    b.Property<string>("ImagePath")
+                        .HasMaxLength(255)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("Image_Path");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -310,6 +316,9 @@ namespace ClassLibrary.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RentalRequestId"));
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("date");
 
@@ -418,8 +427,11 @@ namespace ClassLibrary.Migrations
             modelBuilder.Entity("ClassLibrary.Model.ReturnRecord", b =>
                 {
                     b.Property<int>("ReturnRecordId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("Return_Record_ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ReturnRecordId"));
 
                     b.Property<int>("EquipmentConditionId")
                         .HasColumnType("int")

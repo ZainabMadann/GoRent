@@ -66,6 +66,80 @@ void SeedAdminAndManagerUsers(WebApplication app)
         };
         admin.Password = passwordHasher.HashPassword(admin, "admin123");
         db.Users.Add(admin);
+
+
+        var eqStatus = new EquipmentStatus
+        {
+            Name = "Available",
+            Description = "Equipment is Available"
+        };
+
+        var eqStatus2 = new EquipmentStatus
+        {
+            Name = "Rented",
+            Description = "Equipment is Rented"
+        };
+
+        db.EquipmentStatuses.Add(eqStatus);
+        db.EquipmentStatuses.Add(eqStatus2);
+
+
+
+        var reqStatus = new RequestStatus
+        {
+            Name = "Pending",
+            Description = "Request is Pending"
+        };
+
+        var reqStatus2 = new RequestStatus
+        {
+            Name = "Approved",
+            Description = "Request is Approved"
+        };
+
+        var reqStatus3 = new RequestStatus
+        {
+            Name = "Rejected",
+            Description = "Request is Rejected"
+        };
+
+        var reqStatus4 = new RequestStatus
+        {
+            Name = "Returned",
+            Description = "Request is Returned"
+        };
+
+        db.RequestStatuses.Add(reqStatus);
+        db.RequestStatuses.Add(reqStatus2);
+        db.RequestStatuses.Add(reqStatus3);
+        db.RequestStatuses.Add(reqStatus4);
+
+
+
+        var eqCondition = new EquipmentCondition
+        {
+            Name = "New",
+            Description = "Equipment is New"
+        };
+
+        var eqCondition2 = new EquipmentCondition
+        {
+            Name = "Used",
+            Description = "Equipment is Used"
+        };
+
+        var eqCondition3 = new EquipmentCondition
+        {
+            Name = "Damaged",
+            Description = "Equipment is Damaged"
+        };
+
+        db.EquipmentConditions.Add(eqCondition);
+        db.EquipmentConditions.Add(eqCondition2);
+        db.EquipmentConditions.Add(eqCondition3);
+
+
+
     }
 
     // Seed Manager
@@ -80,6 +154,9 @@ void SeedAdminAndManagerUsers(WebApplication app)
         manager.Password = passwordHasher.HashPassword(manager, "manager123");
         db.Users.Add(manager);
     }
+
+    
+
 
     db.SaveChanges();
 }

@@ -152,7 +152,7 @@ namespace ClassLibrary.Model
 
             modelBuilder.Entity<ReturnRecord>(entity =>
             {
-                entity.Property(e => e.ReturnRecordId).ValueGeneratedNever();
+                entity.Property(e => e.ReturnRecordId).ValueGeneratedOnAdd();
 
                 entity.HasOne(d => d.EquipmentCondition)
                     .WithMany(p => p.ReturnRecords)

@@ -257,10 +257,13 @@ public class RentalController : Controller
         {
             _context.SaveChanges();
             TempData["Message"] = "Equipment successfully returned";
+            //throw new Exception();
         }
         catch (DbUpdateException ex)
         {
             TempData["Error"] = "Error returning equipment: " + ex.Message;
+
+            throw new Exception();
         }
 
         return RedirectToAction("RentedNow");

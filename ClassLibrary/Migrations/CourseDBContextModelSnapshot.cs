@@ -424,8 +424,11 @@ namespace ClassLibrary.Migrations
             modelBuilder.Entity("ClassLibrary.Model.ReturnRecord", b =>
                 {
                     b.Property<int>("ReturnRecordId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("Return_Record_ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ReturnRecordId"));
 
                     b.Property<int>("EquipmentConditionId")
                         .HasColumnType("int")
@@ -482,9 +485,9 @@ namespace ClassLibrary.Migrations
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasMaxLength(50)
+                        .HasMaxLength(255)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("Role")
                         .IsRequired()

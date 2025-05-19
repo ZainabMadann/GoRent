@@ -11,7 +11,7 @@ namespace ClassLibrary.Model
     {
         [Key]
         [Column("Return_Record_ID")]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)] 
+        //[DatabaseGenerated(DatabaseGeneratedOption.Identity)] 
         public int ReturnRecordId { get; set; }
 
         [Column(TypeName = "date")]

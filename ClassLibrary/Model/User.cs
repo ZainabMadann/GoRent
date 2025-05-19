@@ -28,7 +28,7 @@ namespace ClassLibrary.Model
         [StringLength(50)]
         [Unicode(false)]
         public string Email { get; set; } = null!;
-        [StringLength(50)]
+        [StringLength(255)]
         [Unicode(false)]
         public string Password { get; set; } = null!;
         [StringLength(50)]
