@@ -205,9 +205,13 @@
         onclick="window.location.href='/RentalTransaction/ManageTransactions'">
     Manage Transactions
 </button>
+<form asp-controller="Feedback" asp-action="ManageComments" method="get">
+    <button type="submit" class="btn custom-btn text-white" id="manageCommentsBtn">
+        Manage Comments
+    </button>
+</form>
 
-                            <button class="btn custom-btn text-white" id="manageCommentsBtn"
-                            onclick="window.location.href='/home/MangeComments'">Manage Comments</button>
+
                         </div>
                     </div>
                 </div>

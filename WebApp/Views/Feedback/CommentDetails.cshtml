@@ -1,0 +1,48 @@
+﻿@model ClassLibrary.Model.Feedback
+
+@{
+    ViewData["Title"] = "Comment Details";
+    bool isHidden = Model.IsHidden;
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-8">
+            <div class="card bg-dark text-white shadow">
+                <div class="card-body p-4">
+                    <h3 class="h5 mb-3">Comment Details</h3>
+
+                    <p><strong>Comment ID:</strong> #@Model.FeedbackId</p>
+                    <p><strong>User:</strong> @Model.User?.Email</p>
+                    <p><strong>Equipment:</strong> @Model.RentalTransaction?.Equipment?.Name</p>
+                    <p><strong>Rating:</strong> @(new string('⭐', Model.Rating))</p>
+                    <p><strong>Status:</strong>
+                        @if (isHidden)
+                        {
+                            <span class="badge bg-secondary">Hidden</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-success">Visible</span>
+                        }
+                    </p>
+
+                    <p><strong>Comment:</strong></p>
+                    <p class="bg-secondary p-3 rounded">
+                        @(isHidden ? "[Comment is hidden]" : Model.Comment)
+                    </p>
+
+                    <div class="d-flex gap-2 mt-4">
+                        <a asp-action="ManageComments" asp-controller="Feedback" class="btn btn-outline-light">← Back</a>
+
+                        <form asp-action="ToggleVisibility" asp-controller="Feedback" asp-route-id="@Model.FeedbackId" method="post">
+                            <button class="btn @(isHidden ? "btn-success" : "btn-warning")">
+                                @(isHidden ? "Unhide Comment" : "Hide Comment")
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

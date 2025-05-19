@@ -21,6 +21,7 @@ namespace ClassLibrary.Model
         public int UserId { get; set; }
         [Column("Rental_Transaction_ID")]
         public int RentalTransactionId { get; set; }
+        public bool IsHidden { get; set; } = false;
 
         [ForeignKey("RentalTransactionId")]
         [InverseProperty("Feedbacks")]

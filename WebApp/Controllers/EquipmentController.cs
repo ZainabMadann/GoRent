@@ -83,7 +83,6 @@ namespace WebApp.Controllers
             return RedirectToAction("Manage");
         }
 
-        [HttpGet]
         public IActionResult Details(int id)
         {
             var equipment = _context.Equipment
@@ -94,11 +93,42 @@ namespace WebApp.Controllers
             if (equipment == null)
                 return NotFound();
 
+            // Get all feedbacks related to this equipment
+            var feedbacks = _context.Feedbacks
+    .Include(f => f.User)
+    .Include(f => f.RentalTransaction)
+    .Where(f => f.RentalTransaction.EquipmentId == id && f.IsHidden == false)
+    .ToList();
+
+
+            // Get hidden comment IDs from session
+            var hiddenIds = HttpContext.Session.GetString("HiddenFeedbackIds")?
+     .Split(',', StringSplitOptions.RemoveEmptyEntries)
+     .Select(id => int.TryParse(id, out var parsed) ? parsed : (int?)null)
+     .Where(id => id.HasValue)
+     .Select(id => id.Value)
+     .ToList() ?? new List<int>();
+
+
+            // Pass filtered or full list to ViewBag
+            ViewBag.Feedbacks = feedbacks;
+            ViewBag.HiddenIds = hiddenIds;
+
+            // Check if current user has rented this item
+            var userId = _context.Users.FirstOrDefault(u => u.Email == User.Identity.Name)?.UserId;
+            var rentalTransaction = _context.RentalTransactions
+                .FirstOrDefault(rt => rt.EquipmentId == id && rt.UserId == userId);
+
+            ViewBag.UserCanReview = rentalTransaction != null;
+            ViewBag.RentalTransactionId = rentalTransaction?.RentalTransactionId;
+
             ViewBag.Categories = _context.Categories.ToList();
             ViewBag.Statuses = _context.EquipmentStatuses.ToList();
 
             return View("EqDetails", equipment);
         }
+
+
 
         [HttpPost]
         public async Task<IActionResult> Edit(IFormFile? EquipmentImage, int EquipmentId, string Name, string Description,
