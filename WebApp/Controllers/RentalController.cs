@@ -39,24 +39,57 @@ public class RentalController : Controller
         return RedirectToAction("Payment", "Home");
     }
 
+    //public IActionResult MyRequests()
+    //{
+    //    var userIdStr = HttpContext.Session.GetString("UserId");
+    //    if (string.IsNullOrEmpty(userIdStr))
+    //    {
+    //        return RedirectToAction("Login", "Auth");
+    //    }
+
+    //    int userId = int.Parse(userIdStr);
+    //    var requests = _context.RentalRequests
+    //        .Where(r => r.UserId == userId)
+    //        .Include(r => r.Equipment)         // optional: include related Equipment info
+    //        .Include(r => r.RequestStatus)     // optional: include status info
+    //        .OrderByDescending(r => r.RequestDate)
+    //        .ToList();
+
+    //    return PartialView("_RentalRequestsPartial", requests);
+    //}
     public IActionResult MyRequests()
     {
         var userIdStr = HttpContext.Session.GetString("UserId");
-        if (string.IsNullOrEmpty(userIdStr))
+        var userRole = HttpContext.Session.GetString("Role");
+
+        if (string.IsNullOrEmpty(userIdStr) || string.IsNullOrEmpty(userRole))
         {
             return RedirectToAction("Login", "Auth");
         }
 
-        int userId = int.Parse(userIdStr);
-        var requests = _context.RentalRequests
-            .Where(r => r.UserId == userId)
-            .Include(r => r.Equipment)         // optional: include related Equipment info
-            .Include(r => r.RequestStatus)     // optional: include status info
+        IQueryable<RentalRequest> query;
+
+        if (userRole == "Admin" || userRole == "Manager")
+        {
+            // Admin/Manager: show all requests
+            query = _context.RentalRequests;
+        }
+        else
+        {
+            // Customer: show only their own requests
+            int userId = int.Parse(userIdStr);
+            query = _context.RentalRequests.Where(r => r.UserId == userId);
+        }
+
+        var requests = query
+            .Include(r => r.Equipment)
+            .Include(r => r.RequestStatus)
             .OrderByDescending(r => r.RequestDate)
             .ToList();
 
         return PartialView("_RentalRequestsPartial", requests);
     }
+
     public IActionResult RequestDetails(int id)
     {
         var request = _context.RentalRequests
