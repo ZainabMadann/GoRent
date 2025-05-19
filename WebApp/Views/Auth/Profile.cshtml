@@ -132,19 +132,10 @@
                             <option value="failed">Failed</option>
                         </select>
                     </div>
-                    <div id="transactionsList">
-                        <div class="card bg-secondary text-white mb-3">
-                            <div class="card-body d-flex justify-content-between align-items-center">
-                                <div>
-                                    <p class="mb-1"><strong>Transaction ID:</strong> #67890</p>
-                                    <p class="mb-1"><strong>Status:</strong> Completed</p>
-                                </div>
-                                <button class="btn btn-sm btn-outline-light fw-bold"
-                                onclick="window.location.href='@Url.Action("TransactionDetails", "Home")'">View</button>
+                   <div id="transactionsList">
+    <div class="text-center text-muted">Loading your transactions...</div>
+</div>
 
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
             @* this part is for the admin only , we are gonna handle it later *@
@@ -163,8 +154,11 @@
                             </button>
                             <button class="btn custom-btn text-white" id="manageRentalRequestsBtn" onclick="window.location.href='/home/ManageRentalRequests'">Manage Rental
                                 Requests</button>
-                            <button class="btn custom-btn text-white" id="manageTransactionsBtn" onclick="window.location.href='/home/ManageTransactions'">Manage
-                                Transactions</button>
+                            <button class="btn custom-btn text-white"
+        onclick="window.location.href='/RentalTransaction/ManageTransactions'">
+    Manage Transactions
+</button>
+
                             <button class="btn custom-btn text-white" id="manageCommentsBtn"
                             onclick="window.location.href='/home/MangeComments'">Manage Comments</button>
                         </div>
@@ -239,6 +233,21 @@
                             '<div class="text-danger">Unable to load your requests at this time.</div>';
                     });
             });
+        </script>
+        <script>
+            window.addEventListener('DOMContentLoaded', function () {
+    fetch('@Url.Action("MyTransactions", "RentalTransaction")')
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('transactionsList').innerHTML = html;
+        })
+        .catch(error => {
+            console.error("Failed to load transactions:", error);
+            document.getElementById('transactionsList').innerHTML =
+                '<div class="text-danger">Unable to load your transactions at this time.</div>';
+        });
+});
+
         </script>
 
 }
