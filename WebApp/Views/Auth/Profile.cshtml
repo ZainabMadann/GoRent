@@ -108,7 +108,7 @@
                             <option value="pending">Pending</option>
                             <option value="approved">Approved</option>
                             <option value="rejected">Rejected</option>
-                            <option value="returned">Returned</option>
+                            @* <option value="returned">Returned</option> *@
                         </select>
                     </div>
                     <div id="requestsList">
@@ -239,6 +239,24 @@
                             '<div class="text-danger">Unable to load your requests at this time.</div>';
                     });
             });
+        </script>
+        <script>
+            function loadRequests() {
+                const search = document.getElementById("searchRequests").value;
+                const filter = document.getElementById("filterRequests").value;
+
+                fetch(`/Rental/MyRequests?search=${encodeURIComponent(search)}&filter=${encodeURIComponent(filter)}`)
+                    .then(res => res.text())
+                    .then(html => {
+                        document.getElementById("requestsList").innerHTML = html;
+                    });
+            }
+
+            document.getElementById("searchRequests").addEventListener("input", loadRequests);
+            document.getElementById("filterRequests").addEventListener("change", loadRequests);
+
+            // Load initially
+            window.addEventListener("DOMContentLoaded", loadRequests);
         </script>
 
 }

@@ -38,26 +38,7 @@ public class RentalController : Controller
 
         return RedirectToAction("Payment", "Home");
     }
-
-    //public IActionResult MyRequests()
-    //{
-    //    var userIdStr = HttpContext.Session.GetString("UserId");
-    //    if (string.IsNullOrEmpty(userIdStr))
-    //    {
-    //        return RedirectToAction("Login", "Auth");
-    //    }
-
-    //    int userId = int.Parse(userIdStr);
-    //    var requests = _context.RentalRequests
-    //        .Where(r => r.UserId == userId)
-    //        .Include(r => r.Equipment)         // optional: include related Equipment info
-    //        .Include(r => r.RequestStatus)     // optional: include status info
-    //        .OrderByDescending(r => r.RequestDate)
-    //        .ToList();
-
-    //    return PartialView("_RentalRequestsPartial", requests);
-    //}
-    public IActionResult MyRequests()
+    public IActionResult MyRequests(string? search, string? filter)
     {
         var userIdStr = HttpContext.Session.GetString("UserId");
         var userRole = HttpContext.Session.GetString("Role");
@@ -71,14 +52,30 @@ public class RentalController : Controller
 
         if (userRole == "Admin" || userRole == "Manager")
         {
-            // Admin/Manager: show all requests
             query = _context.RentalRequests;
         }
         else
         {
-            // Customer: show only their own requests
             int userId = int.Parse(userIdStr);
             query = _context.RentalRequests.Where(r => r.UserId == userId);
+        }
+
+        if (!string.IsNullOrEmpty(filter) && filter != "all")
+        {
+            query = filter switch
+            {
+                "pending" => query.Where(r => r.RequestStatusId == 1),
+                "approved" => query.Where(r => r.RequestStatusId == 2),
+                "rejected" => query.Where(r => r.RequestStatusId == 3),
+                _ => query
+            };
+        }
+
+        if (!string.IsNullOrEmpty(search))
+        {
+            query = query.Where(r =>
+                r.Description.Contains(search) ||
+                r.Equipment.Name.Contains(search));
         }
 
         var requests = query
@@ -89,6 +86,7 @@ public class RentalController : Controller
 
         return PartialView("_RentalRequestsPartial", requests);
     }
+
 
     public IActionResult RequestDetails(int id)
     {
