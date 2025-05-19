@@ -161,20 +161,19 @@ public class RentalController : Controller
 
         int userId = int.Parse(userIdStr);
 
-        IQueryable<RentalRequest> query = _context.RentalRequests
+        var rentedItems = _context.RentalRequests
             .Include(r => r.Equipment)
             .Include(r => r.RequestStatus)
-            .Where(r => r.RequestStatusId == 2); 
+            .Include(r => r.RentalTransactions)
+            .Where(r => r.RequestStatusId == 2 &&
+                       r.RentalTransactions.Any(t => t.PaymentStatus == "Paid"))
+            .Where(r => userRole == "Admin" || userRole == "Manager" || r.UserId == userId)
+            .OrderByDescending(r => r.RequestDate)
+            .ToList();
 
-        if (userRole != "Admin" && userRole != "Manager")
-        {
-            query = query.Where(r => r.UserId == userId);
-        }
-
-        var rentedItems = query.OrderByDescending(r => r.RequestDate).ToList();
-
-        return View(rentedItems);
+        return View(rentedItems); // This will render RentedNow.cshtml
     }
+
     public IActionResult RentedNowPartial(string search, string filter)
     {
         var userIdStr = HttpContext.Session.GetString("UserId");
@@ -190,7 +189,9 @@ public class RentalController : Controller
         IQueryable<RentalRequest> query = _context.RentalRequests
             .Include(r => r.Equipment)
             .Include(r => r.RequestStatus)
-            .Where(r => r.RequestStatusId == 2); // Approved status
+            .Include(r => r.RentalTransactions)
+            .Where(r => r.RequestStatusId == 2 && // Approved
+                        r.RentalTransactions.Any(t => t.PaymentStatus == "Paid")); // Only paid transactions
 
         if (userRole != "Admin" && userRole != "Manager")
         {
@@ -215,4 +216,54 @@ public class RentalController : Controller
 
         return PartialView("_RentedNowPartial", rentedItems);
     }
+
+    [HttpPost]
+    public IActionResult ReturnEquipment(int RentalRequestId, int EquipmentId, int RentalTransactionId, int EquipmentConditionId)
+    {
+        var userIdStr = HttpContext.Session.GetString("UserId");
+        if (string.IsNullOrEmpty(userIdStr))
+        {
+            return RedirectToAction("Login", "Auth");
+        }
+
+        int userId = int.Parse(userIdStr);
+
+        // Check if this equipment has already been returned for this transaction
+        if (_context.ReturnRecords.Any(r => r.RentalTransactionId == RentalTransactionId))
+        {
+            TempData["Error"] = "This equipment has already been returned";
+            return RedirectToAction("RentedNow");
+        }
+
+        var returnRecord = new ReturnRecord
+        {
+            ReturnDate = DateTime.Today,
+            RentalTransactionId = RentalTransactionId,
+            EquipmentId = EquipmentId,
+            UserId = userId,
+            EquipmentConditionId = EquipmentConditionId
+        };
+
+        _context.ReturnRecords.Add(returnRecord);
+
+        // Update rental request status to returned
+        var rentalRequest = _context.RentalRequests.FirstOrDefault(r => r.RentalRequestId == RentalRequestId);
+        if (rentalRequest != null)
+        {
+            rentalRequest.RequestStatusId = 4; // 4 = Returned
+        }
+
+        try
+        {
+            _context.SaveChanges();
+            TempData["Message"] = "Equipment successfully returned";
+        }
+        catch (DbUpdateException ex)
+        {
+            TempData["Error"] = "Error returning equipment: " + ex.Message;
+        }
+
+        return RedirectToAction("RentedNow");
+    }
+
 }
