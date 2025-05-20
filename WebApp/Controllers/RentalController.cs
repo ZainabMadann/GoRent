@@ -163,6 +163,7 @@ public class RentalController : Controller
         var request = _context.RentalRequests
             .Include(r => r.Equipment)
             .Include(r => r.RequestStatus)
+            .Include(r => r.RentalTransactions)
             .FirstOrDefault(r => r.RentalRequestId == id);
 
         if (request == null)
