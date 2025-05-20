@@ -79,17 +79,15 @@ public class RentalController : Controller
             return RedirectToAction("Login", "Auth");
         }
 
-        IQueryable<RentalRequest> query;
-
+        // Only allow non-admins and non-managers to view this
         if (userRole == "Admin" || userRole == "Manager")
         {
-            query = _context.RentalRequests;
+            return Content("Admins and Managers should access rental requests from the 'Manage Rental Requests' section.");
         }
-        else
-        {
-            int userId = int.Parse(userIdStr);
-            query = _context.RentalRequests.Where(r => r.UserId == userId);
-        }
+
+        int userId = int.Parse(userIdStr);
+
+        IQueryable<RentalRequest> query = _context.RentalRequests.Where(r => r.UserId == userId);
 
         if (!string.IsNullOrEmpty(filter) && filter != "all")
         {
@@ -117,6 +115,46 @@ public class RentalController : Controller
 
         return PartialView("_RentalRequestsPartial", requests);
     }
+    public IActionResult ManageRentalRequests(string? search, string? filter)
+    {
+        var userRole = HttpContext.Session.GetString("Role");
+
+        if (string.IsNullOrEmpty(userRole) || (userRole != "Admin" && userRole != "Manager"))
+        {
+            return Unauthorized("Only Admins or Managers can view this page.");
+        }
+
+        IQueryable<RentalRequest> query = _context.RentalRequests;
+
+        if (!string.IsNullOrEmpty(filter) && filter != "all")
+        {
+            query = filter switch
+            {
+                "pending" => query.Where(r => r.RequestStatusId == 1),
+                "approved" => query.Where(r => r.RequestStatusId == 2),
+                "rejected" => query.Where(r => r.RequestStatusId == 3),
+                _ => query
+            };
+        }
+
+        if (!string.IsNullOrEmpty(search))
+        {
+            query = query.Where(r =>
+                r.Description.Contains(search) ||
+                r.Equipment.Name.Contains(search) ||
+                r.User.Name.Contains(search));
+        }
+
+        var requests = query
+            .Include(r => r.Equipment)
+            .Include(r => r.RequestStatus)
+            .Include(r => r.User)
+            .OrderByDescending(r => r.RequestDate)
+            .ToList();
+
+        return View("ManageRentalRequests", requests); 
+    }
+
 
 
     public IActionResult RequestDetails(int id)

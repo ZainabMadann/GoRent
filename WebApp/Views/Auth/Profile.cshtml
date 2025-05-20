@@ -96,7 +96,8 @@
                     </div>
                 </div>
             </div>
-
+            @if (userRole == "Customer")
+            {
             <div class="card bg-dark text-white shadow mb-4">
                 <div class="card-body p-4">
                     <h3 class="h5 mb-3">All My Requests</h3>
@@ -117,6 +118,8 @@
 
                 </div>
             </div>
+            }
+
 
             <div class="card bg-dark text-white shadow mb-4">
                 <div class="card-body p-4">
@@ -151,11 +154,6 @@
                     <div class="mb-3 d-flex gap-2">
                         <input type="text" id="searchRentedNow" class="form-control bg-dark text-white border-secondary"
                                placeholder="Search approved rentals...">
-                        @* <select id="filterRentedNow" class="form-select bg-dark text-white border-secondary"> *@
-                        @*     <option value="all">All</option> *@
-                        @*     <option value="active">Active</option> *@
-                        @*     <option value="overdue">Overdue</option> *@
-                        @* </select> *@
                     </div>
                     <div id="rentedNowList">
                         <div class="text-center text-muted">Loading your rented items...</div>
@@ -198,7 +196,7 @@
                             onclick="window.location.href='@Url.Action("Manage", "Equipment")'">
                                 Manage Equipments
                             </button>
-                            <button class="btn custom-btn text-white" id="manageRentalRequestsBtn" onclick="window.location.href='/home/ManageRentalRequests'">Manage Rental
+                            <button class="btn custom-btn text-white" id="manageRentalRequestsBtn" onclick="window.location.href='/rental/ManageRentalRequests'">Manage Rental
                                 Requests</button>
                             <button class="btn custom-btn text-white"
         onclick="window.location.href='/RentalTransaction/ManageTransactions'">
@@ -228,8 +226,12 @@
                             <button class="btn custom-btn text-white" id="manageEquipmentsBtn"
                             onclick="window.location.href='/home/ManageEq'">Manage
                                 Equipments</button>
-                            <button class="btn custom-btn text-white" id="manageRentalRequestsBtn" onclick="window.location.href='/home/ManageRentalRequests'">Manage Rental
-                                Requests</button>
+                            @* <button class="btn custom-btn text-white" id="manageRentalRequestsBtn" onclick="window.location.href='/home/ManageRentalRequests'">Manage Rental *@
+                            @*     Requests</button> *@
+                            <button class="btn custom-btn text-white" id="manageRentalRequestsBtn" onclick="window.location.href='@Url.Action("ManageRentalRequests", "Rental")'">
+                                Manage Rental Requests
+                            </button>
+
                             <button class="btn custom-btn text-white" id="manageTransactionsBtn" onclick="window.location.href='/home/ManageTransactions'">Manage
                                 Transactions</button>
                             <button class="btn custom-btn text-white" id="manageCommentsBtn"
