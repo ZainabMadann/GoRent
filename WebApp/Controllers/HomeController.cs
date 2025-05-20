@@ -111,7 +111,7 @@ public class HomeController : Controller
         return View();
     }
 
-    public IActionResult ContactUs()
+    public IActionResult AboutUs()
     {
         return View();
     }
