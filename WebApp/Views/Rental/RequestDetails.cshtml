@@ -24,6 +24,7 @@
                         <p><strong>Start Date:</strong> @Model.StartDate.ToShortDateString()</p>
                         <p><strong>End Date:</strong> @Model.EndDate.ToShortDateString()</p>
                         <p><strong>Request Date:</strong> @Model.RequestDate.ToShortDateString()</p>
+                        <p><strong>Description:</strong> @(Model.Description ?? "No description provided")</p>
 
                         @if (isApproved && !hasPayment &&isCustomer)
                         {
