@@ -163,6 +163,7 @@ public class RentalController : Controller
         var request = _context.RentalRequests
             .Include(r => r.Equipment)
             .Include(r => r.RequestStatus)
+            .Include(r => r.RentalTransactions)
             .FirstOrDefault(r => r.RentalRequestId == id);
 
         if (request == null)
@@ -403,37 +404,21 @@ public class RentalController : Controller
             return Unauthorized("Please login to view return history");
         }
 
-        int userId = int.Parse(userIdStr);
-        IQueryable<ReturnRecord> query = _context.ReturnRecords
+        // Simple query to get all return records with related data
+        var query = _context.ReturnRecords
             .Include(r => r.Equipment)
             .Include(r => r.EquipmentCondition)
             .Include(r => r.User)
             .Include(r => r.RentalTransaction)
-                .ThenInclude(rt => rt.RentalRequest);
+                .ThenInclude(rt => rt.RentalRequest)
+            .AsQueryable();
 
-        // If user is not admin/manager, filter by their own records
-        if (userRole != "Admin" && userRole != "Manager")
-        {
-            query = query.Where(r => r.UserId == userId);
-        }
-
-        // Apply search filter
+        // Apply search filter if provided
         if (!string.IsNullOrEmpty(search))
         {
             query = query.Where(r =>
                 r.Equipment.Name.Contains(search) ||
                 r.User.Name.Contains(search));
-        }
-
-        // Apply status filter
-        if (!string.IsNullOrEmpty(filter) && filter != "all")
-        {
-            query = filter switch
-            {
-                "on-time" => query.Where(r => r.ReturnDate <= r.RentalTransaction.RentalRequest.EndDate),
-                "late" => query.Where(r => r.ReturnDate > r.RentalTransaction.RentalRequest.EndDate),
-                _ => query
-            };
         }
 
         var returnHistory = await query

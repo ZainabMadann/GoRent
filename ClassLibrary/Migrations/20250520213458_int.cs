@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ClassLibrary.Migrations
 {
     /// <inheritdoc />
-    public partial class InitFullSchema : Migration
+    public partial class @int : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -124,10 +124,10 @@ namespace ClassLibrary.Migrations
                     Log_ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Action = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
-                    TimeStamp = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: false),
-                    User_ID = table.Column<int>(type: "int", nullable: false),
-                    CurrentValue = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
-                    OriginalValue = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
+                    TimeStamp = table.Column<DateTime>(type: "datetime2", rowVersion: true, nullable: false),
+                    User_ID = table.Column<int>(type: "int", nullable: true),
+                    CurrentValue = table.Column<string>(type: "varchar(1000)", unicode: false, maxLength: 1000, nullable: false),
+                    OriginalValue = table.Column<string>(type: "varchar(1000)", unicode: false, maxLength: 1000, nullable: false),
                     EntityChanged = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false)
                 },
                 constraints: table =>
@@ -146,7 +146,7 @@ namespace ClassLibrary.Migrations
                 {
                     Notification_ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Massege = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
+                    Massege = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
                     Date = table.Column<DateTime>(type: "date", nullable: false),
                     User_ID = table.Column<int>(type: "int", nullable: false),
                     Is_Read = table.Column<bool>(type: "bit", nullable: false)
