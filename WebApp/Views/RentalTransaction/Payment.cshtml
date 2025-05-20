@@ -53,4 +53,99 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Card Number formatting and validation
+            const cardInput = document.getElementById('CardNumber');
+            cardInput.addEventListener('input', function(e) {
+                // Remove any non-digits
+                let value = e.target.value.replace(/\D/g, '');
+                
+                // Limit to 16 digits
+                value = value.substring(0, 16);
+                
+                // Add spaces after every 4 digits
+                value = value.replace(/(\d{4})(?=\d)/g, '$1 ');
+                
+                e.target.value = value;
+            });
+
+            // Expiry Date formatting and validation
+            const expiryInput = document.getElementById('ExpiryDate');
+            expiryInput.addEventListener('input', function(e) {
+                // Remove any non-digits
+                let value = e.target.value.replace(/\D/g, '');
+                
+                // Limit to 4 digits
+                value = value.substring(0, 4);
+                
+                // Add slash after month
+                if (value.length > 2) {
+                    value = value.substring(0, 2) + '/' + value.substring(2);
+                }
+                
+                e.target.value = value;
+
+                // Validate month
+                if (value.length >= 2) {
+                    let month = parseInt(value.substring(0, 2));
+                    if (month < 1) value = '01' + value.substring(2);
+                    if (month > 12) value = '12' + value.substring(2);
+                    e.target.value = value;
+                }
+            });
+
+            // Future date validation
+            expiryInput.addEventListener('blur', function(e) {
+                if (e.target.value.length === 5) {
+                    const [month, year] = e.target.value.split('/');
+                    const expiry = new Date(2000 + parseInt(year), parseInt(month) - 1);
+                    const today = new Date();
+                    
+                    if (expiry < today) {
+                        alert('Expiry date must be in the future');
+                        e.target.value = '';
+                    }
+                }
+            });
+
+            // CVV validation
+            const cvvInput = document.getElementById('CVV');
+            cvvInput.addEventListener('input', function(e) {
+                // Remove any non-digits
+                let value = e.target.value.replace(/\D/g, '');
+                
+                // Limit to 4 digits (some cards use 4-digit CVV)
+                value = value.substring(0, 4);
+                
+                e.target.value = value;
+            });
+
+            // Form validation before submit
+            document.querySelector('form').addEventListener('submit', function(e) {
+                const cardNumber = cardInput.value.replace(/\s/g, '');
+                const expiry = expiryInput.value;
+                const cvv = cvvInput.value;
+
+                if (cardNumber.length !== 16) {
+                    e.preventDefault();
+                    alert('Please enter a valid 16-digit card number');
+                    return;
+                }
+
+                if (expiry.length !== 5) {
+                    e.preventDefault();
+                    alert('Please enter a valid expiry date (MM/YY)');
+                    return;
+                }
+
+                if (cvv.length < 3) {
+                    e.preventDefault();
+                    alert('Please enter a valid CVV');
+                    return;
+                }
+            });
+        });
+    </script>
 }
