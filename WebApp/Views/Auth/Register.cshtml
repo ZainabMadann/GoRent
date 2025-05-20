@@ -44,89 +44,101 @@
                 </div>
             </div>
 
-            <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    const passwordInput = document.getElementById('password');
-                    const togglePassword = document.getElementById('togglePassword');
-                    const form = document.querySelector('form');
-                    let passwordValid = false;
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const passwordInput = document.getElementById('password');
+            const togglePassword = document.getElementById('togglePassword');
+            const form = document.querySelector('form');
+            let passwordValid = false;
 
-                    // Password validation criteria
-                    const criteria = {
-                        length: str => str.length >= 8,
-                        uppercase: str => /[A-Z]/.test(str),
-                        lowercase: str => /[a-z]/.test(str),
-                        number: str => /[0-9]/.test(str),
-                        special: str => /[!@#$%^&*(),.?":{}|<>]/.test(str)
-                    };
+            const criteria = {
+                length: str => str.length >= 8,
+                uppercase: str => /[A-Z]/.test(str),
+                lowercase: str => /[a-z]/.test(str),
+                number: str => /[0-9]/.test(str),
+                special: str => new RegExp('[!@#$%^&*(),.?:{}|<>]').test(str)
+            };
 
-                    // Toggle password visibility
-                    togglePassword.addEventListener('click', function() {
-                        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-                        passwordInput.setAttribute('type', type);
-                        this.querySelector('i').classList.toggle('bi-eye');
-                        this.querySelector('i').classList.toggle('bi-eye-slash');
-                    });
+            togglePassword.addEventListener('click', function() {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                this.querySelector('i').classList.toggle('bi-eye');
+                this.querySelector('i').classList.toggle('bi-eye-slash');
+            });
 
-                    // Password validation
-                    passwordInput.addEventListener('input', function() {
-                        const password = this.value;
-                        let strength = 0;
-                        
-                        // Update check marks
-                        document.getElementById('lengthCheck').innerHTML = 
-                            `<i class="bi bi-${criteria.length(password) ? 'check-circle text-success' : 'x-circle text-danger'}"></i> At least 8 characters`;
-                        document.getElementById('upperCheck').innerHTML = 
-                            `<i class="bi bi-${criteria.uppercase(password) ? 'check-circle text-success' : 'x-circle text-danger'}"></i> One uppercase letter`;
-                        document.getElementById('lowerCheck').innerHTML = 
-                            `<i class="bi bi-${criteria.lowercase(password) ? 'check-circle text-success' : 'x-circle text-danger'}"></i> One lowercase letter`;
-                        document.getElementById('numberCheck').innerHTML = 
-                            `<i class="bi bi-${criteria.number(password) ? 'check-circle text-success' : 'x-circle text-danger'}"></i> One number`;
-                        document.getElementById('specialCheck').innerHTML = 
-                            `<i class="bi bi-${criteria.special(password) ? 'check-circle text-success' : 'x-circle text-danger'}"></i> One special character`;
+            passwordInput.addEventListener('input', function() {
+                const password = this.value;
+                let strength = 0;
+                
+                document.getElementById('lengthCheck').innerHTML = 
+                    criteria.length(password) 
+                        ? '<i class="bi bi-check-circle text-success"></i> At least 8 characters'
+                        : '<i class="bi bi-x-circle text-danger"></i> At least 8 characters';
+                
+                document.getElementById('upperCheck').innerHTML = 
+                    criteria.uppercase(password)
+                        ? '<i class="bi bi-check-circle text-success"></i> One uppercase letter'
+                        : '<i class="bi bi-x-circle text-danger"></i> One uppercase letter';
+                
+                document.getElementById('lowerCheck').innerHTML = 
+                    criteria.lowercase(password)
+                        ? '<i class="bi bi-check-circle text-success"></i> One lowercase letter'
+                        : '<i class="bi bi-x-circle text-danger"></i> One lowercase letter';
+                
+                document.getElementById('numberCheck').innerHTML = 
+                    criteria.number(password)
+                        ? '<i class="bi bi-check-circle text-success"></i> One number'
+                        : '<i class="bi bi-x-circle text-danger"></i> One number';
+                
+                document.getElementById('specialCheck').innerHTML = 
+                    criteria.special(password)
+                        ? '<i class="bi bi-check-circle text-success"></i> One special character'
+                        : '<i class="bi bi-x-circle text-danger"></i> One special character';
 
-                        // Calculate strength
-                        Object.values(criteria).forEach(criterion => {
-                            if (criterion(password)) strength += 20;
-                        });
-
-                        // Update strength bar
-                        const strengthBar = document.getElementById('passwordStrength');
-                        strengthBar.style.width = strength + '%';
-                        
-                        if (strength < 40) {
-                            strengthBar.className = 'progress-bar bg-danger';
-                        } else if (strength < 80) {
-                            strengthBar.className = 'progress-bar bg-warning';
-                        } else {
-                            strengthBar.className = 'progress-bar bg-success';
-                        }
-
-                        // Update validation state
-                        passwordValid = strength === 100;
-                        if (passwordValid) {
-                            passwordInput.classList.remove('is-invalid');
-                            passwordInput.classList.add('is-valid');
-                            document.getElementById('passwordError').textContent = '';
-                        } else {
-                            passwordInput.classList.remove('is-valid');
-                            if (password.length > 0) {
-                                passwordInput.classList.add('is-invalid');
-                                document.getElementById('passwordError').textContent = 'Please meet all password requirements';
-                            }
-                        }
-                    });
-
-                    // Form validation
-                    form.addEventListener('submit', function(e) {
-                        if (!passwordValid) {
-                            e.preventDefault();
-                            passwordInput.classList.add('is-invalid');
-                            document.getElementById('passwordError').textContent = 'Please meet all password requirements';
-                        }
-                    });
+                Object.values(criteria).forEach(criterion => {
+                    if (criterion(password)) strength += 20;
                 });
-            </script>
+
+                const strengthBar = document.getElementById('passwordStrength');
+                strengthBar.style.width = strength + '%';
+                
+                if (strength < 40) {
+                    strengthBar.className = 'progress-bar bg-danger';
+                } else if (strength < 80) {
+                    strengthBar.className = 'progress-bar bg-warning';
+                } else {
+                    strengthBar.className = 'progress-bar bg-success';
+                }
+
+                passwordValid = strength === 100;
+                if (passwordValid) {
+                    passwordInput.classList.remove('is-invalid');
+                    passwordInput.classList.add('is-valid');
+                    document.getElementById('passwordError').textContent = '';
+                } else {
+                    passwordInput.classList.remove('is-valid');
+                    if (password.length > 0) {
+                        passwordInput.classList.add('is-invalid');
+                        document.getElementById('passwordError').textContent = 'Please meet all password requirements';
+                    } else {
+                        passwordInput.classList.remove('is-invalid');
+                        document.getElementById('passwordError').textContent = '';
+                    }
+                }
+            });
+
+            form.addEventListener('submit', function(e) {
+                if (!passwordValid) {
+                    e.preventDefault();
+                    passwordInput.classList.add('is-invalid');
+                    document.getElementById('passwordError').textContent = 'Please meet all password requirements';
+                }
+            });
+        });
+    </script>
+}
             <div class="text-center mt-4">
                 <button type="submit" class="custom-btn">Register</button>
             </div>
