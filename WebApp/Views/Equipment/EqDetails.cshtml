@@ -18,6 +18,7 @@
     </div>
 }
 }
+@{ var userRole = Context.Session.GetString("Role"); }
 
 <div class="container py-4">
     <div class="row justify-content-center">
@@ -49,16 +50,22 @@
 
 
                     <div class="mt-3">
-                        <button class="btn button-primary" style="background-color: #1f2a55; color: white;"
+                    @if (userRole == "Customer" )
+                    {
+                         <button class="btn button-primary" style="background-color: #1f2a55; color: white;"
                             data-bs-toggle="modal" data-bs-target="#rentEquipmentModal">
                             <i class="bi bi-cart-plus me-1"></i> Rent
                         </button>
+                    }
+                   
+                        @if (userRole == "Admin" || userRole == "Manager") {
                         <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editEquipmentModal">
                             <i class="bi bi-pencil me-1"></i> Edit
                         </button>
                         <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteEquipmentModal">
                             <i class="bi bi-trash me-1"></i> Delete
                         </button>
+                        }
                     </div>
                 </div>
             </div>

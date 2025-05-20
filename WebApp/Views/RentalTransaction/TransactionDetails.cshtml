@@ -2,6 +2,7 @@
 @{
     ViewData["Title"] = "Transaction Details";
 }
+@{ var userRole = Context.Session.GetString("Role"); }
 
 <div class="container py-4">
     <div class="row justify-content-center">
@@ -17,8 +18,11 @@
                     <p><strong>Equipment:</strong> @Model.Equipment?.Name</p>
 
                     <div class="d-flex gap-2 mt-3">
-                        <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#updateModal">Update</button>
-                        <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#cancelModal">Cancel</button>
+                        @if (userRole == "Admin" || userRole == "Manager")
+                        {
+                            <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#updateModal">Update</button>
+                            <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#cancelModal">Cancel</button>
+                        }
                     </div>
                 </div>
             </div>
