@@ -2,6 +2,8 @@
     var isLoggedIn = Context.Session.GetString("UserId") != null;
 }
 
+@{ var userRole = Context.Session.GetString("Role"); }
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -63,9 +65,11 @@
                                         </svg>
                                     </div>
                                 </a>
+                                 @if (userRole == "Admin" || userRole == "Manager") {
                                <a class="nav-link" asp-controller="Dashboard" asp-action="Index">
     <img src="/images/hamburger.png" alt="Dashboard Icon" class="ham-icon">
 </a>
+                                 }
 
                             </div>
                         }

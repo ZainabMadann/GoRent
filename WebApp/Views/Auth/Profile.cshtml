@@ -98,31 +98,31 @@
             </div>
             @if (userRole == "Customer")
             {
-            <div class="card bg-dark text-white shadow mb-4">
-                <div class="card-body p-4">
-                    <h3 class="h5 mb-3">All My Requests</h3>
-                    <div class="mb-3 d-flex gap-2">
-                        <input type="text" id="searchRequests" class="form-control bg-dark text-white border-secondary"
-                        placeholder="Search requests...">
-                        <select id="filterRequests" class="form-select bg-dark text-white border-secondary">
-                            <option value="all">All</option>
-                            <option value="pending">Pending</option>
-                            <option value="approved">Approved</option>
-                            <option value="rejected">Rejected</option>
-                            <option value="returned">Returned</option>
-                        </select>
-                    </div>
-                    <div id="requestsList">
-                        <div class="text-center text-muted">Loading your requests...</div>
-                    </div>
+                <div class="card bg-dark text-white shadow mb-4">
+                    <div class="card-body p-4">
+                        <h3 class="h5 mb-3">All My Requests</h3>
+                        <div class="mb-3 d-flex gap-2">
+                            <input type="text" id="searchRequests" class="form-control bg-dark text-white border-secondary"
+                            placeholder="Search requests...">
+                            <select id="filterRequests" class="form-select bg-dark text-white border-secondary">
+                                <option value="all">All</option>
+                                <option value="pending">Pending</option>
+                                <option value="approved">Approved</option>
+                                <option value="rejected">Rejected</option>
+                                <option value="returned">Returned</option>
+                            </select>
+                        </div>
+                        <div id="requestsList">
+                            <div class="text-center text-muted">Loading your requests...</div>
+                        </div>
 
+                    </div>
                 </div>
-            </div>
-            }
 
 
-            <div class="card bg-dark text-white shadow mb-4">
-                <div class="card-body p-4">
+
+                <div class="card bg-dark text-white shadow mb-4">
+                    <div class="card-body p-4">
                     <h3 class="h5 mb-3">All My Transactions</h3>
                    <div class="mb-3 d-flex gap-2">
     <input type="text" id="searchTransactions"
@@ -148,8 +148,11 @@
 
                 </div>
             </div>
-            <div class="card bg-dark text-white shadow mb-4">
-                <div class="card-body p-4">
+            }
+            @if (userRole == "Admin" || userRole == "Manager")
+            {
+                <div class="card bg-dark text-white shadow mb-4">
+                    <div class="card-body p-4">
                     <h3 class="h5 mb-3">Rented Now</h3>
                     <div class="mb-3 d-flex gap-2">
                         <input type="text" id="searchRentedNow" class="form-control bg-dark text-white border-secondary"
@@ -160,8 +163,11 @@
                     </div>
                 </div>
             </div>
-            <div class="card bg-dark text-white shadow mb-4">
-                <div class="card-body p-4">
+            }
+             @if (userRole == "Customer")
+            {
+                <div class="card bg-dark text-white shadow mb-4">
+                    <div class="card-body p-4">
                     <h3 class="h5 mb-3">Return History</h3>
                     <div class="mb-3 d-flex gap-2">
                         <input type="text" id="searchReturnHistory" class="form-control bg-dark text-white border-secondary"
@@ -181,36 +187,34 @@
                     </div>
                 </div>
             </div>
-
+            }
             @* this part is for the admin only , we are gonna handle it later *@
-            @if (userRole == "Manager" || userRole == "Admin")
+            @if (userRole == "Manager")
             {
                 <div class="card bg-dark text-white shadow mb-4">
                     <div class="card-body p-4">
                         <h3>Manager</h3>
-                        <div class="d-flex gap-2 mt-3">
-                            <button class="btn custom-btn text-white" id="manageCategoriesBtn"
-                            onclick="window.location.href='/category/ManageCat'">Manage
-                                Categories</button>
-                            <button class="btn custom-btn text-white" id="manageEquipmentsBtn"
-                            onclick="window.location.href='@Url.Action("Manage", "Equipment")'">
-                                Manage Equipments
-                            </button>
-                            <button class="btn custom-btn text-white" id="manageRentalRequestsBtn" onclick="window.location.href='@Url.Action("ManageRentalRequests", "Rental")'">
-                                Manage Rental Requests
-                            </button>
-                            <button class="btn custom-btn text-white"
-        onclick="window.location.href='/RentalTransaction/ManageTransactions'">
-    Manage Transactions
-</button>
-<form asp-controller="Feedback" asp-action="ManageComments" method="get">
-    <button type="submit" class="btn custom-btn text-white" id="manageCommentsBtn">
-        Manage Comments
+                       <div class="d-grid gap-2 d-md-flex mt-3">
+    <button class="btn custom-btn text-white flex-fill" onclick="window.location.href='@Url.Action("Manage", "Equipment")'">
+        Manage Equipments
     </button>
-</form>
+
+    <button class="btn custom-btn text-white flex-fill" onclick="window.location.href='@Url.Action("ManageRentalRequests", "Rental")'">
+        Manage Rental Requests
+    </button>
+
+    <button class="btn custom-btn text-white flex-fill" onclick="window.location.href='/RentalTransaction/ManageTransactions'">
+        Manage Transactions
+    </button>
+
+    <form asp-controller="Feedback" asp-action="ManageComments" method="get" class="flex-fill">
+        <button type="submit" class="btn custom-btn text-white w-100">
+            Manage Comments
+        </button>
+    </form>
+</div>
 
 
-                        </div>
                     </div>
                 </div>
             }
