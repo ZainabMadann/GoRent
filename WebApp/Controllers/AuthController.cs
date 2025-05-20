@@ -27,11 +27,39 @@ namespace WebApp.Controllers
         [HttpPost]
         public IActionResult Register(string fullName, string email, string password)
         {
-            if (_context.Users.Any(u => u.Email == email))
+            // Full name check
+            if (string.IsNullOrWhiteSpace(fullName))
             {
-                ModelState.AddModelError("", "Email already exists");
+                ModelState.AddModelError("fullName", "Full name is required.");
+            }
+
+            // Email checks
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                ModelState.AddModelError("email", "Email is required.");
+            }
+            else if (_context.Users.Any(u => u.Email == email))
+            {
+                ModelState.AddModelError("email", "Email already exists.");
+            }
+
+            // Password checks
+            if (string.IsNullOrWhiteSpace(password))
+            {
+                ModelState.AddModelError("password", "Password is required.");
+            }
+            else if (!IsPasswordStrong(password, out string passwordError))
+            {
+                ModelState.AddModelError("password", passwordError);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                ViewData["FullName"] = fullName;
+                ViewData["Email"] = email;
                 return View();
             }
+
 
             var passwordHasher = new PasswordHasher<User>();
             var user = new User
@@ -45,7 +73,6 @@ namespace WebApp.Controllers
             _context.Users.Add(user);
             _context.SaveChanges();
 
-            // Log registration
             _context.Logs.Add(new Log
             {
                 Action = "REGISTER",
@@ -60,6 +87,39 @@ namespace WebApp.Controllers
             TempData["Message"] = "Registration successful. Please log in.";
             return RedirectToAction("Login");
         }
+
+
+        private bool IsPasswordStrong(string password, out string error)
+        {
+            error = string.Empty;
+
+            if (string.IsNullOrWhiteSpace(password) || password.Length < 8)
+            {
+                error = "Password must be at least 8 characters long.";
+                return false;
+            }
+
+            if (!password.Any(char.IsUpper))
+            {
+                error = "Password must contain at least one uppercase letter.";
+                return false;
+            }
+
+            if (!password.Any(char.IsDigit))
+            {
+                error = "Password must contain at least one number.";
+                return false;
+            }
+
+            if (!password.Any(ch => !char.IsLetterOrDigit(ch)))
+            {
+                error = "Password must contain at least one special character.";
+                return false;
+            }
+
+            return true;
+        }
+
 
         // GET: /Auth/Login
         public IActionResult Login()

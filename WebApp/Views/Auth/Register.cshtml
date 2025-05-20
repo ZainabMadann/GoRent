@@ -20,17 +20,30 @@
                     <form method="post" asp-action="Register" asp-controller="Auth">
                         <div class="mb-3">
                             <label class="form-label">Full Name</label>
-                            <input type="text" name="fullName" class="form-control bg-dark text-white border-secondary" required />
+                           <input type="text" name="fullName"
+       class="form-control bg-dark text-white border-secondary"
+       value="@ViewData["FullName"]"
+       required />
+
+                            @Html.ValidationMessage("fullName", "", new { @class = "text-danger small" })
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label">Email</label>
-                            <input type="email" name="email" class="form-control bg-dark text-white border-secondary" required />
+                            <input type="email" name="email"
+       class="form-control bg-dark text-white border-secondary"
+       value="@ViewData["Email"]"
+       required />
+
+                            @Html.ValidationMessage("email", "", new { @class = "text-danger small" })
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label">Password</label>
-                            <input type="password" name="password" class="form-control bg-dark text-white border-secondary" required />
+                            <input type="password" name="password"
+                                   class="form-control bg-dark text-white border-secondary"
+                                   required />
+                            @Html.ValidationMessage("password", "", new { @class = "text-danger small" })
                         </div>
 
                         <div class="d-grid">
