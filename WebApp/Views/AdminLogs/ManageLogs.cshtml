@@ -5,18 +5,18 @@
     {
         return action switch
         {
-            "FAILED_LOGIN" => "bg-danger",                     // 🔴 Red
-            "LOGIN" => "bg-primary",                          // 🔵 Blue
-            "CREATE_REQUEST" => "bg-success",                 // 🟢 Green
-            "UPDATE_REQUEST" => "bg-warning text-dark",       // 🟡 Yellow
-            "APPROVE_REQUEST" => "bg-success",                // 🟢 Green
-            "REJECT_REQUEST" => "bg-danger",                  // 🔴 Red
-            "TRANSACTION_CREATE" => "bg-success",             // 🟢 Green
-            "TRANSACTION_UPDATE" => "bg-warning text-dark",   // 🟡 Yellow
-            "TRANSACTION_CANCELLED" => "bg-danger",           // 🔴 Red
-            "PAYMENT_SUCCESS" => "bg-success",                // 🟢 Green
-            "RETURN_EQUIPMENT" => "bg-info",                  // 🔵 Cyan
-            _ => "bg-secondary"                               // ⚪ Default gray
+            "FAILED_LOGIN" => "bg-danger",                     // Red
+            "LOGIN" => "bg-primary",                          // Blue
+            "CREATE_REQUEST" => "bg-success",                 // Green
+            "UPDATE_REQUEST" => "bg-warning text-dark",       // Yellow
+            "APPROVE_REQUEST" => "bg-success",                // Green
+            "REJECT_REQUEST" => "bg-danger",                  // Red
+            "TRANSACTION_CREATE" => "bg-success",             // Green
+            "TRANSACTION_UPDATE" => "bg-warning text-dark",   // Yellow
+            "TRANSACTION_CANCELLED" => "bg-danger",           // Red
+            "PAYMENT_SUCCESS" => "bg-success",                // Green
+            "RETURN_EQUIPMENT" => "bg-info",                  // Cyan
+            _ => "bg-secondary"                               // Default gray
         };
     }
 
