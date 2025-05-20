@@ -109,15 +109,17 @@
                     aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form asp-action="CreateRentalRequest" asp-controller="Rental" method="post">
+                <form asp-action="CreateRentalRequest" asp-controller="Rental" method="post" id="rentalForm">
                     <input type="hidden" name="EquipmentId" value="@Model.EquipmentId" />
                     <div class="mb-3">
                         <label for="StartDate" class="form-label">Start Date</label>
-                        <input type="date" class="form-control bg-dark text-white border-secondary" name="StartDate" required>
+                        <input type="date" class="form-control bg-dark text-white border-secondary" id="StartDate" name="StartDate" required>
+                        <div class="invalid-feedback" id="startDateError"></div>
                     </div>
                     <div class="mb-3">
                         <label for="EndDate" class="form-label">End Date</label>
-                        <input type="date" class="form-control bg-dark text-white border-secondary" name="EndDate" required>
+                        <input type="date" class="form-control bg-dark text-white border-secondary" id="EndDate" name="EndDate" required>
+                        <div class="invalid-feedback" id="endDateError"></div>
                     </div>
                     <div class="mb-3">
                         <label for="Description" class="form-label">Request Description (Optional)</label>
@@ -131,6 +133,85 @@
                         </button>
                     </div>
                 </form>
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const startDateInput = document.getElementById('StartDate');
+                        const endDateInput = document.getElementById('EndDate');
+                        const rentalForm = document.getElementById('rentalForm');
+                        let startDateValid = false;
+                        let endDateValid = false;
+
+                        // Set minimum date to today for both inputs
+                        const today = new Date().toISOString().split('T')[0];
+                        startDateInput.min = today;
+                        endDateInput.min = today;
+
+                        function validateStartDate() {
+                            const startDate = new Date(startDateInput.value);
+                            const today = new Date();
+                            today.setHours(0, 0, 0, 0);
+
+                            if (startDate < today) {
+                                startDateInput.classList.add('is-invalid');
+                                document.getElementById('startDateError').textContent = 'Start date cannot be in the past';
+                                startDateValid = false;
+                            } else {
+                                startDateInput.classList.remove('is-invalid');
+                                startDateInput.classList.add('is-valid');
+                                startDateValid = true;
+                                // Update end date minimum
+                                endDateInput.min = startDateInput.value;
+                            }
+                            validateEndDate(); // Revalidate end date when start date changes
+                        }
+
+                        function validateEndDate() {
+                            const startDate = new Date(startDateInput.value);
+                            const endDate = new Date(endDateInput.value);
+                            
+                            if (!startDateInput.value) {
+                                endDateInput.classList.add('is-invalid');
+                                document.getElementById('endDateError').textContent = 'Please select a start date first';
+                                endDateValid = false;
+                                return;
+                            }
+
+                            if (endDate <= startDate) {
+                                endDateInput.classList.add('is-invalid');
+                                document.getElementById('endDateError').textContent = 'End date must be after start date';
+                                endDateValid = false;
+                            } else {
+                                endDateInput.classList.remove('is-invalid');
+                                endDateInput.classList.add('is-valid');
+                                endDateValid = true;
+                            }
+                        }
+
+                        startDateInput.addEventListener('input', validateStartDate);
+                        endDateInput.addEventListener('input', validateEndDate);
+
+                        rentalForm.addEventListener('submit', function(e) {
+                            validateStartDate();
+                            validateEndDate();
+
+                            if (!startDateValid || !endDateValid) {
+                                e.preventDefault();
+                            }
+                        });
+
+                        // Clear validation when modal is hidden
+                        const rentModal = document.getElementById('rentEquipmentModal');
+                        rentModal.addEventListener('hidden.bs.modal', function () {
+                            startDateInput.value = '';
+                            endDateInput.value = '';
+                            startDateInput.classList.remove('is-valid', 'is-invalid');
+                            endDateInput.classList.remove('is-valid', 'is-invalid');
+                            document.getElementById('startDateError').textContent = '';
+                            document.getElementById('endDateError').textContent = '';
+                        });
+                    });
+                </script>
             </div> 
         </div>
     </div>
