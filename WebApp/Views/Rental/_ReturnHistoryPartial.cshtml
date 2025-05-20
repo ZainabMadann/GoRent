@@ -19,7 +19,6 @@ else
                     <p class="mb-1"><strong>Equipment:</strong> @record.Equipment?.Name</p>
                     <p class="mb-1"><strong>Returned By:</strong> @record.User?.Name</p>
                     <p class="mb-1"><strong>Return Date:</strong> @record.ReturnDate.ToString("dd MMM yyyy")</p>
-                    <p class="mb-1"><strong>Original Due Date:</strong> @record.RentalTransaction?.RentalRequest?.EndDate.ToString("dd MMM yyyy")</p>
                     <p class="mb-1">
                         <strong>Return Status:</strong>
                         @if (isLateReturn)
