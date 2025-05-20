@@ -5,9 +5,13 @@
     var userRole = Context.Session.GetString("Role");
     bool isCustomer = string.Equals(userRole, "Customer", StringComparison.OrdinalIgnoreCase);
     bool isManager = string.Equals(userRole, "Manager", StringComparison.OrdinalIgnoreCase);
+    bool isAdmin = string.Equals(userRole, "Admin", StringComparison.OrdinalIgnoreCase);
     bool isPending = string.Equals(Model.RequestStatus?.Name, "Pending", StringComparison.OrdinalIgnoreCase);
     bool isApproved = string.Equals(Model.RequestStatus?.Name, "Approved", StringComparison.OrdinalIgnoreCase);
-    bool hasPayment = Model.RentalTransactions?.Any(t => t.PaymentStatus == "Paid") ?? false;
+    bool hasPayment = Model.RentalTransactions?.Any(t =>
+    string.Equals(t.PaymentStatus, "Paid", StringComparison.OrdinalIgnoreCase)
+        ) ?? false;
+
 }
 
 @if (Model != null)
@@ -53,7 +57,7 @@
                                 </button>
                             }
 
-                            @if (isManager && isPending)
+                            @if (isManager && isPending || isAdmin && isPending)
                             {
                                 <form method="post" asp-action="ApproveRequest" class="d-inline">
                                     <input type="hidden" name="RentalRequestId" value="@Model.RentalRequestId" />
