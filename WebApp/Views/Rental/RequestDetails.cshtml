@@ -6,6 +6,8 @@
     bool isCustomer = string.Equals(userRole, "Customer", StringComparison.OrdinalIgnoreCase);
     bool isManager = string.Equals(userRole, "Manager", StringComparison.OrdinalIgnoreCase);
     bool isPending = string.Equals(Model.RequestStatus?.Name, "Pending", StringComparison.OrdinalIgnoreCase);
+    bool isApproved = string.Equals(Model.RequestStatus?.Name, "Approved", StringComparison.OrdinalIgnoreCase);
+    bool hasPayment = Model.RentalTransactions?.Any(t => t.PaymentStatus == "Paid") ?? false;
 }
 
 @if (Model != null)
@@ -22,6 +24,25 @@
                         <p><strong>Start Date:</strong> @Model.StartDate.ToShortDateString()</p>
                         <p><strong>End Date:</strong> @Model.EndDate.ToShortDateString()</p>
                         <p><strong>Request Date:</strong> @Model.RequestDate.ToShortDateString()</p>
+
+                        @if (isApproved && !hasPayment)
+                        {
+                            <div class="alert alert-info mb-3">
+                                <p>Your request has been approved! Please complete the payment to confirm your rental.</p>
+                                <a asp-controller="RentalTransaction"
+                                   asp-action="Payment"
+                                   asp-route-rentalRequestId="@Model.RentalRequestId"
+                                   class="btn btn-primary">
+                                    Proceed to Payment
+                                </a>
+                            </div>
+                        }
+                        else if (hasPayment)
+                        {
+                            <div class="alert alert-success mb-3">
+                                <p>Payment completed for this rental request.</p>
+                            </div>
+                        }
 
                         <div class="d-flex gap-2">
                             @if (isCustomer && isPending)
@@ -42,8 +63,6 @@
                                     <button type="submit" class="btn btn-danger">Reject</button>
                                 </form>
                             }
-
-
                         </div>
                     </div>
                 </div>
@@ -55,7 +74,6 @@ else
 {
     <p class="text-danger">Request details not found.</p>
 }
-
 <!-- Modal (unchanged) -->
 <div class="modal fade" id="updateDescriptionModal" tabindex="-1" aria-labelledby="updateDescriptionModalLabel" aria-hidden="true">
     <div class="modal-dialog">

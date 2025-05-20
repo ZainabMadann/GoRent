@@ -63,9 +63,10 @@ public class RentalController : Controller
             _context.Notifications.Add(notification);
         }
 
-        _context.SaveChanges(); // ⬅️ Save everything (log + notifications)
-
-        return RedirectToAction("Payment", "RentalTransaction", new { rentalRequestId = rentalRequest.RentalRequestId });
+            _context.SaveChanges(); // ⬅️ Save everything (log + notifications)
+        TempData["Success"] = "Rental request submitted successfully! It will be reviewed by our team.";
+        return RedirectToAction("Details", "Equipment", new { id = EquipmentId });
+        //return RedirectToAction("Payment", "RentalTransaction", new { rentalRequestId = rentalRequest.RentalRequestId });
     }
 
 
