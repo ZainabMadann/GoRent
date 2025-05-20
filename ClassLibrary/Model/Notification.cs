@@ -12,7 +12,7 @@ namespace ClassLibrary.Model
         [Key]
         [Column("Notification_ID")]
         public int NotificationId { get; set; }
-        [StringLength(50)]
+        [StringLength(255)]
         [Unicode(false)]
         public string Massege { get; set; } = null!;
         [Column(TypeName = "date")]
@@ -22,6 +22,10 @@ namespace ClassLibrary.Model
 
         [ForeignKey("UserId")]
         [InverseProperty("Notifications")]
+
+        [Column("Is_Read")]
+        public bool IsRead { get; set; } = false;
+
         public virtual User User { get; set; } = null!;
     }
 }

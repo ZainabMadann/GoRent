@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ClassLibrary.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialSetup : Migration
+    public partial class InitFullSchema : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -75,7 +75,7 @@ namespace ClassLibrary.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
                     Email = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
-                    Password = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
+                    Password = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
                     Role = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false)
                 },
                 constraints: table =>
@@ -148,7 +148,8 @@ namespace ClassLibrary.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Massege = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
                     Date = table.Column<DateTime>(type: "date", nullable: false),
-                    User_ID = table.Column<int>(type: "int", nullable: false)
+                    User_ID = table.Column<int>(type: "int", nullable: false),
+                    Is_Read = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -258,7 +259,8 @@ namespace ClassLibrary.Migrations
                     Rating = table.Column<int>(type: "int", nullable: false),
                     comment = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
                     User_ID = table.Column<int>(type: "int", nullable: false),
-                    Rental_Transaction_ID = table.Column<int>(type: "int", nullable: false)
+                    Rental_Transaction_ID = table.Column<int>(type: "int", nullable: false),
+                    IsHidden = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {

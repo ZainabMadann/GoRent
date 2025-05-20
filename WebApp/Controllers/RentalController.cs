@@ -36,9 +36,29 @@ public class RentalController : Controller
         _context.RentalRequests.Add(rentalRequest);
         _context.SaveChanges();
 
-        // Redirect to payment or confirmation page
+        // Send Notification to Managers
+        var equipment = _context.Equipment.FirstOrDefault(e => e.EquipmentId == EquipmentId);
+        var user = _context.Users.FirstOrDefault(u => u.UserId == userId);
+
+        var managers = _context.Users.Where(u => u.Role == "Manager").ToList();
+        foreach (var manager in managers)
+        {
+            var notification = new Notification
+            {
+                Massege = $"New rental request for '{equipment?.Name}' was made by {user?.Name ?? user?.Email}.",
+                Date = DateTime.Today,
+                UserId = manager.UserId,
+                IsRead = false
+            };
+            _context.Notifications.Add(notification);
+        }
+
+        _context.SaveChanges();
+
+
         return RedirectToAction("Payment", "RentalTransaction", new { rentalRequestId = rentalRequest.RentalRequestId });
     }
+
     public IActionResult MyRequests(string? search, string? filter)
     {
         var userIdStr = HttpContext.Session.GetString("UserId");
@@ -122,7 +142,10 @@ public class RentalController : Controller
     [HttpPost]
     public IActionResult ApproveRequest(int RentalRequestId)
     {
-        var request = _context.RentalRequests.FirstOrDefault(r => r.RentalRequestId == RentalRequestId);
+        var request = _context.RentalRequests
+            .Include(r => r.Equipment)
+            .FirstOrDefault(r => r.RentalRequestId == RentalRequestId);
+
         if (request == null)
         {
             return NotFound("Rental request not found.");
@@ -131,19 +154,46 @@ public class RentalController : Controller
         request.RequestStatusId = 2;
         _context.SaveChanges();
 
+        var notification = new Notification
+        {
+            Massege = $"Your rental request for '{request.Equipment.Name}' was approved.",
+            Date = DateTime.Now,
+            UserId = request.UserId,
+            IsRead = false
+        };
+
+        _context.Notifications.Add(notification);
+        _context.SaveChanges();
+
         return RedirectToAction("RequestDetails", new { id = RentalRequestId });
     }
+
 
     [HttpPost]
     public IActionResult RejectRequest(int RentalRequestId)
     {
-        var request = _context.RentalRequests.FirstOrDefault(r => r.RentalRequestId == RentalRequestId);
+        var request = _context.RentalRequests
+    .Include(r => r.Equipment)
+    .FirstOrDefault(r => r.RentalRequestId == RentalRequestId);
+
         if (request == null)
         {
             return NotFound("Rental request not found.");
         }
 
         request.RequestStatusId = 3;
+        _context.SaveChanges();
+
+        // Create notification
+        var notification = new Notification
+        {
+            Massege = $"Your rental request for '{request.Equipment.Name}' was rejected.",
+            Date = DateTime.Now,
+            UserId = request.UserId,
+            IsRead = false
+        };
+
+        _context.Notifications.Add(notification);
         _context.SaveChanges();
 
         return RedirectToAction("RequestDetails", new { id = RentalRequestId });

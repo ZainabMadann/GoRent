@@ -79,6 +79,30 @@ namespace WebApp.Controllers
             _context.RentalTransactions.Add(transaction);
             _context.SaveChanges();
 
+            // Notify Admins and Managers
+            var user = _context.Users.FirstOrDefault(u => u.UserId == request.UserId);
+            var equipment = request.Equipment?.Name ?? "equipment";
+
+            var message = $"Rental transaction for '{equipment}' was made by {user?.Name ?? user?.Email}.";
+
+            var recipients = _context.Users
+                .Where(u => u.Role == "Admin" || u.Role == "Manager")
+                .ToList();
+
+            foreach (var adminOrManager in recipients)
+            {
+                var notification = new Notification
+                {
+                    Massege = message,
+                    Date = DateTime.Today,
+                    UserId = adminOrManager.UserId,
+                    IsRead = false
+                };
+                _context.Notifications.Add(notification);
+            }
+
+            _context.SaveChanges();
+
             TempData["Message"] = "Payment successful and rental transaction created!";
             return RedirectToAction("Profile", "Auth");
         }
@@ -137,8 +161,14 @@ namespace WebApp.Controllers
         [HttpPost]
         public IActionResult UpdateTransaction(int RentalTransactionId, string? PaymentStatus, decimal? TotalCost, bool cancel = false)
         {
-            var transaction = _context.RentalTransactions.FirstOrDefault(t => t.RentalTransactionId == RentalTransactionId);
+            var transaction = _context.RentalTransactions
+                .Include(t => t.User)
+                .Include(t => t.Equipment)
+                .FirstOrDefault(t => t.RentalTransactionId == RentalTransactionId);
+
             if (transaction == null) return NotFound();
+
+            string? originalStatus = transaction.PaymentStatus;
 
             if (cancel)
             {
@@ -151,9 +181,27 @@ namespace WebApp.Controllers
             }
 
             _context.SaveChanges();
+
+            // Send notification if status was changed
+            if (originalStatus != transaction.PaymentStatus)
+            {
+                var message = $"Your transaction for '{transaction.Equipment.Name}' is now marked as {transaction.PaymentStatus}.";
+                var notification = new Notification
+                {
+                    Massege = message,
+                    Date = DateTime.Today,
+                    UserId = transaction.UserId,
+                    IsRead = false
+                };
+
+                _context.Notifications.Add(notification);
+                _context.SaveChanges();
+            }
+
             TempData["Message"] = cancel ? "Transaction cancelled." : "Transaction updated.";
             return RedirectToAction("Details", new { id = RentalTransactionId });
         }
+
 
         [HttpPost]
         public IActionResult CreateTransaction(int RentalRequestId, int EquipmentId, int UserId, decimal TotalCost, string PaymentStatus)
