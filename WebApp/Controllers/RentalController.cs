@@ -29,14 +29,24 @@ public class RentalController : Controller
             EndDate = EndDate,
             RequestDate = DateTime.Today,
             UserId = userId,
-            RequestStatusId = 1, // Default: Pending
+            RequestStatusId = 1,
             Description = Description
         };
 
         _context.RentalRequests.Add(rentalRequest);
-        _context.SaveChanges();
+        _context.SaveChanges(); // ⬅️ Save to ensure RentalRequestId is generated
 
-        // Send Notification to Managers
+        // ⬅️ Now log with valid RentalRequestId
+        _context.Logs.Add(new Log
+        {
+            Action = "CREATE_REQUEST",
+            UserId = userId,
+            EntityChanged = "RentalRequest",
+            OriginalValue = "-",
+            CurrentValue = $"Request created (ID: {rentalRequest.RentalRequestId})",
+            TimeStamp = DateTime.Now
+        });
+
         var equipment = _context.Equipment.FirstOrDefault(e => e.EquipmentId == EquipmentId);
         var user = _context.Users.FirstOrDefault(u => u.UserId == userId);
 
@@ -53,11 +63,11 @@ public class RentalController : Controller
             _context.Notifications.Add(notification);
         }
 
-        _context.SaveChanges();
-
+        _context.SaveChanges(); // ⬅️ Save everything (log + notifications)
 
         return RedirectToAction("Payment", "RentalTransaction", new { rentalRequestId = rentalRequest.RentalRequestId });
     }
+
 
     public IActionResult MyRequests(string? search, string? filter)
     {
@@ -137,6 +147,17 @@ public class RentalController : Controller
         request.Description = Description;
         _context.SaveChanges();
 
+        _context.Logs.Add(new Log
+        {
+            Action = "UPDATE_REQUEST",
+            UserId = request.UserId,
+            EntityChanged = "RentalRequest",
+            OriginalValue = "-",
+            CurrentValue = $"Description updated (ID: {request.RentalRequestId})",
+            TimeStamp = DateTime.Now
+        });
+        _context.SaveChanges();
+
         return RedirectToAction("RequestDetails", new { id = RentalRequestId });
     }
     [HttpPost]
@@ -153,6 +174,17 @@ public class RentalController : Controller
 
         request.RequestStatusId = 2;
         _context.SaveChanges();
+
+        _context.Logs.Add(new Log
+        {
+            Action = "APPROVE_REQUEST",
+            UserId = request.UserId,
+            EntityChanged = "RentalRequest",
+            OriginalValue = "Pending",
+            CurrentValue = "Approved",
+            TimeStamp = DateTime.Now
+        });
+
 
         var notification = new Notification
         {
@@ -183,6 +215,17 @@ public class RentalController : Controller
 
         request.RequestStatusId = 3;
         _context.SaveChanges();
+
+        _context.Logs.Add(new Log
+        {
+            Action = "REJECT_REQUEST",
+            UserId = request.UserId,
+            EntityChanged = "RentalRequest",
+            OriginalValue = "Pending",
+            CurrentValue = "Rejected",
+            TimeStamp = DateTime.Now
+        });
+
 
         // Create notification
         var notification = new Notification
@@ -315,6 +358,17 @@ public class RentalController : Controller
 
             throw new Exception();
         }
+
+        _context.Logs.Add(new Log
+        {
+            Action = "RETURN_EQUIPMENT",
+            UserId = userId,
+            EntityChanged = "ReturnRecord",
+            OriginalValue = "-",
+            CurrentValue = $"Returned equipment (Transaction ID: {RentalTransactionId})",
+            TimeStamp = DateTime.Now
+        });
+        _context.SaveChanges();
 
         return RedirectToAction("_RentedNowPartial");
     }

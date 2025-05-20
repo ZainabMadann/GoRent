@@ -4,6 +4,7 @@ using ClassLibrary.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClassLibrary.Migrations
 {
     [DbContext(typeof(CourseDBContext))]
-    partial class CourseDBContextModelSnapshot : ModelSnapshot
+    [Migration("20250520015648_RebuildLogTable")]
+    partial class RebuildLogTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -245,9 +248,9 @@ namespace ClassLibrary.Migrations
 
                     b.Property<string>("CurrentValue")
                         .IsRequired()
-                        .HasMaxLength(1000)
+                        .HasMaxLength(50)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(1000)");
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("EntityChanged")
                         .IsRequired()
@@ -257,9 +260,9 @@ namespace ClassLibrary.Migrations
 
                     b.Property<string>("OriginalValue")
                         .IsRequired()
-                        .HasMaxLength(1000)
+                        .HasMaxLength(50)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(1000)");
+                        .HasColumnType("varchar(50)");
 
                     b.Property<DateTime>("TimeStamp")
                         .IsConcurrencyToken()

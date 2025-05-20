@@ -77,12 +77,22 @@ namespace WebApp.Controllers
             };
 
             _context.RentalTransactions.Add(transaction);
-            _context.SaveChanges();
+            _context.SaveChanges(); // ensure ID is generated
 
-            // Notify Admins and Managers
-            var user = _context.Users.FirstOrDefault(u => u.UserId == request.UserId);
+            // ✅ Now log with valid Transaction ID
+            _context.Logs.Add(new Log
+            {
+                Action = "PAYMENT_SUCCESS",
+                UserId = request.UserId,
+                EntityChanged = "RentalTransaction",
+                OriginalValue = "-",
+                CurrentValue = $"Payment completed for Request ID {request.RentalRequestId}, Transaction ID {transaction.RentalTransactionId}",
+                TimeStamp = DateTime.Now
+            });
+
+            // ✅ Notifications
+            var user = request.User;
             var equipment = request.Equipment?.Name ?? "equipment";
-
             var message = $"Rental transaction for '{equipment}' was made by {user?.Name ?? user?.Email}.";
 
             var recipients = _context.Users
@@ -101,11 +111,13 @@ namespace WebApp.Controllers
                 _context.Notifications.Add(notification);
             }
 
-            _context.SaveChanges();
+            _context.SaveChanges(); // Save log + notifications
 
             TempData["Message"] = "Payment successful and rental transaction created!";
             return RedirectToAction("Profile", "Auth");
         }
+
+
 
         public IActionResult Details(int id)
         {
@@ -156,8 +168,6 @@ namespace WebApp.Controllers
         }
 
 
-
-
         [HttpPost]
         public IActionResult UpdateTransaction(int RentalTransactionId, string? PaymentStatus, decimal? TotalCost, bool cancel = false)
         {
@@ -180,9 +190,6 @@ namespace WebApp.Controllers
                 transaction.TotalCost = TotalCost ?? transaction.TotalCost;
             }
 
-            _context.SaveChanges();
-
-            // Send notification if status was changed
             if (originalStatus != transaction.PaymentStatus)
             {
                 var message = $"Your transaction for '{transaction.Equipment.Name}' is now marked as {transaction.PaymentStatus}.";
@@ -193,14 +200,25 @@ namespace WebApp.Controllers
                     UserId = transaction.UserId,
                     IsRead = false
                 };
-
                 _context.Notifications.Add(notification);
-                _context.SaveChanges();
             }
+
+            _context.Logs.Add(new Log
+            {
+                Action = cancel ? "TRANSACTION_CANCELLED" : "TRANSACTION_UPDATE",
+                UserId = transaction.UserId,
+                EntityChanged = "RentalTransaction",
+                OriginalValue = originalStatus,
+                CurrentValue = transaction.PaymentStatus,
+                TimeStamp = DateTime.Now
+            });
+
+            _context.SaveChanges();
 
             TempData["Message"] = cancel ? "Transaction cancelled." : "Transaction updated.";
             return RedirectToAction("Details", new { id = RentalTransactionId });
         }
+
 
 
         [HttpPost]
@@ -225,11 +243,25 @@ namespace WebApp.Controllers
             };
 
             _context.RentalTransactions.Add(transaction);
+            _context.SaveChanges(); // generate ID
+
+            // ✅ Now log
+            _context.Logs.Add(new Log
+            {
+                Action = "TRANSACTION_CREATE",
+                UserId = UserId,
+                EntityChanged = "RentalTransaction",
+                OriginalValue = "-",
+                CurrentValue = $"Manual transaction created (Transaction ID: {transaction.RentalTransactionId})",
+                TimeStamp = DateTime.Now
+            });
+
             _context.SaveChanges();
 
             TempData["Message"] = "Rental transaction created successfully.";
             return RedirectToAction("ManageTransactions");
         }
+
         [HttpGet]
         public IActionResult FilterTransactions(string searchTerm, string filterStatus)
         {

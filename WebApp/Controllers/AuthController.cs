@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using System.Linq;
 using ClassLibrary.Model;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace WebApp.Controllers
 {
@@ -40,10 +41,20 @@ namespace WebApp.Controllers
                 Role = "Customer"
             };
 
-            // Hash the password before storing it
             user.Password = passwordHasher.HashPassword(user, password);
-
             _context.Users.Add(user);
+            _context.SaveChanges();
+
+            // Log registration
+            _context.Logs.Add(new Log
+            {
+                Action = "REGISTER",
+                UserId = user.UserId,
+                EntityChanged = "User",
+                OriginalValue = "-",
+                CurrentValue = "New user registered",
+                TimeStamp = DateTime.Now
+            });
             _context.SaveChanges();
 
             TempData["Message"] = "Registration successful. Please log in.";
@@ -63,6 +74,18 @@ namespace WebApp.Controllers
             var user = _context.Users.FirstOrDefault(u => u.Email == email);
             if (user == null)
             {
+                // Log failed login (user not found)
+                _context.Logs.Add(new Log
+                {
+                    Action = "FAILED_LOGIN",
+                    UserId = 0,
+                    EntityChanged = "Auth",
+                    OriginalValue = "-",
+                    CurrentValue = $"Failed login - unknown user ({email})",
+                    TimeStamp = DateTime.Now
+                });
+                _context.SaveChanges();
+
                 ModelState.AddModelError("", "Invalid email or password");
                 return View();
             }
@@ -72,14 +95,39 @@ namespace WebApp.Controllers
 
             if (result == PasswordVerificationResult.Failed)
             {
+                // Log failed login
+                _context.Logs.Add(new Log
+                {
+                    Action = "FAILED_LOGIN",
+                    UserId = user.UserId,
+                    EntityChanged = "Auth",
+                    OriginalValue = "-",
+                    CurrentValue = "Invalid password attempt",
+                    TimeStamp = DateTime.Now
+                });
+                _context.SaveChanges();
+
                 ModelState.AddModelError("", "Invalid email or password");
                 return View();
             }
+
+            // Log successful login
+            _context.Logs.Add(new Log
+            {
+                Action = "LOGIN",
+                UserId = user.UserId,
+                EntityChanged = "Auth",
+                OriginalValue = "-",
+                CurrentValue = "User logged in",
+                TimeStamp = DateTime.Now
+            });
+            _context.SaveChanges();
 
             HttpContext.Session.SetString("UserId", user.UserId.ToString());
             HttpContext.Session.SetString("Role", user.Role);
             HttpContext.Session.SetString("Name", user.Name);
             TempData.Remove("Message");
+
             return RedirectToAction("Profile");
         }
 
@@ -99,9 +147,27 @@ namespace WebApp.Controllers
         // GET: /Auth/Logout
         public IActionResult Logout()
         {
+            var userIdStr = HttpContext.Session.GetString("UserId");
+
+            if (!string.IsNullOrEmpty(userIdStr) && int.TryParse(userIdStr, out int userId))
+            {
+                // Log logout
+                _context.Logs.Add(new Log
+                {
+                    Action = "LOGOUT",
+                    UserId = userId,
+                    EntityChanged = "Auth",
+                    OriginalValue = "-",
+                    CurrentValue = "User logged out",
+                    TimeStamp = DateTime.Now
+                });
+                _context.SaveChanges();
+            }
+
             HttpContext.Session.Clear();
             return RedirectToAction("Login");
         }
+
         // POST: /Auth/UpdateProfile
         [HttpPost]
         public IActionResult UpdateProfile(string fullName, string email)
@@ -115,16 +181,30 @@ namespace WebApp.Controllers
             if (user == null)
                 return RedirectToAction("Login");
 
-            // Check if the email is being changed and if it's already used by another user
             if (email != user.Email && _context.Users.Any(u => u.Email == email))
             {
                 TempData["Error"] = "The email is already used by another user.";
                 return RedirectToAction("Profile");
             }
 
+            string oldName = user.Name;
+            string oldEmail = user.Email;
+
             user.Name = fullName;
             user.Email = email;
             _context.Users.Update(user);
+            _context.SaveChanges();
+
+            // Log profile update
+            _context.Logs.Add(new Log
+            {
+                Action = "UPDATE_PROFILE",
+                UserId = user.UserId,
+                EntityChanged = "User",
+                OriginalValue = $"Name: {oldName}, Email: {oldEmail}",
+                CurrentValue = $"Name: {fullName}, Email: {email}",
+                TimeStamp = DateTime.Now
+            });
             _context.SaveChanges();
 
             HttpContext.Session.SetString("Name", user.Name);
@@ -132,7 +212,6 @@ namespace WebApp.Controllers
 
             return RedirectToAction("Profile");
         }
-
 
         // POST: /Auth/ChangePassword
         [HttpPost]
@@ -165,9 +244,20 @@ namespace WebApp.Controllers
             _context.Users.Update(user);
             _context.SaveChanges();
 
+            // Log password change
+            _context.Logs.Add(new Log
+            {
+                Action = "CHANGE_PASSWORD",
+                UserId = user.UserId,
+                EntityChanged = "User",
+                OriginalValue = "-",
+                CurrentValue = "Password changed",
+                TimeStamp = DateTime.Now
+            });
+            _context.SaveChanges();
+
             TempData["Message"] = "Password changed successfully.";
             return RedirectToAction("Profile");
         }
-
     }
 }
