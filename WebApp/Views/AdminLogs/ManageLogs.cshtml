@@ -5,18 +5,18 @@
     {
         return action switch
         {
-            "FAILED_LOGIN" => "bg-danger",                     // 🔴 Red
-            "LOGIN" => "bg-primary",                          // 🔵 Blue
-            "CREATE_REQUEST" => "bg-success",                 // 🟢 Green
-            "UPDATE_REQUEST" => "bg-warning text-dark",       // 🟡 Yellow
-            "APPROVE_REQUEST" => "bg-success",                // 🟢 Green
-            "REJECT_REQUEST" => "bg-danger",                  // 🔴 Red
-            "TRANSACTION_CREATE" => "bg-success",             // 🟢 Green
-            "TRANSACTION_UPDATE" => "bg-warning text-dark",   // 🟡 Yellow
-            "TRANSACTION_CANCELLED" => "bg-danger",           // 🔴 Red
-            "PAYMENT_SUCCESS" => "bg-success",                // 🟢 Green
-            "RETURN_EQUIPMENT" => "bg-info",                  // 🔵 Cyan
-            _ => "bg-secondary"                               // ⚪ Default gray
+            "FAILED_LOGIN" => "bg-danger",                     // Red
+            "LOGIN" => "bg-primary",                          // Blue
+            "CREATE_REQUEST" => "bg-success",                 // Green
+            "UPDATE_REQUEST" => "bg-warning text-dark",       // Yellow
+            "APPROVE_REQUEST" => "bg-success",                // Green
+            "REJECT_REQUEST" => "bg-danger",                  // Red
+            "TRANSACTION_CREATE" => "bg-success",             // Green
+            "TRANSACTION_UPDATE" => "bg-warning text-dark",   // Yellow
+            "TRANSACTION_CANCELLED" => "bg-danger",           // Red
+            "PAYMENT_SUCCESS" => "bg-success",                // Green
+            "RETURN_EQUIPMENT" => "bg-info",                  // Cyan
+            _ => "bg-secondary"                               // Default gray
         };
     }
 
@@ -28,49 +28,58 @@
     <div class="row justify-content-center">
         <div class="col-12 col-lg-10">
 
-            @foreach (var entity in new[] { "Auth", "RentalRequest", "RentalTransaction", "ReturnRecord" })
-            {
-                var logs = FilterLogs(entity);
-                if (logs.Count > 0)
-                {
-                    <div class="card bg-dark text-white shadow mb-5">
-                        <div class="card-body p-4">
-                            <h4 class="text-white mb-3">@entity Logs</h4>
-                            <div class="table-responsive">
-                                <table class="table table-dark table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th>Timestamp</th>
-                                            <th>Action</th>
-                                            <th>User</th>
-                                            <th>Entity</th>
-                                            <th>Change</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var log in logs)
-                                        {
-                                            <tr>
-                                                <td>@log.TimeStamp.ToString("yyyy-MM-dd HH:mm:ss")</td>
-                                                <td>
-                                                    <span class="badge @GetBadgeClass(log.Action)">
-                                                        @log.Action.Replace("_", " ")
-                                                    </span>
-                                                </td>
-                                                <td>@(log.User?.Email ?? "system")</td>
-                                                <td>@log.EntityChanged</td>
-                                                <td>
-                                                    <strong>From:</strong> @log.OriginalValue <br />
-                                                    <strong>To:</strong> @log.CurrentValue
-                                                </td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                }
+           @foreach (var entity in new[] { "Auth", "RentalRequest", "RentalTransaction", "ReturnRecord" })
+{
+    var logs = FilterLogs(entity);
+
+    <div class="card bg-dark text-white shadow mb-5">
+        <div class="card-body p-4">
+            <h4 class="text-white mb-3">@entity Logs</h4>
+            <div class="table-responsive">
+                <table class="table table-dark table-hover">
+                    <thead>
+                        <tr>
+                            <th>Timestamp</th>
+                            <th>Action</th>
+                            <th>User</th>
+                            <th>Entity</th>
+                            <th>Change</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (logs.Count > 0)
+                        {
+                            foreach (var log in logs)
+                            {
+                                <tr>
+                                    <td>@log.TimeStamp.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                                    <td>
+                                        <span class="badge @GetBadgeClass(log.Action)">
+                                            @log.Action.Replace("_", " ")
+                                        </span>
+                                    </td>
+                                    <td>@(log.User?.Email ?? "system")</td>
+                                    <td>@log.EntityChanged</td>
+                                    <td>
+                                        <strong>From:</strong> @log.OriginalValue <br />
+                                        <strong>To:</strong> @log.CurrentValue
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="5" class="text-center text-muted">No logs yet for @entity.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+
             }
 
         </div>

@@ -214,38 +214,49 @@
                 </div>
             }
 
-            @if (userRole == "Admin")
-            {
-                <div class="card bg-dark text-white shadow mb-4">
-                    <div class="card-body p-4">
-                        <h3>Adminstrator</h3>
-                        <div class="d-flex gap-2 mt-3">
-                            <button class="btn custom-btn text-white" id="manageCategoriesBtn"
-                            onclick="window.location.href='/category/ManageCat'">Manage
-                                Categories</button>
-                            <button class="btn custom-btn text-white" id="manageEquipmentsBtn"
-                            onclick="window.location.href='/home/ManageEq'">Manage
-                                Equipments</button>
-                            @* <button class="btn custom-btn text-white" id="manageRentalRequestsBtn" onclick="window.location.href='/home/ManageRentalRequests'">Manage Rental *@
-                            @*     Requests</button> *@
-                            <button class="btn custom-btn text-white" id="manageRentalRequestsBtn" onclick="window.location.href='@Url.Action("ManageRentalRequests", "Rental")'">
-                                Manage Rental Requests
-                            </button>
+           @if (userRole == "Admin")
+{
+    <div class="card bg-dark text-white shadow mb-4">
+        <div class="card-body p-4">
+            <h3>Administrator</h3>
+            <div class="d-flex gap-2 mt-3">
+                <button class="btn custom-btn text-white"
+                        onclick="window.location.href='@Url.Action("ManageCat", "Category")'">
+                    Manage Categories
+                </button>
 
-                            <button class="btn custom-btn text-white" id="manageTransactionsBtn" onclick="window.location.href='/home/ManageTransactions'">Manage
-                                Transactions</button>
-                            <button class="btn custom-btn text-white" id="manageCommentsBtn"
-                            onclick="window.location.href='/home/MangeComments'">Manage Comments</button>
-                           <a class="btn custom-btn text-white" asp-controller="AdminLogs" asp-action="Index">System Logs</a>
+                <button class="btn custom-btn text-white"
+                        onclick="window.location.href='@Url.Action("Manage", "Equipment")'">
+                    Manage Equipments
+                </button>
 
+                <button class="btn custom-btn text-white"
+                        onclick="window.location.href='@Url.Action("ManageRentalRequests", "Home")'">
+                    Manage Rental Requests
+                </button>
 
-                            <button class="btn custom-btn text-white" id="manageCommentsBtn"
-                            onclick="window.location.href='/home/ManageStatus'">Manage Status</button>
-                        </div>
-                    </div>
+                <button class="btn custom-btn text-white"
+                        onclick="window.location.href='@Url.Action("ManageTransactions", "RentalTransaction")'">
+                    Manage Transactions
+                </button>
 
-                </div>
-            }
+                <button class="btn custom-btn text-white"
+                        onclick="window.location.href='@Url.Action("ManageComments", "Feedback")'">
+                    Manage Comments
+                </button>
+
+                <a class="btn custom-btn text-white"
+                   asp-controller="AdminLogs"
+                   asp-action="Index">
+                    System Logs
+                </a>
+
+               
+            </div>
+        </div>
+    </div>
+}
+
         </div>
 </div>
 

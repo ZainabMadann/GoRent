@@ -1,26 +1,36 @@
 @{
     ViewData["Title"] = "Login Page";
 }
+
 <div class="d-flex justify-content-center align-items-center h-100">
     <div class="dcustom-bg p-4 rounded" style="max-width: 400px;">
-        @* <form method="post" asp-action="Login"> *@
         <form method="post" asp-controller="Auth" asp-action="Login">
+            
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="alert alert-danger">
+                    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+                </div>
+            }
 
             <div class="mb-3">
                 <label for="email" class="form-label fw-bold text-light">Email Address</label>
-                <input type="email" id="email" name="Email"
-                    class="form-control bg-secondary bg-opacity-25 border-secondary text-white"
-                    placeholder="Enter your email" required>
+                <input type="email" id="email" name="email"
+                       class="form-control bg-secondary bg-opacity-25 border-secondary text-white"
+                       placeholder="Enter your email" required>
             </div>
+
             <div class="mb-3">
                 <label for="password" class="form-label fw-bold text-light">Password</label>
-                <input type="password" id="password" name="Password"
-                    class="form-control bg-secondary bg-opacity-25 border-secondary text-white"
-                    placeholder="Enter your password" required>
+                <input type="password" id="password" name="password"
+                       class="form-control bg-secondary bg-opacity-25 border-secondary text-white"
+                       placeholder="Enter your password" required>
             </div>
+
             <div class="text-center mt-4">
                 <button type="submit" class="custom-btn">Login</button>
             </div>
+
             <div class="text-center mt-3 text-white">
                 Don't have an account? <a asp-action="Register" class="custom-link">Register here</a>
             </div>

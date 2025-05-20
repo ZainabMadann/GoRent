@@ -1,35 +1,62 @@
 @{
-    ViewData["Title"] = "Register Page";
+    ViewData["Title"] = "Register";
 }
-<div class="d-flex justify-content-center align-items-center h-100">
-    <div class="dcustom-bg p-4 rounded" style="max-width: 400px;">
-        @* <form method="post" asp-action="Register"> *@
-        <form method="post" asp-controller="Auth" asp-action="Register">
+@model dynamic
 
-            <div class="mb-3">
-                <label for="name" class="form-label fw-bold text-light">Full Name</label>
-                <input type="text" id="name" name="FullName"
-                       class="form-control bg-secondary bg-opacity-25 border-secondary text-white"
-                       placeholder="Enter your full name" required>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card bg-dark text-white shadow">
+                <div class="card-body p-4">
+                    <h3 class="mb-4 text-white">Create an Account</h3>
+
+                    @if (!ViewData.ModelState.IsValid)
+                    {
+                        <div class="alert alert-danger">
+                            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+                        </div>
+                    }
+
+                    <form method="post" asp-action="Register" asp-controller="Auth">
+                        <div class="mb-3">
+                            <label class="form-label">Full Name</label>
+                           <input type="text" name="fullName"
+       class="form-control bg-dark text-white border-secondary"
+       value="@ViewData["FullName"]"
+       required />
+
+                            @Html.ValidationMessage("fullName", "", new { @class = "text-danger small" })
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" name="email"
+       class="form-control bg-dark text-white border-secondary"
+       value="@ViewData["Email"]"
+       required />
+
+                            @Html.ValidationMessage("email", "", new { @class = "text-danger small" })
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <input type="password" name="password"
+                                   class="form-control bg-dark text-white border-secondary"
+                                   required />
+                            @Html.ValidationMessage("password", "", new { @class = "text-danger small" })
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn custom-btn text-white fw-bold">Register</button>
+                        </div>
+
+                        <div class="text-center mt-3">
+                            <a href="@Url.Action("Login", "Auth")" class="text-info">Already have an account? Login</a>
+                        </div>
+                    </form>
+
+                </div>
             </div>
-            <div class="mb-3">
-                <label for="email" class="form-label fw-bold text-light">Email Address</label>
-                <input type="email" id="email" name="Email"
-                       class="form-control bg-secondary bg-opacity-25 border-secondary text-white"
-                       placeholder="Enter your email" required>
-            </div>
-            <div class="mb-3">
-                <label for="password" class="form-label fw-bold text-light">Password</label>
-                <input type="password" id="password" name="Password"
-                       class="form-control bg-secondary bg-opacity-25 border-secondary text-white"
-                       placeholder="Create a password" required>
-            </div>
-            <div class="text-center mt-4">
-                <button type="submit" class="custom-btn">Register</button>
-            </div>
-            <div class="text-center mt-3 text-white">
-                Already have an account? <a asp-action="Login" class="custom-link">Login here</a>
-            </div>
-        </form>
+        </div>
     </div>
 </div>
