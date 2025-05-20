@@ -173,6 +173,7 @@ namespace WebApp.Controllers
             if (equipment == null)
                 return NotFound();
 
+            // Delete image file if exists
             if (!string.IsNullOrEmpty(equipment.ImagePath))
             {
                 var imagePath = Path.Combine(_env.WebRootPath, equipment.ImagePath.TrimStart('/'));
@@ -182,11 +183,21 @@ namespace WebApp.Controllers
                 }
             }
 
-            _context.Equipment.Remove(equipment);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.Equipment.Remove(equipment);
+                await _context.SaveChangesAsync();
+                TempData["Success"] = "Equipment deleted successfully.";
+            }
+            catch (DbUpdateException ex)
+            {
+                // Check for SQL foreign key constraint violation
+                TempData["Error"] = "Cannot delete this equipment because it has existing rental requests.";
+            }
 
-            return RedirectToAction("Manage");
+            return RedirectToAction("Details", new { id = equipment.EquipmentId });
         }
+
         [HttpGet]
         public IActionResult FilterManage(string searchTerm, int? filterCategory)
         {
