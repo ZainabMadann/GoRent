@@ -58,6 +58,13 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Card Number formatting and validation
             const cardInput = document.getElementById('CardNumber');
+            let cardIsValid = false;
+
+            function validateCardNumber(value) {
+                const digitsOnly = value.replace(/\s/g, '');
+                return digitsOnly.length === 16;
+            }
+
             cardInput.addEventListener('input', function(e) {
                 // Remove any non-digits
                 let value = e.target.value.replace(/\D/g, '');
@@ -69,10 +76,37 @@
                 value = value.replace(/(\d{4})(?=\d)/g, '$1 ');
                 
                 e.target.value = value;
+
+                // Update validation state
+                cardIsValid = validateCardNumber(value);
+
+                // Update UI to reflect current validation state
+                const errorSpan = cardInput.nextElementSibling;
+                if (cardIsValid) {
+                    errorSpan.textContent = ''; // Clear error message
+                    cardInput.classList.remove('is-invalid');
+                    cardInput.classList.add('is-valid');
+                } else {
+                    cardInput.classList.remove('is-valid');
+                    // Only show error if user has started typing
+                    if (value.length > 0) {
+                        cardInput.classList.add('is-invalid');
+                    }
+                }
             });
 
             // Expiry Date formatting and validation
             const expiryInput = document.getElementById('ExpiryDate');
+            let expiryIsValid = false;
+
+            function validateExpiry(value) {
+                if (value.length !== 5) return false;
+                const [month, year] = value.split('/');
+                const expiry = new Date(2000 + parseInt(year), parseInt(month) - 1);
+                const today = new Date();
+                return expiry > today;
+            }
+
             expiryInput.addEventListener('input', function(e) {
                 // Remove any non-digits
                 let value = e.target.value.replace(/\D/g, '');
@@ -94,24 +128,32 @@
                     if (month > 12) value = '12' + value.substring(2);
                     e.target.value = value;
                 }
-            });
 
-            // Future date validation
-            expiryInput.addEventListener('blur', function(e) {
-                if (e.target.value.length === 5) {
-                    const [month, year] = e.target.value.split('/');
-                    const expiry = new Date(2000 + parseInt(year), parseInt(month) - 1);
-                    const today = new Date();
-                    
-                    if (expiry < today) {
-                        alert('Expiry date must be in the future');
-                        e.target.value = '';
+                // Update validation state
+                expiryIsValid = validateExpiry(e.target.value);
+                
+                // Update UI
+                const errorSpan = expiryInput.nextElementSibling;
+                if (expiryIsValid) {
+                    errorSpan.textContent = '';
+                    expiryInput.classList.remove('is-invalid');
+                    expiryInput.classList.add('is-valid');
+                } else {
+                    expiryInput.classList.remove('is-valid');
+                    if (value.length > 0) {
+                        expiryInput.classList.add('is-invalid');
                     }
                 }
             });
 
             // CVV validation
             const cvvInput = document.getElementById('CVV');
+            let cvvIsValid = false;
+
+            function validateCVV(value) {
+                return value.length >= 3 && value.length <= 4;
+            }
+
             cvvInput.addEventListener('input', function(e) {
                 // Remove any non-digits
                 let value = e.target.value.replace(/\D/g, '');
@@ -120,29 +162,50 @@
                 value = value.substring(0, 4);
                 
                 e.target.value = value;
+
+                // Update validation state
+                cvvIsValid = validateCVV(value);
+
+                // Update UI
+                const errorSpan = cvvInput.nextElementSibling;
+                if (cvvIsValid) {
+                    errorSpan.textContent = '';
+                    cvvInput.classList.remove('is-invalid');
+                    cvvInput.classList.add('is-valid');
+                } else {
+                    cvvInput.classList.remove('is-valid');
+                    if (value.length > 0) {
+                        cvvInput.classList.add('is-invalid');
+                    }
+                }
             });
 
             // Form validation before submit
             document.querySelector('form').addEventListener('submit', function(e) {
-                const cardNumber = cardInput.value.replace(/\s/g, '');
-                const expiry = expiryInput.value;
-                const cvv = cvvInput.value;
-
-                if (cardNumber.length !== 16) {
+                let hasError = false;
+                
+                if (!cardIsValid) {
                     e.preventDefault();
-                    alert('Please enter a valid 16-digit card number');
-                    return;
+                    cardInput.classList.add('is-invalid');
+                    cardInput.nextElementSibling.textContent = 'Please enter a valid 16-digit card number';
+                    hasError = true;
                 }
 
-                if (expiry.length !== 5) {
+                if (!expiryIsValid) {
                     e.preventDefault();
-                    alert('Please enter a valid expiry date (MM/YY)');
-                    return;
+                    expiryInput.classList.add('is-invalid');
+                    expiryInput.nextElementSibling.textContent = 'Please enter a valid future expiry date';
+                    hasError = true;
                 }
 
-                if (cvv.length < 3) {
+                if (!cvvIsValid) {
                     e.preventDefault();
-                    alert('Please enter a valid CVV');
+                    cvvInput.classList.add('is-invalid');
+                    cvvInput.nextElementSibling.textContent = 'Please enter a valid CVV';
+                    hasError = true;
+                }
+
+                if (hasError) {
                     return;
                 }
             });
