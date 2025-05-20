@@ -62,27 +62,34 @@
                 </div>
 
                 <div style="max-height: 440px; overflow-y: auto;">
-@{
-    var feedbacks = ViewBag.Feedbacks as List<ClassLibrary.Model.Feedback> ?? new List<ClassLibrary.Model.Feedback>();
-}
 
-@if (feedbacks.Any())
-{
-    foreach (var feedback in feedbacks)
+
+<div class="list-group" style="max-height: 440px; overflow-y: auto;">
+    @{
+        var feedbacks = ViewBag.Feedbacks as List<ClassLibrary.Model.Feedback> ?? new List<ClassLibrary.Model.Feedback>();
+    }
+
+    @if (feedbacks.Any())
     {
-        <div class="list-group mb-3">
-            <div class="list-group-item bg-secondary text-white border-secondary p-3">
-                <h6 class="text-info mb-1">@feedback.User.Email</h6>
+       @foreach (var feedback in feedbacks)
+{
+    <div class="list-group mb-3">
+        <div class="list-group-item bg-secondary text-white border-secondary p-3">
+            <h6 class="mb-2" style="color: #1F2A55;">@feedback.User.Email</h6>
+            <p class="text-white mb-2" style="font-size: 1.05rem;"> <span>Comment: </span>@feedback.Comment</p>
+            <div class="text-light small">
                 <strong>Rating:</strong> @(new string('⭐', feedback.Rating))
-                <p class="text-info small">@feedback.Comment</p>
             </div>
         </div>
+    </div>
+}
+
     }
-}
-else
-{
-    <p class="text-info text-center">No feedback yet.</p>
-}
+    else
+    {
+        <p class="text-info text-center">No feedback yet.</p>
+    }
+</div>
 
 
 

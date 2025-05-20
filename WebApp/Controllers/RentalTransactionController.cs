@@ -77,11 +77,47 @@ namespace WebApp.Controllers
             };
 
             _context.RentalTransactions.Add(transaction);
-            _context.SaveChanges();
+            _context.SaveChanges(); // ensure ID is generated
+
+            // ✅ Now log with valid Transaction ID
+            _context.Logs.Add(new Log
+            {
+                Action = "PAYMENT_SUCCESS",
+                UserId = request.UserId,
+                EntityChanged = "RentalTransaction",
+                OriginalValue = "-",
+                CurrentValue = $"Payment completed for Request ID {request.RentalRequestId}, Transaction ID {transaction.RentalTransactionId}",
+                TimeStamp = DateTime.Now
+            });
+
+            // ✅ Notifications
+            var user = request.User;
+            var equipment = request.Equipment?.Name ?? "equipment";
+            var message = $"Rental transaction for '{equipment}' was made by {user?.Name ?? user?.Email}.";
+
+            var recipients = _context.Users
+                .Where(u => u.Role == "Admin" || u.Role == "Manager")
+                .ToList();
+
+            foreach (var adminOrManager in recipients)
+            {
+                var notification = new Notification
+                {
+                    Massege = message,
+                    Date = DateTime.Today,
+                    UserId = adminOrManager.UserId,
+                    IsRead = false
+                };
+                _context.Notifications.Add(notification);
+            }
+
+            _context.SaveChanges(); // Save log + notifications
 
             TempData["Message"] = "Payment successful and rental transaction created!";
             return RedirectToAction("Profile", "Auth");
         }
+
+
 
         public IActionResult Details(int id)
         {
@@ -132,13 +168,17 @@ namespace WebApp.Controllers
         }
 
 
-
-
         [HttpPost]
         public IActionResult UpdateTransaction(int RentalTransactionId, string? PaymentStatus, decimal? TotalCost, bool cancel = false)
         {
-            var transaction = _context.RentalTransactions.FirstOrDefault(t => t.RentalTransactionId == RentalTransactionId);
+            var transaction = _context.RentalTransactions
+                .Include(t => t.User)
+                .Include(t => t.Equipment)
+                .FirstOrDefault(t => t.RentalTransactionId == RentalTransactionId);
+
             if (transaction == null) return NotFound();
+
+            string? originalStatus = transaction.PaymentStatus;
 
             if (cancel)
             {
@@ -150,10 +190,36 @@ namespace WebApp.Controllers
                 transaction.TotalCost = TotalCost ?? transaction.TotalCost;
             }
 
+            if (originalStatus != transaction.PaymentStatus)
+            {
+                var message = $"Your transaction for '{transaction.Equipment.Name}' is now marked as {transaction.PaymentStatus}.";
+                var notification = new Notification
+                {
+                    Massege = message,
+                    Date = DateTime.Today,
+                    UserId = transaction.UserId,
+                    IsRead = false
+                };
+                _context.Notifications.Add(notification);
+            }
+
+            _context.Logs.Add(new Log
+            {
+                Action = cancel ? "TRANSACTION_CANCELLED" : "TRANSACTION_UPDATE",
+                UserId = transaction.UserId,
+                EntityChanged = "RentalTransaction",
+                OriginalValue = originalStatus,
+                CurrentValue = transaction.PaymentStatus,
+                TimeStamp = DateTime.Now
+            });
+
             _context.SaveChanges();
+
             TempData["Message"] = cancel ? "Transaction cancelled." : "Transaction updated.";
             return RedirectToAction("Details", new { id = RentalTransactionId });
         }
+
+
 
         [HttpPost]
         public IActionResult CreateTransaction(int RentalRequestId, int EquipmentId, int UserId, decimal TotalCost, string PaymentStatus)
@@ -177,11 +243,25 @@ namespace WebApp.Controllers
             };
 
             _context.RentalTransactions.Add(transaction);
+            _context.SaveChanges(); // generate ID
+
+            // ✅ Now log
+            _context.Logs.Add(new Log
+            {
+                Action = "TRANSACTION_CREATE",
+                UserId = UserId,
+                EntityChanged = "RentalTransaction",
+                OriginalValue = "-",
+                CurrentValue = $"Manual transaction created (Transaction ID: {transaction.RentalTransactionId})",
+                TimeStamp = DateTime.Now
+            });
+
             _context.SaveChanges();
 
             TempData["Message"] = "Rental transaction created successfully.";
             return RedirectToAction("ManageTransactions");
         }
+
         [HttpGet]
         public IActionResult FilterTransactions(string searchTerm, string filterStatus)
         {

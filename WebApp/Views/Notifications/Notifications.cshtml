@@ -1,0 +1,53 @@
+@model List<ClassLibrary.Model.Notification>
+@{
+    ViewData["Title"] = "Notifications Page";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <h4 class="text-light mb-4">Your Notifications</h4>
+
+            @if (!Model.Any())
+            {
+                <div class="text-center p-5">
+                    <i class="bi bi-bell-slash" style="font-size: 3rem; color: #6c757d;"></i>
+                    <p class="text-muted mt-3">You don't have any notifications yet.</p>
+                </div>
+            }
+            else
+            {
+                foreach (var notification in Model)
+                {
+                    var statusClass = notification.IsRead ? "read" : "unread";
+                        <div class="list-group-item text-white p-3 mb-2 notification @statusClass" style="background-color: #212529;">
+
+       <div class="d-flex justify-content-between align-items-center">
+    <h6 class="mb-1" style="color: #28a745;">Update</h6> 
+    @if (!notification.IsRead)
+    {
+        <span class="badge bg-primary rounded-pill">New</span>
+    }
+    else
+    {
+        <span class="small" style="color: #6cb2eb;">Read</span> 
+    }
+</div>
+
+                        <p class="mb-1">@notification.Massege</p>
+                        <div class="d-flex justify-content-between align-items-center mt-2">
+                            <small class="text-white">@notification.Date.ToString("MMM dd, yyyy")</small>
+                            @if (!notification.IsRead)
+                            {
+                                <form method="post" asp-action="MarkAsRead" asp-controller="Notifications">
+                                    <input type="hidden" name="id" value="@notification.NotificationId" />
+                                    <button type="submit" class="btn btn-sm btn-light">Mark as Read</button>
+                                </form>
+                            }
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>

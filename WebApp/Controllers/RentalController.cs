@@ -29,16 +29,46 @@ public class RentalController : Controller
             EndDate = EndDate,
             RequestDate = DateTime.Today,
             UserId = userId,
-            RequestStatusId = 1, // Default: Pending
+            RequestStatusId = 1,
             Description = Description
         };
 
         _context.RentalRequests.Add(rentalRequest);
-        _context.SaveChanges();
+        _context.SaveChanges(); // ⬅️ Save to ensure RentalRequestId is generated
 
-        // Redirect to payment or confirmation page
+        // ⬅️ Now log with valid RentalRequestId
+        _context.Logs.Add(new Log
+        {
+            Action = "CREATE_REQUEST",
+            UserId = userId,
+            EntityChanged = "RentalRequest",
+            OriginalValue = "-",
+            CurrentValue = $"Request created (ID: {rentalRequest.RentalRequestId})",
+            TimeStamp = DateTime.Now
+        });
+
+        var equipment = _context.Equipment.FirstOrDefault(e => e.EquipmentId == EquipmentId);
+        var user = _context.Users.FirstOrDefault(u => u.UserId == userId);
+
+        var managers = _context.Users.Where(u => u.Role == "Manager").ToList();
+        foreach (var manager in managers)
+        {
+            var notification = new Notification
+            {
+                Massege = $"New rental request for '{equipment?.Name}' was made by {user?.Name ?? user?.Email}.",
+                Date = DateTime.Today,
+                UserId = manager.UserId,
+                IsRead = false
+            };
+            _context.Notifications.Add(notification);
+        }
+
+        _context.SaveChanges(); // ⬅️ Save everything (log + notifications)
+
         return RedirectToAction("Payment", "RentalTransaction", new { rentalRequestId = rentalRequest.RentalRequestId });
     }
+
+
     public IActionResult MyRequests(string? search, string? filter)
     {
         var userIdStr = HttpContext.Session.GetString("UserId");
@@ -117,12 +147,26 @@ public class RentalController : Controller
         request.Description = Description;
         _context.SaveChanges();
 
+        _context.Logs.Add(new Log
+        {
+            Action = "UPDATE_REQUEST",
+            UserId = request.UserId,
+            EntityChanged = "RentalRequest",
+            OriginalValue = "-",
+            CurrentValue = $"Description updated (ID: {request.RentalRequestId})",
+            TimeStamp = DateTime.Now
+        });
+        _context.SaveChanges();
+
         return RedirectToAction("RequestDetails", new { id = RentalRequestId });
     }
     [HttpPost]
     public IActionResult ApproveRequest(int RentalRequestId)
     {
-        var request = _context.RentalRequests.FirstOrDefault(r => r.RentalRequestId == RentalRequestId);
+        var request = _context.RentalRequests
+            .Include(r => r.Equipment)
+            .FirstOrDefault(r => r.RentalRequestId == RentalRequestId);
+
         if (request == null)
         {
             return NotFound("Rental request not found.");
@@ -131,19 +175,68 @@ public class RentalController : Controller
         request.RequestStatusId = 2;
         _context.SaveChanges();
 
+        _context.Logs.Add(new Log
+        {
+            Action = "APPROVE_REQUEST",
+            UserId = request.UserId,
+            EntityChanged = "RentalRequest",
+            OriginalValue = "Pending",
+            CurrentValue = "Approved",
+            TimeStamp = DateTime.Now
+        });
+
+
+        var notification = new Notification
+        {
+            Massege = $"Your rental request for '{request.Equipment.Name}' was approved.",
+            Date = DateTime.Now,
+            UserId = request.UserId,
+            IsRead = false
+        };
+
+        _context.Notifications.Add(notification);
+        _context.SaveChanges();
+
         return RedirectToAction("RequestDetails", new { id = RentalRequestId });
     }
+
 
     [HttpPost]
     public IActionResult RejectRequest(int RentalRequestId)
     {
-        var request = _context.RentalRequests.FirstOrDefault(r => r.RentalRequestId == RentalRequestId);
+        var request = _context.RentalRequests
+    .Include(r => r.Equipment)
+    .FirstOrDefault(r => r.RentalRequestId == RentalRequestId);
+
         if (request == null)
         {
             return NotFound("Rental request not found.");
         }
 
         request.RequestStatusId = 3;
+        _context.SaveChanges();
+
+        _context.Logs.Add(new Log
+        {
+            Action = "REJECT_REQUEST",
+            UserId = request.UserId,
+            EntityChanged = "RentalRequest",
+            OriginalValue = "Pending",
+            CurrentValue = "Rejected",
+            TimeStamp = DateTime.Now
+        });
+
+
+        // Create notification
+        var notification = new Notification
+        {
+            Massege = $"Your rental request for '{request.Equipment.Name}' was rejected.",
+            Date = DateTime.Now,
+            UserId = request.UserId,
+            IsRead = false
+        };
+
+        _context.Notifications.Add(notification);
         _context.SaveChanges();
 
         return RedirectToAction("RequestDetails", new { id = RentalRequestId });
@@ -266,8 +359,29 @@ public class RentalController : Controller
             throw new Exception();
         }
 
-        //return RedirectToAction("_RentedNowPartial");
-        // If you're going back to full profile page:
+        _context.Logs.Add(new Log
+        {
+            Action = "RETURN_EQUIPMENT",
+            UserId = userId,
+            EntityChanged = "ReturnRecord",
+            OriginalValue = "-",
+            CurrentValue = $"Returned equipment (Transaction ID: {RentalTransactionId})",
+            TimeStamp = DateTime.Now
+        });
+        _context.SaveChanges();
+
+        _context.Logs.Add(new Log
+        {
+            Action = "RETURN_EQUIPMENT",
+            UserId = userId,
+            EntityChanged = "ReturnRecord",
+            OriginalValue = "-",
+            CurrentValue = $"Returned equipment (Transaction ID: {RentalTransactionId})",
+            TimeStamp = DateTime.Now
+        });
+        _context.SaveChanges();
+
+
         return RedirectToAction("Profile", "Auth");
 
     }

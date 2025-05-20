@@ -48,9 +48,10 @@
                         @if (isLoggedIn)
                         {
                             <div class="d-flex align-items-center gap-0">
-                                <a class="nav-link profile-icon-link" asp-area="" asp-controller="Home" asp-action="Notifications">
-                                    <img src="/images/notification4.jpeg" alt="Notification Icon" class="notification-icon">
-                                </a>
+                                <a class="nav-link profile-icon-link" asp-controller="Notifications" asp-action="Index">
+    <img src="/images/notification4.jpeg" alt="Notification Icon" class="notification-icon">
+</a>
+
                                 <a class="d-flex align-items-center justify-content-center rounded-3 bg-dark text-decoration-none"
                                    style="background-color: #27313A; height: 36px; min-width: 0; padding: 0 10px;"
                                    asp-area="" asp-controller="Auth" asp-action="Profile">
@@ -62,9 +63,10 @@
                                         </svg>
                                     </div>
                                 </a>
-                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Dashboard">
-                                    <img src="/images/hamburger.png" alt="Ham Icon" class="ham-icon">
-                                </a>
+                               <a class="nav-link" asp-controller="Dashboard" asp-action="Index">
+    <img src="/images/hamburger.png" alt="Dashboard Icon" class="ham-icon">
+</a>
+
                             </div>
                         }
                     </div>

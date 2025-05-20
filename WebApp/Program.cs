@@ -17,6 +17,15 @@ builder.Services.AddDbContext<CourseDBContext>(options =>
 // ✅ Add session support BEFORE builder.Build()
 builder.Services.AddSession();
 
+builder.Services.AddAuthentication("Cookies")
+    .AddCookie("Cookies", options =>
+    {
+        options.LoginPath = "/Auth/Login"; // Redirect if not authenticated
+    });
+
+builder.Services.AddAuthorization(); // Add this too
+
+
 // ✅ Add this to support @inject IHttpContextAccessor in Razor views
 builder.Services.AddHttpContextAccessor();
 
@@ -38,6 +47,8 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseSession(); // Use session middleware
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

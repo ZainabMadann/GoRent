@@ -5,29 +5,29 @@
 namespace ClassLibrary.Migrations
 {
     /// <inheritdoc />
-    public partial class IncreaseUserPassword2 : Migration
+    public partial class ExtendLogColumnLength : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<string>(
-                name: "Role",
-                table: "User",
-                type: "varchar(50)",
+                name: "OriginalValue",
+                table: "Log",
+                type: "varchar(1000)",
                 unicode: false,
-                maxLength: 50,
+                maxLength: 1000,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "varchar(255)",
+                oldType: "varchar(50)",
                 oldUnicode: false,
-                oldMaxLength: 255);
+                oldMaxLength: 50);
 
             migrationBuilder.AlterColumn<string>(
-                name: "Password",
-                table: "User",
-                type: "varchar(255)",
+                name: "CurrentValue",
+                table: "Log",
+                type: "varchar(1000)",
                 unicode: false,
-                maxLength: 255,
+                maxLength: 1000,
                 nullable: false,
                 oldClrType: typeof(string),
                 oldType: "varchar(50)",
@@ -39,28 +39,28 @@ namespace ClassLibrary.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<string>(
-                name: "Role",
-                table: "User",
-                type: "varchar(255)",
-                unicode: false,
-                maxLength: 255,
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "varchar(50)",
-                oldUnicode: false,
-                oldMaxLength: 50);
-
-            migrationBuilder.AlterColumn<string>(
-                name: "Password",
-                table: "User",
+                name: "OriginalValue",
+                table: "Log",
                 type: "varchar(50)",
                 unicode: false,
                 maxLength: 50,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "varchar(255)",
+                oldType: "varchar(1000)",
                 oldUnicode: false,
-                oldMaxLength: 255);
+                oldMaxLength: 1000);
+
+            migrationBuilder.AlterColumn<string>(
+                name: "CurrentValue",
+                table: "Log",
+                type: "varchar(50)",
+                unicode: false,
+                maxLength: 50,
+                nullable: false,
+                oldClrType: typeof(string),
+                oldType: "varchar(1000)",
+                oldUnicode: false,
+                oldMaxLength: 1000);
         }
     }
 }

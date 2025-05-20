@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClassLibrary.Migrations
 {
     [DbContext(typeof(CourseDBContext))]
-    [Migration("20250519193933_AddIsHiddenToFeedback")]
-    partial class AddIsHiddenToFeedback
+    [Migration("20250520015648_RebuildLogTable")]
+    partial class RebuildLogTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -264,11 +264,10 @@ namespace ClassLibrary.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(50)");
 
-                    b.Property<byte[]>("TimeStamp")
+                    b.Property<DateTime>("TimeStamp")
                         .IsConcurrencyToken()
-                        .IsRequired()
                         .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int")
@@ -293,11 +292,15 @@ namespace ClassLibrary.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("date");
 
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit")
+                        .HasColumnName("Is_Read");
+
                     b.Property<string>("Massege")
                         .IsRequired()
-                        .HasMaxLength(50)
+                        .HasMaxLength(255)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int")
@@ -430,8 +433,11 @@ namespace ClassLibrary.Migrations
             modelBuilder.Entity("ClassLibrary.Model.ReturnRecord", b =>
                 {
                     b.Property<int>("ReturnRecordId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("Return_Record_ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ReturnRecordId"));
 
                     b.Property<int>("EquipmentConditionId")
                         .HasColumnType("int")
@@ -488,9 +494,9 @@ namespace ClassLibrary.Migrations
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasMaxLength(50)
+                        .HasMaxLength(255)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("Role")
                         .IsRequired()

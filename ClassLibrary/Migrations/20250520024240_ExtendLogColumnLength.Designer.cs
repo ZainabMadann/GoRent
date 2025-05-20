@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClassLibrary.Migrations
 {
     [DbContext(typeof(CourseDBContext))]
-    [Migration("20250519211452_IncreaseUserPassword2")]
-    partial class IncreaseUserPassword2
+    [Migration("20250520024240_ExtendLogColumnLength")]
+    partial class ExtendLogColumnLength
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -208,6 +208,9 @@ namespace ClassLibrary.Migrations
                         .HasColumnType("varchar(50)")
                         .HasColumnName("comment");
 
+                    b.Property<bool>("IsHidden")
+                        .HasColumnType("bit");
+
                     b.Property<int>("Rating")
                         .HasColumnType("int");
 
@@ -245,9 +248,9 @@ namespace ClassLibrary.Migrations
 
                     b.Property<string>("CurrentValue")
                         .IsRequired()
-                        .HasMaxLength(50)
+                        .HasMaxLength(1000)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("varchar(1000)");
 
                     b.Property<string>("EntityChanged")
                         .IsRequired()
@@ -257,15 +260,14 @@ namespace ClassLibrary.Migrations
 
                     b.Property<string>("OriginalValue")
                         .IsRequired()
-                        .HasMaxLength(50)
+                        .HasMaxLength(1000)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("varchar(1000)");
 
-                    b.Property<byte[]>("TimeStamp")
+                    b.Property<DateTime>("TimeStamp")
                         .IsConcurrencyToken()
-                        .IsRequired()
                         .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int")
@@ -290,11 +292,15 @@ namespace ClassLibrary.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("date");
 
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit")
+                        .HasColumnName("Is_Read");
+
                     b.Property<string>("Massege")
                         .IsRequired()
-                        .HasMaxLength(50)
+                        .HasMaxLength(255)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int")

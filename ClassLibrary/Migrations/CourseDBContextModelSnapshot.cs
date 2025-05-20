@@ -245,9 +245,9 @@ namespace ClassLibrary.Migrations
 
                     b.Property<string>("CurrentValue")
                         .IsRequired()
-                        .HasMaxLength(50)
+                        .HasMaxLength(1000)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("varchar(1000)");
 
                     b.Property<string>("EntityChanged")
                         .IsRequired()
@@ -257,15 +257,14 @@ namespace ClassLibrary.Migrations
 
                     b.Property<string>("OriginalValue")
                         .IsRequired()
-                        .HasMaxLength(50)
+                        .HasMaxLength(1000)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("varchar(1000)");
 
-                    b.Property<byte[]>("TimeStamp")
+                    b.Property<DateTime>("TimeStamp")
                         .IsConcurrencyToken()
-                        .IsRequired()
                         .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int")
@@ -290,11 +289,15 @@ namespace ClassLibrary.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("date");
 
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit")
+                        .HasColumnName("Is_Read");
+
                     b.Property<string>("Massege")
                         .IsRequired()
-                        .HasMaxLength(50)
+                        .HasMaxLength(255)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int")
