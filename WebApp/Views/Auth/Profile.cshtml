@@ -151,11 +151,11 @@
                     <div class="mb-3 d-flex gap-2">
                         <input type="text" id="searchRentedNow" class="form-control bg-dark text-white border-secondary"
                                placeholder="Search approved rentals...">
-                        <select id="filterRentedNow" class="form-select bg-dark text-white border-secondary">
-                            <option value="all">All</option>
-                            <option value="active">Active</option>
-                            <option value="overdue">Overdue</option>
-                        </select>
+                        @* <select id="filterRentedNow" class="form-select bg-dark text-white border-secondary"> *@
+                        @*     <option value="all">All</option> *@
+                        @*     <option value="active">Active</option> *@
+                        @*     <option value="overdue">Overdue</option> *@
+                        @* </select> *@
                     </div>
                     <div id="rentedNowList">
                         <div class="text-center text-muted">Loading your rented items...</div>
@@ -338,9 +338,8 @@
             // Load rented items
             function loadRentedNow() {
                 const search = document.getElementById('searchRentedNow').value;
-                const filter = document.getElementById('filterRentedNow').value;
 
-                fetch(`/Rental/RentedNowPartial?search=${encodeURIComponent(search)}&filter=${encodeURIComponent(filter)}`)
+                fetch(`/Rental/RentedNowPartial?search=${encodeURIComponent(search)}`)
                     .then(response => response.text())
                     .then(html => {
                         document.getElementById('rentedNowList').innerHTML = html;
@@ -352,40 +351,41 @@
                     });
             }
 
-            // Event listeners
+            // Event listener for search input
             document.getElementById('searchRentedNow').addEventListener('input', loadRentedNow);
-            document.getElementById('filterRentedNow').addEventListener('change', loadRentedNow);
 
             // Load initially
             window.addEventListener('DOMContentLoaded', loadRentedNow);
         </script>
         <script>
-            document.addEventListener("DOMContentLoaded", () => {
-                const returnHistoryList = document.getElementById("returnHistoryList");
-                if (!returnHistoryList) return;
+            // Load return history with search and filter
+            function loadReturnHistory() {
+                const search = document.getElementById('searchReturnHistory').value;
+                const filter = document.getElementById('filterReturnHistory').value;
 
-                fetch("/Rental/GetReturnHistory", {
-                    credentials: 'include'
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        if (response.status === 401) {
-                            return "<div class='text-warning'>Please login to view return history</div>";
-                        }
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.text();
-                })
-                .then(html => {
-                    returnHistoryList.innerHTML = html;
-                })
-                .catch(error => {
-                    console.error("Error loading return history:", error);
-                    returnHistoryList.innerHTML =
-                        "<div class='text-danger'>Failed to load return history. Please try again.</div>";
-                });
+                fetch(`/Rental/GetReturnHistory?search=${encodeURIComponent(search)}&filter=${encodeURIComponent(filter)}`)
+                    .then(response => response.text())
+                    .then(html => {
+                        document.getElementById('returnHistoryList').innerHTML = html;
+                    })
+                    .catch(error => {
+                        console.error("Failed to load return history:", error);
+                        document.getElementById('returnHistoryList').innerHTML =
+                            '<div class="text-danger">Unable to load return history at this time.</div>';
+                    });
+            }
+
+            // Event listeners
+            document.getElementById('searchReturnHistory').addEventListener('input', loadReturnHistory);
+            document.getElementById('filterReturnHistory').addEventListener('change', loadReturnHistory);
+            document.getElementById('resetReturnHistoryFilter').addEventListener('click', () => {
+                document.getElementById('searchReturnHistory').value = '';
+                document.getElementById('filterReturnHistory').value = 'all';
+                loadReturnHistory();
             });
 
+            // Load initially
+            window.addEventListener('DOMContentLoaded', loadReturnHistory);
 
         </script>
 }

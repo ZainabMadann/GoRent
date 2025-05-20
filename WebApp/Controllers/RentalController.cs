@@ -242,7 +242,7 @@ public class RentalController : Controller
         return RedirectToAction("RequestDetails", new { id = RentalRequestId });
     }
 
-    public IActionResult RentedNowPartial(string search, string filter)
+    public IActionResult RentedNowPartial(string search)
     {
         var userIdStr = HttpContext.Session.GetString("UserId");
         var userRole = HttpContext.Session.GetString("Role");
@@ -259,7 +259,7 @@ public class RentalController : Controller
             .Include(r => r.RequestStatus)
             .Include(r => r.RentalTransactions)
             .Where(r => r.RequestStatusId == 2 && // Approved
-                        r.RentalTransactions.Any(t => t.PaymentStatus == "Paid")); // Only paid transactions
+                       r.RentalTransactions.Any(t => t.PaymentStatus == "Paid")); // Only paid transactions
 
         if (userRole != "Admin" && userRole != "Manager")
         {
@@ -269,15 +269,6 @@ public class RentalController : Controller
         if (!string.IsNullOrEmpty(search))
         {
             query = query.Where(r => r.Equipment.Name.Contains(search));
-        }
-
-        if (filter == "active")
-        {
-            query = query.Where(r => r.EndDate >= DateTime.Today);
-        }
-        else if (filter == "overdue")
-        {
-            query = query.Where(r => r.EndDate < DateTime.Today);
         }
 
         var rentedItems = query.OrderByDescending(r => r.RequestDate).ToList();
@@ -360,8 +351,9 @@ public class RentalController : Controller
         return RedirectToAction("Profile", "Auth");
 
     }
+
     [HttpGet]
-    public async Task<IActionResult> GetReturnHistory()
+    public async Task<IActionResult> GetReturnHistory(string? search, string? filter)
     {
         // Check if user is authenticated
         var userIdStr = HttpContext.Session.GetString("UserId");
@@ -376,12 +368,33 @@ public class RentalController : Controller
         IQueryable<ReturnRecord> query = _context.ReturnRecords
             .Include(r => r.Equipment)
             .Include(r => r.EquipmentCondition)
-            .Include(r => r.User);
+            .Include(r => r.User)
+            .Include(r => r.RentalTransaction)
+                .ThenInclude(rt => rt.RentalRequest);
 
         // If user is not admin/manager, filter by their own records
         if (userRole != "Admin" && userRole != "Manager")
         {
             query = query.Where(r => r.UserId == userId);
+        }
+
+        // Apply search filter
+        if (!string.IsNullOrEmpty(search))
+        {
+            query = query.Where(r =>
+                r.Equipment.Name.Contains(search) ||
+                r.User.Name.Contains(search));
+        }
+
+        // Apply status filter
+        if (!string.IsNullOrEmpty(filter) && filter != "all")
+        {
+            query = filter switch
+            {
+                "on-time" => query.Where(r => r.ReturnDate <= r.RentalTransaction.RentalRequest.EndDate),
+                "late" => query.Where(r => r.ReturnDate > r.RentalTransaction.RentalRequest.EndDate),
+                _ => query
+            };
         }
 
         var returnHistory = await query
