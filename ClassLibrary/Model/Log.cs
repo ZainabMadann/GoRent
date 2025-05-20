@@ -18,7 +18,7 @@ namespace ClassLibrary.Model
         public DateTime TimeStamp { get; set; } = DateTime.Now;
 
         [Column("User_ID")]
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
         [StringLength(1000)]
         [Unicode(false)]
         public string CurrentValue { get; set; } = null!;

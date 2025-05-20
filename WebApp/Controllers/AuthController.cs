@@ -78,7 +78,7 @@ namespace WebApp.Controllers
                 _context.Logs.Add(new Log
                 {
                     Action = "FAILED_LOGIN",
-                    UserId = 0,
+                    UserId = null,
                     EntityChanged = "Auth",
                     OriginalValue = "-",
                     CurrentValue = $"Failed login - unknown user ({email})",
