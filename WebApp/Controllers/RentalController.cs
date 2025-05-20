@@ -266,7 +266,10 @@ public class RentalController : Controller
             throw new Exception();
         }
 
-        return RedirectToAction("_RentedNowPartial");
+        //return RedirectToAction("_RentedNowPartial");
+        // If you're going back to full profile page:
+        return RedirectToAction("Profile", "Auth");
+
     }
 
 }
