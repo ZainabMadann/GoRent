@@ -194,7 +194,7 @@
                 <div class="card bg-dark text-white shadow mb-4">
                     <div class="card-body p-4">
                         <h3>Manager</h3>
-                       <div class="d-grid gap-2 d-md-flex mt-3">
+<div class="d-grid gap-2 d-md-flex mt-3">
     <button class="btn custom-btn text-white flex-fill" onclick="window.location.href='@Url.Action("Manage", "Equipment")'">
         Manage Equipments
     </button>
@@ -207,12 +207,11 @@
         Manage Transactions
     </button>
 
-    <form asp-controller="Feedback" asp-action="ManageComments" method="get" class="flex-fill">
-        <button type="submit" class="btn custom-btn text-white w-100">
-            Manage Comments
-        </button>
-    </form>
+    <button class="btn custom-btn text-white flex-fill" onclick="window.location.href='/Comment/Manage'">
+        Manage Comments
+    </button>
 </div>
+
 
 
                     </div>
