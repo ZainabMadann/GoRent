@@ -242,31 +242,6 @@ public class RentalController : Controller
         return RedirectToAction("RequestDetails", new { id = RentalRequestId });
     }
 
-    //public IActionResult RentedNow()
-    //{
-    //    var userIdStr = HttpContext.Session.GetString("UserId");
-    //    var userRole = HttpContext.Session.GetString("Role");
-
-    //    if (string.IsNullOrEmpty(userIdStr) || string.IsNullOrEmpty(userRole))
-    //    {
-    //        return RedirectToAction("Login", "Auth");
-    //    }
-
-    //    int userId = int.Parse(userIdStr);
-
-    //    var rentedItems = _context.RentalRequests
-    //        .Include(r => r.Equipment)
-    //        .Include(r => r.RequestStatus)
-    //        .Include(r => r.RentalTransactions)
-    //        .Where(r => r.RequestStatusId == 2 &&
-    //                   r.RentalTransactions.Any(t => t.PaymentStatus == "Paid"))
-    //        .Where(r => userRole == "Admin" || userRole == "Manager" || r.UserId == userId)
-    //        .OrderByDescending(r => r.RequestDate)
-    //        .ToList();
-
-    //    return View(rentedItems); // This will render RentedNow.cshtml
-    //}
-
     public IActionResult RentedNowPartial(string search, string filter)
     {
         var userIdStr = HttpContext.Session.GetString("UserId");
@@ -385,5 +360,34 @@ public class RentalController : Controller
         return RedirectToAction("Profile", "Auth");
 
     }
+    [HttpGet]
+    public async Task<IActionResult> GetReturnHistory()
+    {
+        // Check if user is authenticated
+        var userIdStr = HttpContext.Session.GetString("UserId");
+        var userRole = HttpContext.Session.GetString("Role");
 
+        if (string.IsNullOrEmpty(userIdStr) || string.IsNullOrEmpty(userRole))
+        {
+            return Unauthorized("Please login to view return history");
+        }
+
+        int userId = int.Parse(userIdStr);
+        IQueryable<ReturnRecord> query = _context.ReturnRecords
+            .Include(r => r.Equipment)
+            .Include(r => r.EquipmentCondition)
+            .Include(r => r.User);
+
+        // If user is not admin/manager, filter by their own records
+        if (userRole != "Admin" && userRole != "Manager")
+        {
+            query = query.Where(r => r.UserId == userId);
+        }
+
+        var returnHistory = await query
+            .OrderByDescending(r => r.ReturnDate)
+            .ToListAsync();
+
+        return PartialView("_ReturnHistoryPartial", returnHistory);
+    }
 }

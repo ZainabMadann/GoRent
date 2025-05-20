@@ -108,7 +108,7 @@
                             <option value="pending">Pending</option>
                             <option value="approved">Approved</option>
                             <option value="rejected">Rejected</option>
-                            @* <option value="returned">Returned</option> *@
+                            <option value="returned">Returned</option>
                         </select>
                     </div>
                     <div id="requestsList">
@@ -162,6 +162,28 @@
                     </div>
                 </div>
             </div>
+            <div class="card bg-dark text-white shadow mb-4">
+                <div class="card-body p-4">
+                    <h3 class="h5 mb-3">Return History</h3>
+                    <div class="mb-3 d-flex gap-2">
+                        <input type="text" id="searchReturnHistory" class="form-control bg-dark text-white border-secondary"
+                               placeholder="Search returned items...">
+                        <select id="filterReturnHistory" class="form-select bg-dark text-white border-secondary">
+                            <option value="all">All</option>
+                            <option value="on-time">Returned On Time</option>
+                            <option value="late">Returned Late</option>
+                        </select>
+                        <button type="button" id="resetReturnHistoryFilter" class="btn button-primary"
+                                style="background-color: #1f2a55; color: white;">
+                            <i class="bi bi-arrow-counterclockwise"></i> Reset
+                        </button>
+                    </div>
+                    <div id="returnHistoryList">
+                        <div class="text-center text-muted">Loading return history items...</div>
+                    </div>
+                </div>
+            </div>
+
             @* this part is for the admin only , we are gonna handle it later *@
             @if (userRole == "Manager" || userRole == "Admin")
             {
@@ -336,5 +358,34 @@
 
             // Load initially
             window.addEventListener('DOMContentLoaded', loadRentedNow);
+        </script>
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const returnHistoryList = document.getElementById("returnHistoryList");
+                if (!returnHistoryList) return;
+
+                fetch("/Rental/GetReturnHistory", {
+                    credentials: 'include'
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        if (response.status === 401) {
+                            return "<div class='text-warning'>Please login to view return history</div>";
+                        }
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.text();
+                })
+                .then(html => {
+                    returnHistoryList.innerHTML = html;
+                })
+                .catch(error => {
+                    console.error("Error loading return history:", error);
+                    returnHistoryList.innerHTML =
+                        "<div class='text-danger'>Failed to load return history. Please try again.</div>";
+                });
+            });
+
+
         </script>
 }
