@@ -35,7 +35,7 @@ namespace WinFormsApp
                             EntityChanged = "RentalTransaction",
                             OriginalValue = "N/A",
                             CurrentValue = "N/A",
-                            TimeStamp = BitConverter.GetBytes(DateTime.Now.Ticks),
+                            TimeStamp = DateTime.Today,
                             UserId = currentUser.UserId
                         });
                     }
@@ -55,7 +55,7 @@ namespace WinFormsApp
                                         EntityChanged = "RentalTransaction",
                                         OriginalValue = prop.OriginalValue?.ToString() ?? "null",
                                         CurrentValue = prop.CurrentValue?.ToString() ?? "null",
-                                        TimeStamp = BitConverter.GetBytes(DateTime.Now.Ticks),
+                                        TimeStamp = DateTime.Today,
                                         UserId = currentUser.UserId
                                     });
                                 }

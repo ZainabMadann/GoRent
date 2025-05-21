@@ -129,7 +129,7 @@ namespace WinFormsApp
 
                     // Update and Save changes to the database
                     context.Update(transaction);
-                    AuditLogger.AddAuditLogs(context, Global.Email); 
+                    //AuditLogger.AddAuditLogs(context, Global.Email); 
                     context.SaveChanges(); 
 
                     //setting the dialog result to ok so that when going back to the Transaction form i refersh the grid view
@@ -174,7 +174,7 @@ namespace WinFormsApp
 
                     //add and save the transaction
                     context.RentalTransactions.Add(transaction);
-                    AuditLogger.AddAuditLogs(context, Global.Email);
+                    //AuditLogger.AddAuditLogs(context, Global.Email);
                     context.SaveChanges(); 
 
                     //setting the dialog result to ok so that when going back to the Transaction form i refersh the grid view

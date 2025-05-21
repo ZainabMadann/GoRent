@@ -121,7 +121,7 @@ namespace WinFormsApp
             {
                 //making a variable qurayable so that i can use multiple qurys
                 var confirmedRentalsToshow = context.RentalRequests
-                .Where(x => x.RequestStatus.Name == "Approved")
+                .Where(x => x.RequestStatus.Name == "Confirmed")
                 .AsQueryable();
 
                 // see what the user enter in the text view so that it filter the rental request by the customer name
@@ -194,7 +194,7 @@ namespace WinFormsApp
         private void btnManageRentalRequests_Click(object sender, EventArgs e)
         {
             // store the id of the row that the user selected for editing
-            int rentalID = Convert.ToInt32(dgvRentalRequests.SelectedCells[0].OwningRow.Cells[0].Value);
+            int rentalID = Convert.ToInt32(dgvConfirmedRntalRequest.SelectedCells[0].OwningRow.Cells[0].Value);
             // pass the id and display the Manage rental request form
             ManageRentalRequests manageRentalRequests = new ManageRentalRequests(rentalID);
             manageRentalRequests.ShowDialog();

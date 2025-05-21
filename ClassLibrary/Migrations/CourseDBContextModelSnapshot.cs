@@ -4,7 +4,6 @@ using ClassLibrary.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -12,11 +11,9 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClassLibrary.Migrations
 {
     [DbContext(typeof(CourseDBContext))]
-    [Migration("20250520024240_ExtendLogColumnLength")]
-    partial class ExtendLogColumnLength
+    partial class CourseDBContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -269,7 +266,7 @@ namespace ClassLibrary.Migrations
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("UserId")
+                    b.Property<int?>("UserId")
                         .HasColumnType("int")
                         .HasColumnName("User_ID");
 
@@ -571,7 +568,6 @@ namespace ClassLibrary.Migrations
                     b.HasOne("ClassLibrary.Model.User", "User")
                         .WithMany("Logs")
                         .HasForeignKey("UserId")
-                        .IsRequired()
                         .HasConstraintName("FK_Log_User");
 
                     b.Navigation("User");

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClassLibrary.Migrations
 {
     [DbContext(typeof(CourseDBContext))]
-    [Migration("20250519230216_lengthNotificationsMessage")]
-    partial class lengthNotificationsMessage
+    [Migration("20250520203430_intialcreate")]
+    partial class intialcreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -248,9 +248,9 @@ namespace ClassLibrary.Migrations
 
                     b.Property<string>("CurrentValue")
                         .IsRequired()
-                        .HasMaxLength(50)
+                        .HasMaxLength(1000)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("varchar(1000)");
 
                     b.Property<string>("EntityChanged")
                         .IsRequired()
@@ -260,17 +260,16 @@ namespace ClassLibrary.Migrations
 
                     b.Property<string>("OriginalValue")
                         .IsRequired()
-                        .HasMaxLength(50)
+                        .HasMaxLength(1000)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("varchar(1000)");
 
-                    b.Property<byte[]>("TimeStamp")
+                    b.Property<DateTime>("TimeStamp")
                         .IsConcurrencyToken()
-                        .IsRequired()
                         .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
+                        .HasColumnType("datetime2");
 
-                    b.Property<int>("UserId")
+                    b.Property<int?>("UserId")
                         .HasColumnType("int")
                         .HasColumnName("User_ID");
 
@@ -572,7 +571,6 @@ namespace ClassLibrary.Migrations
                     b.HasOne("ClassLibrary.Model.User", "User")
                         .WithMany("Logs")
                         .HasForeignKey("UserId")
-                        .IsRequired()
                         .HasConstraintName("FK_Log_User");
 
                     b.Navigation("User");
