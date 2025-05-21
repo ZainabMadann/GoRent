@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿    using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
 using System.Linq;
@@ -135,16 +135,16 @@ namespace WebApp.Controllers
             if (user == null)
             {
                 // Log failed login (user not found)
-                _context.Logs.Add(new Log
-                {
-                    Action = "FAILED_LOGIN",
-                    UserId = null,
-                    EntityChanged = "Auth",
-                    OriginalValue = "-",
-                    CurrentValue = $"Failed login - unknown user ({email})",
-                    TimeStamp = DateTime.Now
-                });
-                _context.SaveChanges();
+                //_context.Logs.Add(new Log
+                //{
+                //    Action = "FAILED_LOGIN",
+                //    UserId = null,
+                //    EntityChanged = "Auth",
+                //    OriginalValue = "-",
+                //    CurrentValue = $"Failed login - unknown user ({email})",
+                //    TimeStamp = DateTime.Now
+                //});
+                //_context.SaveChanges();
 
                 ModelState.AddModelError("", "Invalid email or password");
                 return View();
@@ -156,32 +156,32 @@ namespace WebApp.Controllers
             if (result == PasswordVerificationResult.Failed)
             {
                 // Log failed login
-                _context.Logs.Add(new Log
-                {
-                    Action = "FAILED_LOGIN",
-                    UserId = user.UserId,
-                    EntityChanged = "Auth",
-                    OriginalValue = "-",
-                    CurrentValue = "Invalid password attempt",
-                    TimeStamp = DateTime.Now
-                });
-                _context.SaveChanges();
+                //_context.Logs.Add(new Log
+                //{
+                //    Action = "FAILED_LOGIN",
+                //    UserId = user.UserId,
+                //    EntityChanged = "Auth",
+                //    OriginalValue = "-",
+                //    CurrentValue = "Invalid password attempt",
+                //    TimeStamp = DateTime.Now
+                //});
+                //_context.SaveChanges();
 
                 ModelState.AddModelError("", "Invalid email or password");
                 return View();
             }
 
             // Log successful login
-            _context.Logs.Add(new Log
-            {
-                Action = "LOGIN",
-                UserId = user.UserId,
-                EntityChanged = "Auth",
-                OriginalValue = "-",
-                CurrentValue = "User logged in",
-                TimeStamp = DateTime.Now
-            });
-            _context.SaveChanges();
+            //_context.Logs.Add(new Log
+            //{
+            //    Action = "LOGIN",
+            //    UserId = user.UserId,
+            //    EntityChanged = "Auth",
+            //    OriginalValue = "-",
+            //    CurrentValue = "User logged in",
+            //    TimeStamp = DateTime.Now
+            //});
+            //_context.SaveChanges();
 
             HttpContext.Session.SetString("UserId", user.UserId.ToString());
             HttpContext.Session.SetString("Role", user.Role);
