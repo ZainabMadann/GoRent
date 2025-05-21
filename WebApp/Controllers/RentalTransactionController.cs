@@ -52,6 +52,15 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult ProcessPayment(PaymentViewModel model)
         {
+            var existingPaidTransaction = _context.RentalTransactions
+    .Any(t => t.RentalRequestId == model.RentalRequestId &&
+             t.PaymentStatus == "Paid");
+
+            if (existingPaidTransaction)
+            {
+                TempData["Error"] = "This request has already been paid";
+                return RedirectToAction("Profile", "Auth");
+            }
             if (!ModelState.IsValid)
             {
                 return View("Payment", model);
@@ -114,7 +123,7 @@ namespace WebApp.Controllers
             _context.SaveChanges(); // Save log + notifications
 
             TempData["Message"] = "Payment successful and rental transaction created!";
-            return RedirectToAction("Profile", "Auth");
+            return RedirectToAction("RequestDetails", "Rental", new { id = model.RentalRequestId });
         }
 
 
