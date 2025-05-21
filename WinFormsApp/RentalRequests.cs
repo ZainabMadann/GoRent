@@ -168,14 +168,38 @@ namespace WinFormsApp
 
         }
 
+
         private void btnViewTransactions_Click(object sender, EventArgs e)
         {
-            // store the id of the row that the user selected for view
-            int requestID = Convert.ToInt32(dgvConfirmedRntalRequest.SelectedCells[0].OwningRow.Cells[0].Value);
-            // pass te id and move to the view transaction page if the user click the button
-            ViewTransactions viewTransactions = new ViewTransactions(requestID);
-            viewTransactions.ShowDialog();
+            try
+            {
+                if (dgvConfirmedRntalRequest.SelectedCells.Count == 0)
+                {
+                    MessageBox.Show("Please select a rental request to view its transaction.", "No Selection", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                int requestID = Convert.ToInt32(dgvConfirmedRntalRequest.SelectedCells[0].OwningRow.Cells[0].Value);
+
+                // Check if there is any transaction related to the selected rental request
+                bool hasTransaction = context.RentalTransactions.Any(t => t.RentalRequestId == requestID);
+
+                if (hasTransaction)
+                {
+                    ViewTransactions viewTransactions = new ViewTransactions(requestID);
+                    viewTransactions.ShowDialog();
+                }
+                else
+                {
+                    MessageBox.Show("No transaction found for the selected rental request.", "No Transaction", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occurred while trying to view the transaction:\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
+
 
         private void btnHome_Click(object sender, EventArgs e)
         {
@@ -194,7 +218,7 @@ namespace WinFormsApp
         private void btnManageRentalRequests_Click(object sender, EventArgs e)
         {
             // store the id of the row that the user selected for editing
-            int rentalID = Convert.ToInt32(dgvConfirmedRntalRequest.SelectedCells[0].OwningRow.Cells[0].Value);
+            int rentalID = Convert.ToInt32(dgvRentalRequests.SelectedCells[0].OwningRow.Cells[0].Value);
             // pass the id and display the Manage rental request form
             ManageRentalRequests manageRentalRequests = new ManageRentalRequests(rentalID);
             manageRentalRequests.ShowDialog();
