@@ -35,7 +35,11 @@ namespace WinFormsApp
                             EntityChanged = "RentalTransaction",
                             OriginalValue = "N/A",
                             CurrentValue = "N/A",
+<<<<<<< HEAD
                             TimeStamp = DateTime.Now,
+=======
+                            TimeStamp = DateTime.Today,
+>>>>>>> origin/mergesafe
                             UserId = currentUser.UserId
                         });
                     }
@@ -55,7 +59,11 @@ namespace WinFormsApp
                                         EntityChanged = "RentalTransaction",
                                         OriginalValue = prop.OriginalValue?.ToString() ?? "null",
                                         CurrentValue = prop.CurrentValue?.ToString() ?? "null",
+<<<<<<< HEAD
                                         TimeStamp = DateTime.Now,
+=======
+                                        TimeStamp = DateTime.Today,
+>>>>>>> origin/mergesafe
                                         UserId = currentUser.UserId
                                     });
                                 }
